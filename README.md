@@ -22,5 +22,5 @@ build/server n°_port
 ```
 et pour lancer le client 
 ```Bash 
-java build/Client @IP_serveur n°_port
+java -cp build Client @IP_serveur n°_port
 ```
