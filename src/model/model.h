@@ -6,40 +6,48 @@
 
 #define SIZE_NAMES 100
 
-// structure de coordonnees pour position/taille d un poisson
+// structure of coordinates for the scale/location of a fish
 struct coordinates {
     int x;
     int y;
 };
 
+// initializes a coordinates
 void init_coordinates(struct coordinates* c, int _x, int _y);
 
+// returns the x value 
 int getx(struct coordinates* c);
 
+// returns the y value 
 int gety(struct coordinates* c);
 
+// modifies the x value
 void setx(struct coordinates* c, int _x);
 
+// modifies the y value
 void sety(struct coordinates* c, int _y);
 
 
 
 
 
-// stucture de mouvement decrivant le deplacement des poissons
+// structure describing the movements of a fish
 struct movement {
     void (*shift) (struct coordinates*);
 };
 
+// initializes a movement
 void init_movement(struct movement* mov, void (*f) (struct coordinates*));
 
+
+// modifies a coordinate c with the movement mov
 void shifting(struct movement* mov, struct coordinates* c);
 
 
 
 
 
-// structure decrivant le poisson
+// structure of a fish
 struct fish { 
     char name[SIZE_NAMES];
     struct coordinates dimension;
@@ -47,35 +55,35 @@ struct fish {
     struct movement move; 
 };
 
-// initalise les valeurs d'un poisson
+// initalizes a fish
 void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (struct coordinates*));
 
 
-// renvoie les coordonnees d'un poisson
+// returns the location of a fish 
 struct coordinates get_fish_location(struct fish* f);
 
-// modifie les coordonnees d'un poisson
+// modifies the location of a fish
 void set_fish_location(struct fish* f, int x, int y);
 
-
-// renvoie les dimensions d'un poisson
+// returns the dimensions of a fish 
 struct coordinates get_fish_dimension(struct fish* f);
 
-// modifie les dimensions d'un poisson
+// modifies the location of a fish
 void set_fish_dimension(struct fish* f, int width, int height);
 
 
-// modifie la fonction de déplacement d'un poisson
+// modifies the shifting function of a fish
 void set_fish_move(struct fish* f, void (*_shift) (struct coordinates*));
 
 
-// effectue le deplacement d'un poisson
+// applies the shifting function to move a fish
 void shift_fish(struct fish* f);
 
 
-// affiche les coordonnees d'un poisson
+// diplays the location of a fish
 void print_fish_loc(struct fish* f);
 
+// diplays the name of a fish
 void print_fish_name(struct fish* f);
 
 

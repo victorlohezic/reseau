@@ -97,6 +97,7 @@ void set_fish_move(struct fish* f, void (*_shift) (struct coordinates*))
     init_movement(&(f->move), _shift);
 }
 
+
 void print_fish_loc(struct fish* f)
 {
     struct coordinates c = get_fish_location(f);
