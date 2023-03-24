@@ -12,12 +12,8 @@ public class Client {
 
             PrintWriter pred = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
 
-            String str = "bonjour";
-
-            for (int i = 0; i < 10; i++) {
-                pred.println(str);
-                str = plec.readLine();
-            }
+            Status status = Status.initStatus(plec, pred);
+            status.execute();
 
             System.out.println("END");
             pred.println("END");

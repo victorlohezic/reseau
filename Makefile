@@ -19,11 +19,17 @@ test: test_model
 server: build_directory
 	${CC} ${CFLAGS} ${SRC}/controller/server.c  -o ${BUILD_DIR}/server
 
-client: build_directory prompt
+client: build_directory prompt commande status
 	${JC} ${SRC}/view/Client.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
 
 prompt:
 	${JC} ${SRC}/view/Prompt.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
+
+commande: 
+	${JC} ${SRC}/view/Commande.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
+
+status: commande
+	${JC} ${SRC}/view/Status.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
 
 
 build_directory: 
