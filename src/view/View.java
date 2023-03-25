@@ -80,7 +80,7 @@ public class View {
      * @param fish Fish
      * @throws FishViewException
      */
-    public void updateCoordinatesFish(Fish fish) throws FishViewException {
+    public void updateCoordinatesFish(Fish fish) throws FishViewException, FishException {
         if (isInView(fish)) {
             if (fishes.containsKey(fish.getName())) {
                 fishes.get(fish.getName()).setPosition(fish.getPosition());
@@ -97,7 +97,7 @@ public class View {
      * @param fish Fish
      * @throws FishViewException
      */
-    public void updateCoordinatesListFishes(ArrayList<Fish> fishesMoved) throws FishViewException {
+    public void updateCoordinatesListFishes(ArrayList<Fish> fishesMoved) throws FishViewException, FishException {
         ListIterator<Fish> li = fishesMoved.listIterator();
         while (li.hasNext()) {
             Fish currentFish = li.next();

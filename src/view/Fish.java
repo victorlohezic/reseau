@@ -7,12 +7,25 @@ public class Fish {
     private int[] dimensions = new int[2]; 
     private int[] coordinates = new int[2]; 
 
-    public Fish(String name, int[] dimensions, int[] coordinates) {
+    public Fish(String name, int[] coordinates, int[] dimensions) throws FishException {
         this.name = name;
-        this.dimensions[0] = dimensions[0];
-        this.dimensions[1] = dimensions[1]; 
-        this.coordinates[0] = coordinates[0];
-        this.coordinates[1] = coordinates[1]; 
+  
+        for (int i = 0; i < 2; ++i)  {
+            if (dimensions[i] < 0) {
+                throw new FishException(String.format("The %d dimension is negative", i));
+            } else {
+                this.dimensions[i] = dimensions[i];
+            } 
+        }
+        for (int i = 0; i < 2; ++i)  {
+            if (coordinates[i] < 0) {
+                throw new FishException(String.format("The %d coordinate is negative", i));
+            } else if (coordinates[i] > 100) {
+                throw new FishException(String.format("The %d coordinate is over 100", i));
+            } else {
+                this.coordinates[i] = coordinates[i];
+            } 
+        }
     }
 
     /**
@@ -34,9 +47,16 @@ public class Fish {
     /*
      * Change the attribute coordinates with the @newPosition int[2]
      */
-    public void setPosition(int[] newPosition) {
-        coordinates[0] = newPosition[0];
-        coordinates[1] = newPosition[1];
+    public void setPosition(int[] newPosition) throws FishException {
+        for (int i = 0; i < 2; ++i)  {
+            if (newPosition[i] < 0) {
+                throw new FishException(String.format("The %d coordinate is negative", i));
+            } else if (newPosition[i] > 100) {
+                throw new FishException(String.format("The %d coordinate is over 100", i));
+            } else {
+                coordinates[i] = newPosition[i];
+            } 
+        }
     }
 
     /*
