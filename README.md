@@ -14,7 +14,13 @@ Les différents paramètres sont résumés dans ce tableau :
 | make build  |     Compile le projet |
 | make client  |     Compile le client |
 | make server  |   Compile le serveur |
+| make test  |   Compile les tests du client et les exécute |
 | make clean  |   Supprime le dossier build |
+
+
+Pour ajouter un test pour le client, il faut créer un fichier `TestNomClasseATester.java`. 
+Ensuite, il faut écrire les méthodes de test, celles-ci doivent commencer par `testNomDeCeQueLOnTeste`. 
+Puis dans le makefile, il faut rajoute à la variable `TEST`, le nom de la classe de test. 
 
 Actuellement, pour lancer le serveur. Il faut exécuter : 
 ```Bash
@@ -24,3 +30,4 @@ et pour lancer le client
 ```Bash 
 java -cp build Client @IP_serveur n°_port
 ```
+

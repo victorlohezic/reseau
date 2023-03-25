@@ -4,6 +4,7 @@ JC=javac
 BUILD_DIR=build
 SRC=src
 TEST_DIR=test
+TEST = TestFish
 
 .PHONY: clean 
 
@@ -21,6 +22,14 @@ server: build_directory
 
 client: build_directory 
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
+
+test: ex_java_test
+
+java_test: client
+	$(JC) -d $(BUILD_DIR) -cp $(BUILD_DIR) $(TEST_DIR)/*.java
+
+ex_java_test:: java_test
+	java -ea -cp $(BUILD_DIR) LancerTest $(TEST)
 
 build_directory: 
 	mkdir -p build
