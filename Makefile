@@ -12,7 +12,7 @@ all : build
 
 build : build_directory server client 
 
-test: test_model
+test: ex_test_model
 
 
 
@@ -55,3 +55,6 @@ test_model: build_directory model.o test_model.o
 
 test_model.o: ${TEST_DIR}/test_model.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_model.c -c
+
+ex_test_model: test_model
+	./${BUILD_DIR}/test_model
