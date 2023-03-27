@@ -12,7 +12,7 @@ all : build
 
 build : build_directory server client 
 
-test: test_model
+test: ex_test_model
 
 
 
@@ -50,8 +50,13 @@ test_model: build_directory model.o test_model.o
 test_model.o: ${TEST_DIR}/test_model.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_model.c -c
 
+<<<<<<< HEAD
 java_test: client
 	$(JC) -d $(BUILD_DIR) -cp $(BUILD_DIR) $(TEST_DIR)/*.java
 
 ex_java_test:: java_test
 	java -ea -cp $(BUILD_DIR) LancerTest $(TEST)
+=======
+ex_test_model: test_model
+	./${BUILD_DIR}/test_model
+>>>>>>> 27e87a8194de362e7aa51fb583193e4499def4e2
