@@ -23,13 +23,7 @@ server: build_directory
 client: build_directory 
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
 
-test: ex_java_test
-
-java_test: client
-	$(JC) -d $(BUILD_DIR) -cp $(BUILD_DIR) $(TEST_DIR)/*.java
-
-ex_java_test:: java_test
-	java -ea -cp $(BUILD_DIR) LancerTest $(TEST)
+test: ex_java_test test_model
 
 build_directory: 
 	mkdir -p build
@@ -55,3 +49,9 @@ test_model: build_directory model.o test_model.o
 
 test_model.o: ${TEST_DIR}/test_model.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_model.c -c
+
+java_test: client
+	$(JC) -d $(BUILD_DIR) -cp $(BUILD_DIR) $(TEST_DIR)/*.java
+
+ex_java_test:: java_test
+	java -ea -cp $(BUILD_DIR) LancerTest $(TEST)
