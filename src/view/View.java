@@ -12,20 +12,30 @@ public class View {
     private int[] dimensions = new int[2];
     private int[] coordinates = new int[2];
 
-    public View(int id, HashMap<String, Fish> fishes, int[] coordinates) {
+    public View(int id, HashMap<String, Fish> fishes, int[] coordinates, int dimensions[]) throws ViewException {
         this.id = id;
         this.fishes = fishes; 
-        this.dimensions[0] = dimensions[0];
-        this.dimensions[1] = dimensions[1];
+        for (int i = 0; i < 2; ++i) {
+            if (coordinates[i] < 0 || coordinates[i] > 100) {
+                throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
+            }
+        }
         this.coordinates[0] = coordinates[0];
         this.coordinates[1] = coordinates[1];
+        for (int i = 0; i < 2; ++i) {
+            if (dimensions[i] + coordinates[i] > 100) {
+                throw new ViewException(String.format("The dimension of the aquarium is superior to the dimension of the aquarium", i));
+            }
+        }
+        this.dimensions[0] = dimensions[0];
+        this.dimensions[1] = dimensions[1];
     }
 
     /**
      * Return the identity of the view
      * @return id int
      */
-    private int getId() {
+    public int getId() {
         return id;
     }
 
@@ -33,7 +43,7 @@ public class View {
      * Return the size of the view
      * @return dimensions int[2]
      */
-    private int[] getDimensions() {
+    public int[] getDimensions() {
         return dimensions;
     }
 
@@ -41,8 +51,16 @@ public class View {
      * Return the position of the view
      * @return position int[2]
      */
-    private int[] getPosition() {
+    public int[] getPosition() {
         return coordinates;
+    }
+
+    /**
+     * Return fishes
+     * @return fishes HashMap<String, Fish>
+     */
+    public HashMap<String, Fish> getFishes() {
+        return fishes;
     }
 
     /**
@@ -52,7 +70,7 @@ public class View {
      */
     public void addFish(Fish fish) throws FishViewException{
         if (isInView(fish)) {
-            if (fishes.containsKey(fish.getName())) {
+            if (fishes.containsKey(fish.getName()) == false) {
                 fishes.put(fish.getName(), fish);
             } else {
                 throw new FishViewException("The fish is already in the view");
@@ -81,7 +99,7 @@ public class View {
      * @throws FishViewException
      */
     public void updateCoordinatesFish(Fish fish) throws FishViewException, FishException {
-        if (isInView(fish)) {
+        if (isInView(fish)) {   
             if (fishes.containsKey(fish.getName())) {
                 fishes.get(fish.getName()).setPosition(fish.getPosition());
             } else {
