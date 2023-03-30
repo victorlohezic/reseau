@@ -5,42 +5,75 @@ import java.util.HashMap;
 public class Client {
     private Logging logging;
     private Prompt prompt; 
-    private Socket socket;
     private HashMap<String, Commande> promptCommand = new HashMap<>();  
     private HashMap<String, Commande> networkCommand = new HashMap<>();  
     private View view;
-    private int displayTimeOutValue;
+
+    /* Socket Attributes */
+    private Socket socket;
+    BufferedReader plec;
+    PrintWriter pred;
+
+    /*Config data*/ 
+    private String id;
+    private String controllerAddress;
+    private int controllerPort;
+    private String resources;
+    private int displayTimeoutValue;
+
+
+    public Client(){
+        ConfigParser config = new ConfigParser("view.cfg");
+
+        this.id = config.getId();
+        this.controllerAddress = config.getControllerAddress();
+        this.controllerPort = config.getControllerPort();
+        this.resources = config.getResources();
+        this.displayTimeoutValue = config.getDisplayTimeoutValue();
+
+    }
+
+
 
     private void initNetwork() {
-        /* To implement */
-        return;
-    }
+            try{
+            String address = this.controllerAddress; // get controllerAddress ( /!\ CAST IN INT BCAUSE IT'S A STR)
+            int port = this.controllerPort; // get controllerPort 
+            this.socket = new Socket(address, port); // create socket with @ip and port
+            System.out.println("SOCKET = " + this.socket);
 
-    private void closeNetwork() {
-        /* To implement */
-        return;
-    }
+            this.plec = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); // Initialize data flow allowing to read what is sent by server
 
-    public static void main(String[] argv) {
-        try {
-            int port = Integer.parseInt(argv[1]);
-            Socket s = new Socket(argv[0], port);
-            System.out.println("SOCKET = " + s);
-
-            BufferedReader plec = new BufferedReader(new InputStreamReader(s.getInputStream()));
-
-            PrintWriter pred = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true);
+            this.pred = new PrintWriter(new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream())), true); // Initialize data flow allowing to write to server
 
             Status status = Status.initStatus(plec, pred);
             status.execute();
+            return;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+    }
 
-            System.out.println("END");
-            pred.println("END");
-            plec.close();
-            pred.close();
-            s.close();
-        } catch (IOException e) {
+    private void closeNetwork() {
+        try{
+            System.out.println("END"); // End of communication
+            this.pred.println("END"); // Indicate end of communication to server 
+            this.plec.close(); // close reading flow
+            this.pred.close(); // close wrinting flow
+            this.socket.close(); // close socket
+            return;
+        }catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
     }
+
+    // public static void main() {
+    //     try {
+           
+
+    //     } catch (IOException e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 }
