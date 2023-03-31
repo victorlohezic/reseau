@@ -68,12 +68,9 @@ public class Client {
 
     }
 
-    // public static void main() {
-    //     try {
-           
-
-    //     } catch (IOException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
+    public static void main(String[] argv) {
+         Client client = new Client();
+         client.initNetwork();
+         client.closeNetwork();
+     }
 }
