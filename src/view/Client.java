@@ -51,8 +51,9 @@ public class Client {
 
             this.pred = new PrintWriter(new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream())), true); // Initialize data flow allowing to write to server
 
-            Status status = Status.initStatus(plec, pred);
-            status.execute();
+            // Status status = Status.initStatus(plec, pred);
+            // status.execute();
+            networkCommand.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
             return;
             } catch (IOException e) {
                 logging.debug(e.getMessage());
@@ -60,17 +61,7 @@ public class Client {
     }
 
     private void closeNetwork() {
-        try{
-            logging.info("END"); // End of communication
-            this.pred.println("END"); // Indicate end of communication to server 
-            this.plec.close(); // close reading flow
-            this.pred.close(); // close wrinting flow
-            this.socket.close(); // close socket
-            return;
-        }catch (IOException e) {
-            logging.debug(e.getMessage());
-        }
-
+        networkCommand.get("log out").execute();
     }
 
     public static void main(String[] argv) {
