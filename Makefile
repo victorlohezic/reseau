@@ -20,8 +20,11 @@ test: ex_test_model ex_java_test
 server: build_directory
 	${CC} ${CFLAGS} ${SRC}/controller/server.c  -o ${BUILD_DIR}/server
 
-client: build_directory 
+client: build_directory copy_view
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
+
+copy_view: 
+	cp ${SRC}/view/view.cfg	${BUILD_DIR}/
 
 test: ex_java_test test_model
 
