@@ -23,9 +23,14 @@ public class Client {
 
 
     public Client(){
-        ConfigParser config = new ConfigParser("view.cfg");
+        this.logging = new Logging("view.log");
+        this.logging.enableSaving(false);
+        this.logging.enable(true, true, true);
+        
+        ConfigParser config = new ConfigParser("build/view.cfg");
 
         this.id = config.getId();
+        logging.info(this.id);
         this.controllerAddress = config.getControllerAddress();
         this.controllerPort = config.getControllerPort();
         this.resources = config.getResources();
@@ -40,7 +45,7 @@ public class Client {
             String address = this.controllerAddress; // get controllerAddress ( /!\ CAST IN INT BCAUSE IT'S A STR)
             int port = this.controllerPort; // get controllerPort 
             this.socket = new Socket(address, port); // create socket with @ip and port
-            System.out.println("SOCKET = " + this.socket);
+            logging.info("SOCKET = " + this.socket);
 
             this.plec = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); // Initialize data flow allowing to read what is sent by server
 
@@ -50,20 +55,20 @@ public class Client {
             status.execute();
             return;
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                logging.debug(e.getMessage());
             }
     }
 
     private void closeNetwork() {
         try{
-            System.out.println("END"); // End of communication
+            logging.info("END"); // End of communication
             this.pred.println("END"); // Indicate end of communication to server 
             this.plec.close(); // close reading flow
             this.pred.close(); // close wrinting flow
             this.socket.close(); // close socket
             return;
         }catch (IOException e) {
-            System.out.println(e.getMessage());
+            logging.debug(e.getMessage());
         }
 
     }
