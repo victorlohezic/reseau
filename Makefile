@@ -41,7 +41,12 @@ clean:
 model.o: ${SRC}/model/model.c
 	${CC} ${CFLAGS} ${SRC}/model/model.c -c
 
+view.o: ${SRC}/model/view.c
+	${CC} ${CFLAGS} ${SRC}/model/view.c -c
 
+
+aquarium.o: ${SRC}/model/aquarium.c
+	${CC} ${CFLAGS} ${SRC}/model/aquarium.c -c
 
 
 
@@ -49,14 +54,23 @@ model.o: ${SRC}/model/model.c
 test_model: build_directory model.o test_model.o
 	${CC} ${CFLAGS} model.o test_model.o -o ${BUILD_DIR}/$@ 
 
+test_aquarium: build_directory view.o aquarium.o test_aquarium.o
+	${CC} ${CFLAGS} view.o aquarium.o test_aquarium.o -o ${BUILD_DIR}/$@ 
+
+
 
 test_model.o: ${TEST_DIR}/test_model.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_model.c -c
+
+test_aquarium.o: ${TEST_DIR}/test_aquarium.c
+	${CC} ${CFLAGS} ${TEST_DIR}/test_aquarium.c -c
+
 
 java_test: client
 	$(JC) -d $(BUILD_DIR) -cp $(BUILD_DIR) $(TEST_DIR)/*.java
 
 ex_java_test:: java_test
 	java -ea -cp $(BUILD_DIR) LancerTest $(TEST)
+
 ex_test_model: test_model
 	./${BUILD_DIR}/test_model
