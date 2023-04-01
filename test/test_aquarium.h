@@ -12,6 +12,6 @@
 
 void test_add_view();
 void test_del_view();
-
+void test_load();
 
 #endif //_TEST_AQUARIUM_H_

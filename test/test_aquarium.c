@@ -6,6 +6,9 @@ void test_add_view()
     printf("%s", __func__);
 
     struct aquarium a;
+    a.dimension[0] = 128;
+    a.dimension[1] = 337;
+
     a.nb_fishes = 0;
 
     for(int k=0; k<5; k++) {
@@ -46,9 +49,11 @@ void test_del_view()
 
     struct aquarium a;
     a.nb_fishes = 0;
+    a.dimension[0] = 128;
+    a.dimension[1] = 337;
 
     for(int k=0; k<5; k++) {
-        init_view(a.views+k, k, 10, 10, 10, 10);
+        init_view(a.views+k, k, k+10, k+20, k+30, k+40);
     }
     
     a.nb_views = 5;
@@ -70,11 +75,17 @@ void test_del_view()
     assert(del_view(&a, 6) == 0);
 
     //show(&a);
-
+    save_aquarium(&a, "aquarium.txt");
     printf("\t\tOK\n");
 }
 
 
+void test_load() {
+    struct aquarium a;
+
+    load(&a, "aquarium.txt");
+    show(&a);
+}
 
 
 
@@ -82,7 +93,8 @@ int main()
 {
     test_add_view();
     test_del_view();
-
+    test_load();
+    
 
     return 0;
 }

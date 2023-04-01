@@ -1,34 +1,69 @@
 #include "aquarium.h"
 
-void show(struct aquarium* a) {
-    printf("List of fishes: \n");
-    for(int k=0; k<a->nb_fishes; k++) {
-        struct coordinates dim = get_fish_dimension(&a->fishes[k]);
-        struct coordinates loc = get_fish_location(&a->fishes[k]);
-        printf("name: %s, dimension: %dx%d, location: %dx%d \n", 
-            a->fishes[k].name, 
-            getx(&dim),
-            gety(&dim),
-            getx(&loc),
-            gety(&loc));
-    }
+const int* get_aquarium_dimension(const struct aquarium* a) {
+    return a->dimension;
+}
 
-    printf("List of views: \n");
+
+void show(struct aquarium* a) 
+{
+    printf("%dx%d\n",get_aquarium_dimension(a)[0], get_aquarium_dimension(a)[1]);
 
     for(int k=0; k<a->nb_views; k++) {
-        printf("id: %d, dimension: %dx%d, location: %dx%d \n",
+        printf("%d %dx%d+%d+%d\n",
         get_view_id(&a->views[k]),
-        get_view_dimension(&a->views[k])[0],
-        get_view_dimension(&a->views[k])[1],
         get_view_position(&a->views[k])[0],
-        get_view_position(&a->views[k])[1]);
-    }
-
+        get_view_position(&a->views[k])[1],
+        get_view_dimension(&a->views[k])[0],
+        get_view_dimension(&a->views[k])[1]);
+    }    
 }
 
 
 
-void load(struct aquarium*);
+int load(struct aquarium* a, char* path)
+{
+    a->nb_views = 0;
+    a->nb_fishes = 0;
+
+    FILE* input_file;
+    input_file = fopen(path, "r");
+
+    if (input_file == NULL) {
+        return -1;
+    }
+
+    int num;
+    for (int k=0; k<2; k++) {
+        fscanf(input_file, "%d", &num);
+        a->dimension[k] = num;
+        fseek(input_file, 1, SEEK_CUR);
+    }
+
+    int id, pos_x, pos_y, dim_x, dim_y;
+    struct view v;
+    while (fscanf(input_file, "%d", &id) == 1) {
+        fseek(input_file, 1, SEEK_CUR);
+
+        fscanf(input_file, "%d", &pos_x);     
+        fseek(input_file, 1, SEEK_CUR);
+
+        fscanf(input_file, "%d", &pos_y);
+        fseek(input_file, 1, SEEK_CUR);
+
+        fscanf(input_file, "%d", &dim_x);
+        fseek(input_file, 1, SEEK_CUR);
+        
+        fscanf(input_file, "%d", &dim_y);
+        fseek(input_file, 1, SEEK_CUR);
+
+        init_view(&v, id, pos_x, pos_y, dim_x, dim_y);
+        add_view(a, &v);
+    }
+
+    fclose(input_file);
+    return 0;
+}
 
 
 
@@ -72,7 +107,29 @@ int del_view(struct aquarium* a, int id_view) {
 
 
 
-void save_aquarium(struct aquarium*);
+int save_aquarium(struct aquarium* a, char* path) {
+
+    FILE* output_file;
+    output_file = fopen(path, "w");
+
+    if (output_file == NULL) {
+        return -1;
+    }
+
+    fprintf(output_file, "%dx%d\n",get_aquarium_dimension(a)[0], get_aquarium_dimension(a)[1]);
+
+    for(int k=0; k<a->nb_views; k++) {
+        fprintf(output_file, "%d %dx%d+%d+%d\n",
+        get_view_id(&a->views[k]),
+        get_view_position(&a->views[k])[0],
+        get_view_position(&a->views[k])[1],
+        get_view_dimension(&a->views[k])[0],
+        get_view_dimension(&a->views[k])[1]);
+    }    
+
+    fclose(output_file);
+    return 0;
+}
 
 
 
