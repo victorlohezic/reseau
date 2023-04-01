@@ -11,10 +11,10 @@
 // struct of aquarium that contains views and fishes
 struct aquarium {
     int nb_views;
-    struct view* views[MAX_VIEWS];
+    struct view views[MAX_VIEWS];
 
     int nb_fishes;
-    struct fish* fishes[MAX_FISHES];
+    struct fish fishes[MAX_FISHES];
 };
 
 
