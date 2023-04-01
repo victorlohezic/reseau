@@ -11,9 +11,9 @@ void init_view(struct view* v, int id, int x, int y, int width, int height);
 
 int get_view_id(const struct view* v);
 
-const int* get_view_position(struct view* v);
+const int* get_view_position(const struct view* v);
 
-const int* get_view_dimension(struct view* v);
+const int* get_view_dimension(const struct view* v);
 
 void set_view_id(struct view* v, int id);
 
