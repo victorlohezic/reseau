@@ -2,7 +2,6 @@ import java.io.*;
 
 public class Logging{
 
-    private ConfigParser configParser;
     private boolean isInfo=true;
     private boolean isDebug=true;
     private boolean isWarning=true;
