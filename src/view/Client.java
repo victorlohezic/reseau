@@ -54,11 +54,25 @@ public class Client {
             // Status status = Status.initStatus(plec, pred);
             // status.execute();
             networkCommand.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
+            networkCommand.put("AddFish", AddFish.initAddFish(plec, pred, logging));
             return;
             } catch (IOException e) {
                 logging.debug(e.getMessage());
             }
     }
+
+    /**
+     * Run functional test
+     */
+    private void run() {
+        try {
+            Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
+            AddFish.castCommandToFish(networkCommand.get("AddFish")).setFish(fish);
+        } catch(FishException e) {
+            logging.warning(e.getMessage());
+        }
+        networkCommand.get("AddFish").execute();
+    }   
 
     private void closeNetwork() {
         networkCommand.get("log out").execute();
@@ -67,6 +81,7 @@ public class Client {
     public static void main(String[] argv) {
          Client client = new Client();
          client.initNetwork();
+         client.run();
          client.closeNetwork();
      }
 }

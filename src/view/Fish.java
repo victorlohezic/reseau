@@ -6,8 +6,9 @@ public class Fish {
     private String name;
     private int[] dimensions = new int[2]; 
     private int[] coordinates = new int[2]; 
+    private String mobility;
 
-    public Fish(String name, int[] coordinates, int[] dimensions) throws FishException {
+    public Fish(String name, int[] coordinates, int[] dimensions, String mobility) throws FishException {
         this.name = name;
   
         for (int i = 0; i < 2; ++i)  {
@@ -26,6 +27,8 @@ public class Fish {
                 this.coordinates[i] = coordinates[i];
             } 
         }
+
+        this.mobility = mobility;
     }
 
     /**
@@ -42,6 +45,14 @@ public class Fish {
      */
     public int[] getSize() {
         return dimensions;
+    }
+
+    /**
+     * Return the string with the name of the mobility
+     * @return dimension int[2]
+     */
+    public String getMobility() {
+        return mobility;
     }
 
     /*
