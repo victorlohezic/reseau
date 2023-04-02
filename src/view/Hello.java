@@ -1,26 +1,16 @@
-import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.io.IOException;
 
 public class Hello {
 
     private static final Hello HELLO = new Hello();
-    private static final Prompt PROMPT = new Prompt();
     private static Logging logging;
     private static BufferedReader input;
-    private static PrintWriter output;
-    private static Socket socket;
 
-    private Hello() {
-    }
+    private Hello() {}
 
-    public static Hello initHello(BufferedReader in, PrintWriter out, Socket s, Logging log) {
+    public static Hello initHello(BufferedReader in, Logging log) {
         input = in;
-        output = out;
-        logging = log;
-        socket = s;
         logging = log;
         return HELLO;
     }
