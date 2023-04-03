@@ -59,9 +59,13 @@ public class Client {
             networkCommand.put("ping", Ping.initPing(plec, logging,controllerPort));
             networkCommand.put("getFishes", getFishes.initGetFishes(plec, logging));
             networkCommand.put("DelFish", DelFish.initDelFish(plec, pred, logging));
+            Hello.castCommandToHello(networkCommand.get("Hello")).execute();
+
             return;
             } catch (IOException e) {
                 logging.debug(e.getMessage());
+            } catch (CommandeException e) {
+                logging.warning(e.getMessage());
             }
     }
 

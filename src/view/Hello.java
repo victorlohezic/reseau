@@ -15,6 +15,21 @@ public class Hello implements Commande {
         return HELLO;
     }
 
+     /**
+     * Cast a commande to Hello commande
+     * @param commande : Commande to cast
+     * @return  Hello
+     * @throws CommandeException
+     * 
+     */
+    public static Hello castCommandToHello(Commande commande) throws CommandeException {
+        if (commande == HELLO) {
+            return HELLO;
+        } else {
+            throw new CommandeException("La commande à caster n'est pas un Hello");
+        }
+    }
+
     public void execute() {
 
         logging.info("Hello");
