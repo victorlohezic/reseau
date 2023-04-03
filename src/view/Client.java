@@ -58,6 +58,7 @@ public class Client {
             networkCommand.put("Hello", Hello.initHello(plec, logging));
             networkCommand.put("ping", Ping.initPing(plec, logging,controllerPort));
             networkCommand.put("getFishes", getFishes.initGetFishes(plec, logging));
+            networkCommand.put("DelFish", DelFish.initDelFish(plec, pred, logging));
             return;
             } catch (IOException e) {
                 logging.debug(e.getMessage());
@@ -71,14 +72,24 @@ public class Client {
         try {
             Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
             AddFish.castCommandToFish(networkCommand.get("AddFish")).setFish(fish);
-        } catch(FishException e) {
+            DelFish.castCommandToFish(networkCommand.get("DelFish")).setFish(fish);
+            networkCommand.get("AddFish").execute();
+            networkCommand.get("DelFish").execute();
+            networkCommand.get("ping").execute();
+            networkCommand.get("getFishes").execute();
+        } catch (CommandeException e) {
+            logging.warning(e.getMessage());
+        } catch (FishException e) {
             logging.warning(e.getMessage());
         }
-        networkCommand.get("AddFish").execute();
     }   
 
     private void closeNetwork() {
-        networkCommand.get("log out").execute();
+        try {
+            networkCommand.get("log out").execute();
+        } catch (CommandeException e) {
+            logging.warning(e.getMessage());
+        }
     }
 
     public static void main(String[] argv) {

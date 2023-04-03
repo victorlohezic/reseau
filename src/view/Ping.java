@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 
-public class Ping {
+public class Ping implements Commande {
     private static final Ping PING = new Ping();
     private static Logging logging;
     private static BufferedReader input;

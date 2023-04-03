@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class getFishes {
+public class getFishes implements Commande{
 
     private static final getFishes GET_FISHES = new getFishes();
     private static Logging logging;

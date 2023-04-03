@@ -5,5 +5,5 @@ interface Commande {
     /** 
      * Launch the work of the commande
     **/
-    public void execute();
+    public void execute() throws CommandeException;
 }

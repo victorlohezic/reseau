@@ -6,38 +6,38 @@ import java.io.IOException;
 /** 
  * Close the socket with the server
 **/
-public class AddFish implements Commande {
-    private static final AddFish ADD_FISH = new AddFish();
+public class DelFish implements Commande {
+    private static final DelFish DEL_FISH = new DelFish();
     private static Logging logging;
     private static BufferedReader input; 
     private static PrintWriter output;
     private static Fish fish; 
 
-    private AddFish(){
+    private DelFish(){
     }
 
     /*
-     * Initialise AddFish but it needs to use the method setFish to add a Fish
+     * Initialise DelFish but it needs to use the method setFish to add a Fish
      */
-    public static AddFish initAddFish(BufferedReader in, PrintWriter out, Logging log) {
+    public static DelFish initDelFish(BufferedReader in, PrintWriter out, Logging log) {
         input = in;
         output = out;
         logging = log;
-        return ADD_FISH;
+        return DEL_FISH;
     }
 
     /**
-     * Cast a commande to AddFish commande
+     * Cast a commande to DelFish commande
      * @param commande : Commande to cast
-     * @return  AddFish
+     * @return  DelFish
      * @throws FishException 
      * 
      */
-    public static AddFish castCommandToFish(Commande commande) throws CommandeException {
-        if (commande == ADD_FISH) {
-            return ADD_FISH;
+    public static DelFish castCommandToFish(Commande commande) throws CommandeException {
+        if (commande == DEL_FISH) {
+            return DEL_FISH;
         } else {
-            throw new CommandeException("La commande à caster n'est pas un AddFish");
+            throw new CommandeException("La commande à caster n'est pas un DelFish");
         }
     }
 
@@ -45,13 +45,11 @@ public class AddFish implements Commande {
      * Launch the work of the commande
      * Before calling this method, you must call setFish in order to add a Fish
     **/
-    public void execute() {
+    public void execute() throws CommandeException {
         if (fish == null) {
             logging.warning("Aucun poisson n'a été ajouté en paramètre");
         }
-        String commandValue = String.format("AddFish %s at %dx%d, %dx%d %s", 
-        fish.getName(), fish.getPosition()[0], fish.getPosition()[1], 
-        fish.getSize()[0], fish.getSize()[1], fish.getMobility());
+        String commandValue = String.format("DelFish %s", fish.getName());
 
         logging.info(commandValue);
         try{
@@ -62,6 +60,7 @@ public class AddFish implements Commande {
                 logging.info(answer);
             } else {
                 logging.warning(answer);
+                throw new CommandeException(answer);
             }
             return;
         }catch (IOException e) {
@@ -70,7 +69,7 @@ public class AddFish implements Commande {
     }
 
     /**
-     * This method sets the attribute fish to the @f  in order to ask to the server to add the good fish
+     * This method sets the attribute fish to the @f  in order to ask to the server to remove this fish
      * It needs to call this method before execute
      * @param f : Fish
      */

@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class Hello {
+public class Hello implements Commande {
 
     private static final Hello HELLO = new Hello();
     private static Logging logging;
