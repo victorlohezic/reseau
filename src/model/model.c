@@ -1,108 +1,74 @@
 #include "model.h"
 
-// fonctions sur les coordonnees
+// functions for the movements
 
-void init_coordinates(struct coordinates* c, int _x, int _y)
-{
-    c->x = _x;
-    c->y = _y;
-}
-
-
-int getx(struct coordinates* c)
-{
-    return c->x; 
-}
-
-
-int gety(struct coordinates* c)
-{
-    return c->y; 
-}
-
-
-void setx(struct coordinates* c, int _x)
-{
-    c->x = _x;
-}
-
-
-void sety(struct coordinates* c, int _y)
-{
-    c->y = _y;
-}
-
-
-// fonctions sur les deplacements
-
-void init_movement(struct movement* mov, void (*f) (struct coordinates*))
+void init_movement(struct movement* mov, void (*f) (int*))
 {
     mov->shift = f;
 }
 
-void shifting(struct movement* mov, struct coordinates* c)
+void shifting(struct movement* mov, int* c)
 {
     (*(mov->shift))(c);
 }
 
 
 
-// fonctions sur les poissons
+// functions for the fishes
 
-void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (struct coordinates*))
+void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*))
 {
     strcpy(f->name, _name);
 
-    init_coordinates(&(f->dimension), width, height);
-    init_coordinates(&(f->location), x, y);
+    f->position[0] = x;
+    f->position[1] = y;
+
+    f->dimension[0] = width;
+    f->dimension[1] = height;
+
     init_movement(&(f->move), shift);
 }
 
 
 void shift_fish(struct fish* f)
 {
-    shifting(&(f->move),&(f->location));
+    shifting(&(f->move),f->position);
 }
 
-struct coordinates get_fish_location(struct fish* f)
+int* get_fish_position(struct fish* f)
 {
-    struct coordinates tmp;
-    tmp.x = getx(&(f->location));
-    tmp.y = gety(&(f->location));
-    return tmp;
+    return f->position;
 }
 
-void set_fish_location(struct fish* f, int x, int y)
+void set_fish_position(struct fish* f, int x, int y)
 {
-    init_coordinates(&(f->location), x, y);
-}
+    f->position[0] = x;
+    f->position[1] = y;
+}   
 
 
-struct coordinates get_fish_dimension(struct fish* f)
+int* get_fish_dimension(struct fish* f)
 {
-    struct coordinates tmp;
-    tmp.x = getx(&(f->dimension));
-    tmp.y = gety(&(f->dimension));
-    return tmp;
+    return f->dimension;
 }
 
 void set_fish_dimension(struct fish* f, int width, int height)
 {
-    init_coordinates(&(f->dimension), width, height);
+    f->dimension[0] = width;
+    f->dimension[1] = height;
 }
 
 
-void set_fish_move(struct fish* f, void (*_shift) (struct coordinates*))
+void set_fish_move(struct fish* f, void (*_shift) (int*))
 {
     init_movement(&(f->move), _shift);
 }
 
 
-void print_fish_loc(struct fish* f)
+void print_fish_pos(struct fish* f)
 {
-    struct coordinates c = get_fish_location(f);
-    printf("x = %d\n", getx(&c));
-    printf("y = %d\n", gety(&c));
+    printf("x = %d\n", f->position[0]);
+    printf("y = %d\n", f->position[1]);
 
 }
 

@@ -74,27 +74,63 @@ void test_del_view()
     assert(del_view(&a, 0) == 0);
     assert(del_view(&a, 6) == 0);
 
-    //show(&a);
-    save_aquarium(&a, "aquarium.txt");
     printf("\t\tOK\n");
 }
 
 
-void test_load() {
-    struct aquarium a;
+void test_save_load()
+{
+    printf("%s", __func__);
 
-    load(&a, "aquarium.txt");
-    show(&a);
+    struct aquarium a1;
+
+    a1.nb_fishes = 0;
+    a1.dimension[0] = 232;
+    a1.dimension[1] = 655;
+    char* path = "save_a1.txt";
+
+    for(int k=0; k<7; k++) {
+        init_view(a1.views+k, k, k+10, k+100, k+1000, k+10000);
+    }
+    a1.nb_views = 7;
+
+    int rs = save_aquarium(&a1, path);
+    assert(rs == 0);
+
+    struct aquarium a2;
+
+    int rl = load(&a2, path);
+    assert(rl == 0);
+
+    assert(get_aquarium_dimension(&a2)[0] == 232);
+    assert(get_aquarium_dimension(&a2)[1] == 655);
+    assert(a2.nb_fishes == 0);
+    assert(a2.nb_views == 7);
+
+    for(int j=0; j<a2.nb_views; j++) {
+        assert(get_view_id(a2.views+j) == j);
+        assert(get_view_position(a2.views+j)[0] == j+10);
+        assert(get_view_dimension(a2.views+j)[1] == j+10000);
+
+    }
+
+    remove(path);
+
+    //show(&a2);
+    printf("\t\tOK\n");
 }
+
+
 
 
 
 int main() 
 {
+    printf("\nTEST FILE : %s\n\n", __FILE__);
+
     test_add_view();
     test_del_view();
-    test_load();
-    
+    test_save_load();
 
     return 0;
 }
