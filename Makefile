@@ -10,12 +10,12 @@ TEST = TestFish TestView
 
 all : build
 
-build : build_directory server client 
+build : build_directory server client copy_controller
 
 test: ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
-server: $(SRC)/controller/parser.o build_directory copy_controller
-	${CC} ${CFLAGS} ${SRC}/controller/server.c $< -o ${BUILD_DIR}/server
+server: ${SRC}/controller/server.c $(SRC)/controller/parser.o network_command.o aquarium.o view.o model.o 
+	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server
 
 client: build_directory copy_view
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
@@ -43,9 +43,11 @@ model.o: ${SRC}/model/model.c
 view.o: ${SRC}/model/view.c
 	${CC} ${CFLAGS} ${SRC}/model/view.c -c
 
-
 aquarium.o: ${SRC}/model/aquarium.c
 	${CC} ${CFLAGS} ${SRC}/model/aquarium.c -c
+
+network_command.o: $(SRC)/controller/network_command.c
+	${CC} ${CFLAGS} -I $(SRC)/model $< -c
 
 #-------------- tests -------------------
 test_model: build_directory model.o test_model.o
