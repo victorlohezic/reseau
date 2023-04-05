@@ -1,16 +1,19 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Hello implements Commande {
 
     private static final Hello HELLO = new Hello();
     private static Logging logging;
     private static BufferedReader input;
-
+    private static PrintWriter output;
     private Hello() {}
 
-    public static Hello initHello(BufferedReader in, Logging log) {
+    public static Hello initHello(BufferedReader in, PrintWriter out, Logging log) {
         input = in;
+        output = out;
         logging = log;
         return HELLO;
     }
@@ -31,18 +34,17 @@ public class Hello implements Commande {
     }
 
     public void execute() {
-
         logging.info("Hello");
-
+        output.println("hello");
         printExecute();
     }
 
     public void execute(int id) {
 
         logging.info("Hello in as" + id);
-
+        output.println("hello in as" + id);
         printExecute();
-    }
+    }  
 
     private void printExecute(){
         try {
