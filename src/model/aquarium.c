@@ -138,6 +138,14 @@ int save_aquarium(struct aquarium* a, char* path) {
     return 0;
 }
 
+int find_view(struct aquarium* a, int id_view) {
+    for(int k=0; k<a->nb_views; k++) {
+        if ((a->views[k]).id == id_view) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 
 

@@ -29,7 +29,6 @@ const int* get_aquarium_dimension(const struct aquarium* a);
 // displays the content of the aquarium
 void show(struct aquarium*);
 
-
 // load an aquarium from a file, returns 0 if success, -1 otherwise
 int load(struct aquarium*, char* path);
 
@@ -42,11 +41,7 @@ int del_view(struct aquarium*, int id_view);
 // saves the content of the aquarium in a file, returns 0 if success, -1 otherwise
 int save_aquarium(struct aquarium* a, char* path);
 
-
-
-
-
-
-
+// return 1 if the view is in the aquarium 0 otherwise 
+int find_view(struct aquarium* a, int id_view);
 
 #endif //_AQUARIUM_H_
