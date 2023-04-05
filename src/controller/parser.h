@@ -17,5 +17,7 @@ struct Config{ // Contain all of the ConfigItems
 /* Take a file and retrurn the list of all parameters*/
 struct Config* parse_controller_config(const char* filename);
 
+int get_setting(struct Config* config, char* setting_name);
+
 /* Used to free all the malloc and realloc made to create the Config struct*/
 void free_config(struct Config* config);

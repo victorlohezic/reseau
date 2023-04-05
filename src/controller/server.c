@@ -7,6 +7,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <strings.h>
+
+#include "parser.h"
 
 void error(char *msg)
 {
@@ -14,18 +17,24 @@ void error(char *msg)
     exit(1);
 }
 
+void init_server(const char* filename, int* controller_port, int* display_time_out_value, int* fish_update_interval) {
+    struct Config* config = parse_controller_config(filename);
+    *controller_port = get_setting(config, "controller-port");
+    *display_time_out_value = get_setting(config, "display-timeout-value");
+    *fish_update_interval = get_setting(config, "fish-update-interval");
+}
+
 int main(int argc, char *argv[])
 {
-    int sockfd, newsockfd, portno, clilen;
+    int sockfd, newsockfd, controller_port, display_time_out_value, fish_update_interval;
+    socklen_t clilen;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
 
-    if (argc < 2)
-    {
-        fprintf(stderr, "ERROR, no port provided\n");
-        exit(1);
-    }
+    init_server("controller.cfg", &controller_port, &display_time_out_value, &fish_update_interval);
+
+    printf("%i %i %i \n", controller_port, display_time_out_value, fish_update_interval);
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -33,11 +42,9 @@ int main(int argc, char *argv[])
         error("ERROR opening socket");
 
     bzero((char *)&serv_addr, sizeof(serv_addr));
-    // port number
-    portno = atoi(argv[1]);
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(portno);
+    serv_addr.sin_port = htons(controller_port);
 
     if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");

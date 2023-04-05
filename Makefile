@@ -14,14 +14,17 @@ build : build_directory server client
 
 test: ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
-server: build_directory
-	${CC} ${CFLAGS} ${SRC}/controller/server.c  -o ${BUILD_DIR}/server
+server: $(SRC)/controller/parser.o build_directory copy_controller
+	${CC} ${CFLAGS} ${SRC}/controller/server.c $< -o ${BUILD_DIR}/server
 
 client: build_directory copy_view
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 
 
 copy_view: 
 	cp ${SRC}/view/view.cfg	${BUILD_DIR}/
+
+copy_controller:
+	cp ${SRC}/controller/controller.cfg	${BUILD_DIR}/
 
 build_directory: 
 	mkdir -p build
@@ -30,6 +33,9 @@ clean:
 	rm -rf  ${BUILD_DIR} *.o
 
 #------------- creation fichiers .o --------------
+
+%.o : %.c
+	${CC} ${CFLAGS} -c $< -o $@
 
 model.o: ${SRC}/model/model.c
 	${CC} ${CFLAGS} ${SRC}/model/model.c -c
@@ -40,8 +46,6 @@ view.o: ${SRC}/model/view.c
 
 aquarium.o: ${SRC}/model/aquarium.c
 	${CC} ${CFLAGS} ${SRC}/model/aquarium.c -c
-
-
 
 #-------------- tests -------------------
 test_model: build_directory model.o test_model.o

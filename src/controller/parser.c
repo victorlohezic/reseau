@@ -1,5 +1,7 @@
-#include "parser.h"
+#include <string.h>
 
+#include "parser.h"
+       
 /* Main function: Take a file and retrurn the list of all parameters*/
 struct Config* parse_controller_config(const char* filename) {
     FILE* file = fopen(filename, "r"); // Open the file
@@ -30,7 +32,6 @@ struct Config* parse_controller_config(const char* filename) {
         }
 
         struct ConfigItem item;
-
         strncpy(item.key, line, equals_pos - line); // Copy into the "key" attribute the one read in the file
         item.key[equals_pos - line] = '\0';
         strncpy(item.value, equals_pos + 1, strlen(line) - (equals_pos - line + 1)); // Same for its value
@@ -51,15 +52,33 @@ void free_config(struct Config* config) {
     free(config);
 }
 
+int get_setting(struct Config* config, char* setting_name) {
+    for (int i = 0; i < config->count; i++) {
+        char* trimmed_key = strtok(config->items[i].key, " "); // Remove white space
+        if (strcmp(setting_name, trimmed_key) == 0) {
+            return atoi(config->items[i].value);
+        }
+    }
+    perror("Setting not found");
+    exit(1);
+}
+
+
 // int main() {
 //     struct Config* config = parse_controller_config("controller.cfg");
 //     if (!config) {
 //         printf("Error: could not parse config file\n");
 //         return 1;
 //     }
-//     for (int i = 0; i < config->count; i++) {
-//         printf("Key: %s, Value: %s\n", config->items[i].key, config->items[i].value);
-//     }
+//     // for (int i = 0; i < config->count; i++) {
+//     //     printf("Key: %s, Value: %s\n", config->items[i].key, config->items[i].value);
+//     // }
+//     printf("Key: %s\n", config->items[0].key);
+//     printf("%i\n", strcmp(config->items[0].key, "controller-port"));
+
+//     printf("config->items[0].key: \"%s\"\n", config->items[0].key);
+//     printf("\"controller-port\": \"%s\"\n", "controller-port");
+//     printf("%i\n", get_setting(config, "controller-port"));
 //     free_config(config);
 //     return 0;
 // }
