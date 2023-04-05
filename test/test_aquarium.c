@@ -37,6 +37,25 @@ void test_add_view()
     init_view(&new_v3, 10, 10, 10, 10, 10);
     assert(add_view(&a, &new_v3) == -1);
 
+
+    struct view new_v4;
+    init_view(&new_v4, -5, 10, 10, 10, 10);
+    assert(add_view(&a, &new_v4) == -1);
+
+    struct view new_v5;
+    init_view(&new_v5, 5, -10, 10, 10, 10);
+    assert(add_view(&a, &new_v5) == -1);
+
+    struct view new_v6;
+    init_view(&new_v6, 5, 200, 10, 10, 10);
+    assert(add_view(&a, &new_v6) == -1);
+
+
+    struct view new_v7;
+    init_view(&new_v7, 5, 10, 10, 10, 400);
+    assert(add_view(&a, &new_v7) == -1);
+
+
     //show(&a);
 
     printf("\t\tOK\n");
@@ -85,8 +104,8 @@ void test_save_load()
     struct aquarium a1;
 
     a1.nb_fishes = 0;
-    a1.dimension[0] = 232;
-    a1.dimension[1] = 655;
+    a1.dimension[0] = 20000;
+    a1.dimension[1] = 30000;
     char* path = "save_a1.txt";
 
     for(int k=0; k<7; k++) {
@@ -102,8 +121,8 @@ void test_save_load()
     int rl = load(&a2, path);
     assert(rl == 0);
 
-    assert(get_aquarium_dimension(&a2)[0] == 232);
-    assert(get_aquarium_dimension(&a2)[1] == 655);
+    assert(get_aquarium_dimension(&a2)[0] == 20000);
+    assert(get_aquarium_dimension(&a2)[1] == 30000);
     assert(a2.nb_fishes == 0);
     assert(a2.nb_views == 7);
 

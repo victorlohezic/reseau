@@ -71,18 +71,25 @@ int add_view(struct aquarium* a, struct view* v)
 {
     if (a->nb_views >= MAX_VIEWS) {
         return -1;
-    } else {
+    } 
+        
+    if (get_view_position(v)[0] < 0 || get_view_position(v)[1] < 0 || 
+        get_view_position(v)[0] + get_view_dimension(v)[0] > get_aquarium_dimension(a)[0] ||
+        get_view_position(v)[1] + get_view_dimension(v)[1] > get_aquarium_dimension(a)[1]) {
 
-        for(int k=0; k<a->nb_views; k++) {
-            if (get_view_id(v) ==  get_view_id(&(a->views[k]))) {
-                return -1;
-            }
-        }
-        a->views[a->nb_views] = *v;
-        a->nb_views++;
-
-        return 0;
+        return -1;
     }
+
+    for(int k=0; k<a->nb_views; k++) {
+        if (get_view_id(v) ==  get_view_id(&(a->views[k]))) {
+            return -1;
+        }
+    }
+    a->views[a->nb_views] = *v;
+    a->nb_views++;
+    return 0;
+        
+
 }
 
 
