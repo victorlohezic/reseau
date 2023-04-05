@@ -3,11 +3,15 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "aquarium.h"
 
-void hello(char* command, int socket);
+int hello(char* command, int socket, struct aquarium* a, int* clients);
 
 void log_out(int socket);
+
+int id_is_available(int id, struct aquarium* a, int* client);
 
 #endif
