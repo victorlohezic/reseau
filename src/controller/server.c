@@ -26,6 +26,9 @@ void error(char *msg)
 void handle_network_command(char* command, int socket_client){
     if (strstr(command, "hello") == command) { // check if the command start with hello
         hello(command, socket_client);
+    } 
+    else if (strcmp(command, "log out") == 0) {
+        log_out(socket_client);
     }
     else {
         send(socket_client, "Command not found\n", 19, 0);
