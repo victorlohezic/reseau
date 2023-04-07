@@ -8,12 +8,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <strings.h>
+#include <sys/time.h>
 
 #include "parser.h"
 #include "aquarium.h"
 #include "network_command.h"
 
 #define SO_REUSEPORT 15 
+#define MAX_CLIENTS MAX_VIEWS
 
 void error(char *msg)
 {
@@ -21,11 +23,9 @@ void error(char *msg)
     exit(1);
 }
 
-
-
-void handle_network_command(char* command, int socket_client){
+void handle_network_command(char* command, int socket_client, struct aquarium* controller_aquarium, int* client_socket){
     if (strstr(command, "hello") == command) { // check if the command start with hello
-        hello(command, socket_client);
+        hello(command, socket_client, controller_aquarium, client_socket);
     } 
     else if (strcmp(command, "log out") == 0) {
         log_out(socket_client);
@@ -47,15 +47,26 @@ int main(int argc, char *argv[])
 {
     int sockfd, newsockfd, controller_port, display_time_out_value, fish_update_interval;
     struct aquarium controller_aquarium;
+
     load(&controller_aquarium, "save_a1.txt");
+    int client_socket[MAX_CLIENTS] = {0};
     socklen_t clilen;
     int opt = 1;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
+    
+    //set of socket descriptors 
+    fd_set readfds;  
     int n;
 
     init_server("build/controller.cfg", &controller_port, &display_time_out_value, &fish_update_interval);
 
+    //initialise all client_socket[] to 0 so not checked 
+    for (int i = 0; i < MAX_CLIENTS; ++i)  
+    {  
+        client_socket[i] = 0;  
+    }  
+    
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
@@ -72,7 +83,8 @@ int main(int argc, char *argv[])
 
     if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
-    listen(sockfd, 5);
+
+    listen(sockfd, MAX_CLIENTS);
     clilen = sizeof(cli_addr);
     newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
 
@@ -87,11 +99,11 @@ int main(int argc, char *argv[])
    
         printf("Here is the message: %s\n", buffer);
         
-        handle_network_command(buffer, newsockfd);
+        handle_network_command(buffer, newsockfd, &controller_aquarium, client_socket);
         // bzero(buffer, 256);
         // n = 0;
-        // // while ((buffer[n++] = getchar()) != '\n');
-        // // n = write(newsockfd, buffer, n*sizeof(char));
+        // while ((buffer[n++] = getchar()) != '\n');
+        // n = write(newsockfd, buffer, n*sizeof(char));
         
         // if (n < 0)
         //     error("ERROR writing to socket");
