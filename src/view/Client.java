@@ -55,9 +55,9 @@ public class Client {
             // status.execute();
             networkCommand.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
             networkCommand.put("AddFish", AddFish.initAddFish(plec, pred, logging));
-            networkCommand.put("Hello", Hello.initHello(plec, logging));
-            networkCommand.put("ping", Ping.initPing(plec, logging,controllerPort));
-            networkCommand.put("getFishes", getFishes.initGetFishes(plec, logging));
+            networkCommand.put("Hello", Hello.initHello(plec, pred, logging));
+            networkCommand.put("ping", Ping.initPing(plec, pred, logging,controllerPort));
+            networkCommand.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
             networkCommand.put("DelFish", DelFish.initDelFish(plec, pred, logging));
             Hello.castCommandToHello(networkCommand.get("Hello")).execute();
 
