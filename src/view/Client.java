@@ -59,6 +59,7 @@ public class Client {
             networkCommand.put("ping", Ping.initPing(plec, pred, logging,controllerPort));
             networkCommand.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
             networkCommand.put("DelFish", DelFish.initDelFish(plec, pred, logging));
+            networkCommand.put("ls", Ls.initLs(plec, pred, logging, prompt));
             Hello.castCommandToHello(networkCommand.get("Hello")).execute();
 
             return;
@@ -81,6 +82,7 @@ public class Client {
             networkCommand.get("DelFish").execute();
             networkCommand.get("ping").execute();
             networkCommand.get("getFishes").execute();
+            Ls.castCommandToLs(networkCommand.get("ls")).getResult();
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
         } catch (FishException e) {

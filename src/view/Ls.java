@@ -29,7 +29,7 @@ public class Ls implements Commande {
      * @throws LsExeception 
      * 
      */
-    public static Ls castCommandToFish(Commande command) throws CommandeException {
+    public static Ls castCommandToLs(Commande command) throws CommandeException {
         if (command == Ls) {
             return Ls;
         } else {
