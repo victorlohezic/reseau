@@ -11,6 +11,7 @@ public class AddFish implements Commande {
     private static BufferedReader input; 
     private static PrintWriter output;
     private static Fish fish; 
+    private static boolean result;
 
     private AddFish(){
     }
@@ -75,6 +76,18 @@ public class AddFish implements Commande {
      */
     public void setFish(Fish f) {
         fish = f;
+    }
+
+    /**
+     * This methods return true if the fish is added else false 
+     * If the result is true after the call of this method the attribute is false
+     */
+    public boolean getResult() {
+        boolean currentResult = result;
+        if (result == true) {
+            result = false;
+        }
+        return currentResult;
     }
 
 }
