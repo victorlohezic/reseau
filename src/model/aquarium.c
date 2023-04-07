@@ -114,6 +114,54 @@ int del_view(struct aquarium* a, int id_view) {
 
 
 
+
+int add_fish(struct aquarium* a, struct fish* f)
+{
+    if (a->nb_fishes >= MAX_FISHES) {
+        return -1;
+    } 
+        
+    if (get_fish_position(f)[0] < 0 || get_fish_position(f)[1] < 0 || 
+        get_fish_position(f)[0] + get_fish_dimension(f)[0] > get_aquarium_dimension(a)[0] ||
+        get_fish_position(f)[1] + get_fish_dimension(f)[1] > get_aquarium_dimension(a)[1]) {
+
+        return -1;
+    }
+
+    for(int k=0; k<a->nb_fishes; k++) {
+        if (strcmp(get_fish_name(f),get_fish_name(a->fishes+k)) == 0) {
+            return -1;
+        }
+    }
+    a->fishes[a->nb_fishes] = *f;
+    a->nb_fishes++;
+    return 0;
+        
+
+}
+
+
+
+int del_fish(struct aquarium* a, char* fish_name) {
+    for(int k = 0; k< a->nb_fishes; k++) {
+        if (strcmp((a->fishes[k]).name,fish_name) == 0) {
+
+            for(int j = k+1; j < a->nb_fishes; j++) {
+                a->fishes[j-1] = a->fishes[j];
+            }
+            a->nb_fishes--;
+
+            return 0;
+
+        } 
+
+    }
+    return -1;
+
+}
+
+
+
 int save_aquarium(struct aquarium* a, char* path) {
 
     FILE* output_file;

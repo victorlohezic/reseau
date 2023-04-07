@@ -34,6 +34,9 @@ struct fish {
 // initalizes a fish
 void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*));
 
+// diplays the name of a fish
+char* get_fish_name(struct fish* f);
+
 
 // returns the position of a fish 
 int* get_fish_position(struct fish* f);

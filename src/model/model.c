@@ -16,6 +16,7 @@ void shifting(struct movement* mov, int* c)
 
 // functions for the fishes
 
+
 void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*))
 {
     strcpy(f->name, _name);
@@ -27,6 +28,11 @@ void init_fish(struct fish* f, char* _name, int width, int height, int x, int y,
     f->dimension[1] = height;
 
     init_movement(&(f->move), shift);
+}
+
+char* get_fish_name(struct fish* f)
+{
+    return f->name;
 }
 
 
