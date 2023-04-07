@@ -22,9 +22,9 @@ public class Ping implements Commande {
 
     public void execute() {
 
-        logging.info("ping" + port );
+        logging.info("ping " + port );
         try {
-            output.println("ping"+ port);
+            output.println("ping "+ port);
             String answer = input.readLine();
                 logging.info((answer));
         }
