@@ -18,7 +18,20 @@ public class Prompt {
         String inputClear = input.replaceAll(",", "").replaceAll("x", " ");
         System.out.println("Vous avez saisi : " + inputClear);
         sc.close();
-        String[] inputTab = inputClear.split("\\s+");
+        ArrayList<String> inputList =  parse(inputClear,"\\s+");
+        return inputList;
+
+    }
+
+    public void print(String message) {
+        /**
+         * Print information into the terminal
+         */
+        System.out.println(message);
+    }
+    
+    public ArrayList<String> parse(String inputClear, String splitter ){
+        String[] inputTab = inputClear.split(splitter);
         ArrayList<String> inputList = new ArrayList<>(Arrays.asList(inputTab));
         ListIterator<String> li = inputList.listIterator();
     
@@ -30,14 +43,6 @@ public class Prompt {
         }
         return inputList;
     }
-
-    public void print(String message) {
-        /**
-         * Print information into the terminal
-         */
-        System.out.println(message);
-    }
-    
 
     public static void main(String[] argv) {
         Prompt prompt = new Prompt();
