@@ -7,6 +7,7 @@ public class Fish {
     private int[] dimensions = new int[2]; 
     private int[] coordinates = new int[2]; 
     private String mobility;
+    private State state = State.STOPPED;
 
     public Fish(String name, int[] coordinates, int[] dimensions, String mobility) throws FishException {
         this.name = name;
@@ -55,6 +56,32 @@ public class Fish {
         return mobility;
     }
 
+    /**
+     * Return the state of a fish, either STARTED or STOPPED (enum)
+     * @return state State
+     */
+    public State getState() {
+        return state;
+    }
+
+    /*
+     * Return the name of the fish
+     * @return @name String
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Change the state of the fish
+     * Current value : STARTED -> New value : STOPPED
+     * Current value : STOPPED -> New value : STARTED
+     * @return state State
+     */
+    public void setState(State newState) {
+        state = newState;
+    }
+
     /*
      * Change the attribute coordinates with the @newPosition int[2]
      */
@@ -70,11 +97,4 @@ public class Fish {
         }
     }
 
-    /*
-     * Return the name of the fish
-     * @return @name String
-     */
-    public String getName() {
-        return name;
-    }
 } 
