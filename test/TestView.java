@@ -13,15 +13,15 @@ public class TestView {
         int[] coordinates = {0, 0};
         int[] dimensions = {50, 50};
         int[] size = {2, 4};
-        Fish clownFish = new Fish("Clown Fish", coordinates, size);
-        Fish chouchouFish = new Fish("Chouchou Fish", coordinates, size);
-        Fish flowerFish = new Fish("Flower Fish", coordinates, size);
+        Fish clownFish = new Fish("Clown Fish", coordinates, size, "RandomPathWay");
+        Fish chouchouFish = new Fish("Chouchou Fish", coordinates, size, "RandomPathWay");
+        Fish flowerFish = new Fish("Flower Fish", coordinates, size, "RandomPathWay");
         HashMap<String, Fish> fishes = new HashMap<String, Fish>();
         fishes.put("Clown Fish", clownFish);
         fishes.put("chouchou Fish", chouchouFish);
         fishes.put("flower Fish", flowerFish);
         try {
-            View view = new View(1, fishes, coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions);
         } catch (ViewException e) {
             assert false : "Exception Launched";
         }
@@ -35,15 +35,14 @@ public class TestView {
         int[] fishCoordinates = {0, 0};
         int[] dimensions = {50, 50};
         int[] size = {2, 4};
-        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size);
-        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size);
-        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size);
-        HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-        fishes.put("Clown Fish", clownFish);
-        fishes.put("chouchou Fish", chouchouFish);
-        fishes.put("flower Fish", flowerFish);
+        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size, "RandomPathWay");
+        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
+        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
         try {
-            View view = new View(1, fishes, coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions);
+            view.addFish(flowerFish);
+            view.addFish(clownFish);
+            view.addFish(chouchouFish);
         } catch (ViewException e) {
             return;
         }
@@ -58,15 +57,14 @@ public class TestView {
         int[] fishCoordinates = {0, 0};
         int[] dimensions = {50, 50};
         int[] size = {2, 4};
-        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size);
-        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size);
-        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size);
-        HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-        fishes.put("Clown Fish", clownFish);
-        fishes.put("chouchou Fish", chouchouFish);
-        fishes.put("flower Fish", flowerFish);
+        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size, "RandomPathWay");
+        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
+        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
         try {
-            View view = new View(1, fishes, coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions);
+            view.addFish(clownFish);
+            view.addFish(chouchouFish);
+            view.addFish(flowerFish);
         } catch (ViewException e) {
             return;
         }
@@ -81,15 +79,15 @@ public class TestView {
         int[] fishCoordinates = {0, 0};
         int[] dimensions = {50, 50};
         int[] size = {2, 4};
-        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size);
-        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size);
-        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size);
-        HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-        fishes.put("Clown Fish", clownFish);
-        fishes.put("chouchou Fish", chouchouFish);
-        fishes.put("flower Fish", flowerFish);
+        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size, "RandomPathWay");
+        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
+        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
+    
         try {
-            View view = new View(1, fishes, coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions);
+            view.addFish(clownFish);
+            view.addFish(chouchouFish);
+            view.addFish(flowerFish);
         } catch (ViewException e) {
             return;
         }
@@ -101,8 +99,8 @@ public class TestView {
     */
     public void testGetId() {
         try {
-            View view = new View(1, new HashMap<String, Fish>(), new int[]{0, 0}, new int[]{100, 100});
-            assert 1 == view.getId() : "Different id";
+            View view = new View("N1", new int[]{0, 0}, new int[]{100, 100});
+            assert "N1" == view.getId() : "Different id";
         } catch (ViewException e) {
             assert false : "Exception Launched";
         }
@@ -113,7 +111,7 @@ public class TestView {
     */
     public void testGetDimensions() {
         try {
-            View view = new View(1, new HashMap<String, Fish>(), new int[]{0, 0}, new int[]{100, 90});
+            View view = new View("N1", new int[]{0, 0}, new int[]{100, 90});
             int[] dimensions = view.getDimensions();
             assert 100 == dimensions[0] : "Bad dimension[0]";
             assert 90 == dimensions[1] : "Bad dimension[1]";
@@ -127,7 +125,7 @@ public class TestView {
     */
     public void testGetPosition() {
         try {
-            View view = new View(1, new HashMap<String, Fish>(), new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
             int[] position = view.getPosition();
             assert 10 == position[0] : "Bad position[0]";
             assert 20 == position[1] : "Bad position[0]";
@@ -143,10 +141,10 @@ public class TestView {
         int[] fishCoordinates = {15, 25};
         int[] size = {2, 4};
         try {
-            Fish clownFish = new Fish("clownFish", fishCoordinates, size);
-            Fish chouchouFish = new Fish("chouchouFish", fishCoordinates, size);
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            View view = new View(1, new HashMap<String, Fish>(), new int[]{10, 20}, new int[]{90, 80});
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            Fish chouchouFish = new Fish("chouchouFish", fishCoordinates, size, "RandomPathWay");
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
             view.addFish(flowerFish);
             view.addFish(chouchouFish);
             view.addFish(clownFish);
@@ -166,8 +164,8 @@ public class TestView {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            View view = new View(1, new HashMap<String, Fish>(), new int[]{10, 20}, new int[]{5, 5});
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{5, 5});
             view.addFish(flowerFish);
          } catch (FishViewException e) {
             return;
@@ -178,16 +176,16 @@ public class TestView {
     }
 
     /**
-    *Test addFish but with a fish wich isn't in the view
+    *Test addFish but with a fish wich is in the view
     */
     public void testAddFishAlreadyInTheView() {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
             HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            fishes.put("flowerFish", flowerFish);
-            View view = new View(1, fishes, new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(flowerFish);
             view.addFish(flowerFish);
          } catch (FishViewException e) {
             return;
@@ -204,10 +202,9 @@ public class TestView {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            fishes.put("flowerFish", flowerFish);
-            View view = new View(1, fishes, new int[]{10, 20}, new int[]{90, 80});
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(flowerFish);
             view.removeFish(flowerFish);
          } catch (Exception e2) {
             assert false : "Exception Launched";
@@ -221,11 +218,10 @@ public class TestView {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish clownFish = new Fish("clownFish", fishCoordinates, size);
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            fishes.put("flowerFish", flowerFish);
-            View view = new View(1, fishes, new int[]{10, 20}, new int[]{90, 80});
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(flowerFish);
             view.removeFish(clownFish);
          } catch (FishViewException e) {
             return;
@@ -242,12 +238,11 @@ public class TestView {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish clownFish = new Fish("clownFish", fishCoordinates, size);
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            fishes.put("flowerFish", flowerFish);
-            fishes.put("clownFish", clownFish);
-            View view = new View(1, fishes, new int[]{10, 20}, new int[]{90, 80});
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(flowerFish);
+            view.addFish(clownFish);
             clownFish.setPosition(new int[]{12, 28});
             view.updateCoordinatesFish(clownFish);
          } catch (Exception e2) {
@@ -262,12 +257,11 @@ public class TestView {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
-            Fish clownFish = new Fish("clownFish", fishCoordinates, size);
-            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size);
-            HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            fishes.put("flowerFish", flowerFish);
-            fishes.put("clownFish", clownFish);
-            View view = new View(1, fishes, new int[]{10, 20}, new int[]{90, 80});
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(flowerFish);
+            view.addFish(clownFish);
             clownFish.setPosition(new int[]{12, 28});
             flowerFish.setPosition(new int[]{12, 56});
             ArrayList<Fish> fishesArray = new ArrayList<Fish>();

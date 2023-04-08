@@ -10,7 +10,7 @@ public class TestFish {
         int[] coordinates = {0, 0};
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
-        Fish testFish = new Fish(name, coordinates, dimensions);
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         assert testFish.getName() == name : "The name of the fish isn't correct during the initialisation.";
     } 
 
@@ -21,7 +21,7 @@ public class TestFish {
         int[] coordinates = {0, 0};
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
-        Fish testFish = new Fish(name, coordinates, dimensions);
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         assert testFish.getPosition()[0] == coordinates[0] : "x : coordinate isn't correct";
         assert testFish.getPosition()[1] == coordinates[1] : "y : coordinate isn't correct";
     } 
@@ -35,7 +35,7 @@ public class TestFish {
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
         try {
-            Fish testFish = new Fish(name, coordinates, dimensions);
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         } catch(FishException e) {
             return;
         }
@@ -50,7 +50,7 @@ public class TestFish {
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
         try {
-            Fish testFish = new Fish(name, coordinates, dimensions);
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         } catch(FishException e) {
             return;
         }
@@ -66,7 +66,7 @@ public class TestFish {
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
         try {
-            Fish testFish = new Fish(name, coordinates, dimensions);
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
             int[] newDimensions = {-5, 2};
             testFish.setPosition(newDimensions);
         } catch(FishException e) {
@@ -84,7 +84,7 @@ public class TestFish {
         int[] dimensions = {-5, 2};
         String name = "ChouchouALaCreme";
         try {
-            Fish testFish = new Fish(name, coordinates, dimensions);
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         } catch(FishException e) {
             return;
         }
@@ -99,7 +99,7 @@ public class TestFish {
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
         try {
-            Fish testFish = new Fish(name, coordinates, dimensions);
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
             int[] newDimensions = {105, 2};
             testFish.setPosition(newDimensions);
         } catch(FishException e) {
@@ -115,7 +115,7 @@ public class TestFish {
         int[] coordinates = {0, 0};
         int[] dimensions = {5, 2};
         String name = "ChouchouALaCreme";
-        Fish testFish = new Fish(name, coordinates, dimensions);
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
         assert testFish.getSize()[0] == dimensions[0] : "x : coordinate isn't correct";
         assert testFish.getSize()[1] == dimensions[1] : "y : coordinate isn't correct";
     } 
