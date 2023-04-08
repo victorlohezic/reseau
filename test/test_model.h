@@ -19,7 +19,9 @@ void test_shifting();
 
 // testing structure fish
 
+
 void test_init_fish();
+void test_get_fish_name();
 void test_get_fish_pos();
 void test_set_fish_pos();
 void test_get_fish_dim();

@@ -38,10 +38,20 @@ int add_view(struct aquarium*, struct view*);
 // returns 0 if success and -1 otherwise
 int del_view(struct aquarium*, int id_view);
 
+// returns 0 if success and -1 otherwise
+int add_fish(struct aquarium*, struct fish*);
+
+// returns 0 if success and -1 otherwise
+int del_fish(struct aquarium*, char* fish_name);
+
 // saves the content of the aquarium in a file, returns 0 if success, -1 otherwise
 int save_aquarium(struct aquarium* a, char* path);
 
 // return 1 if the view is in the aquarium 0 otherwise 
 int find_view(struct aquarium* a, int id_view);
+
+// return the fishes belonging to a view
+struct fish* fishes_in_view(struct aquarium* a, int id_view);
+
 
 #endif //_AQUARIUM_H_

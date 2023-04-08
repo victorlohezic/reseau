@@ -12,6 +12,9 @@
 
 void test_add_view();
 void test_del_view();
+void test_add_fish();
+void test_del_fish();
 void test_save_load();
+void test_find_view();
 
 #endif //_TEST_AQUARIUM_H_

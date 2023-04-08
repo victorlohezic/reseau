@@ -97,6 +97,34 @@ void test_init_fish()
 }
 
 
+void test_get_fish_name()
+{
+    printf("%s", __func__);
+
+    char name[] = "Poisson Chouchou";
+    int width = 10;
+    int height = 20;
+    int x = 4;
+    int y = 5;
+
+    void shift (int* c)
+    {
+        c[0] +=2;
+        c[1] +=3;
+    }
+
+    struct fish f;
+
+    init_fish(&f, name, width, height, x, y, &shift);
+
+    assert(strcmp(get_fish_name(&f),"Poisson Chouchou") == 0);
+    assert(strcmp(get_fish_name(&f),"poisson Chouchou") != 0);
+    assert(strcmp(get_fish_name(&f),"poisson Chichon") != 0);
+
+
+    printf("\tOK\n");
+}
+
 void test_get_fish_pos()
 {
     printf("%s", __func__);
@@ -317,6 +345,7 @@ int main(void)
     printf("\n");
 
     test_init_fish();
+    test_get_fish_name();
     test_get_fish_pos();
     test_set_fish_pos();
     test_get_fish_dim();

@@ -97,6 +97,94 @@ void test_del_view()
 }
 
 
+
+void test_add_fish()
+{
+    printf("%s", __func__);
+
+    struct aquarium a;
+    a.dimension[0] = 128;
+    a.dimension[1] = 337;
+
+    a.nb_fishes = 0;
+
+    void shift (int* c)
+    {
+        c[0] +=2;
+        c[1] +=3;
+    }
+
+    assert(a.nb_fishes == 0);
+    struct fish f0;
+    init_fish(&f0, "Poisson n° 0", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f0) == 0);
+    assert(a.nb_fishes == 1);
+    assert(a.nb_fishes != 0);
+
+    struct fish f1;
+    init_fish(&f1, "Poisson n° 1", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f1) == 0);
+    assert(a.nb_fishes == 2);
+
+    struct fish f2;
+    init_fish(&f2, "Poisson n° 0", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f2) == -1);
+    assert(a.nb_fishes == 2);
+
+    struct fish f3;
+    init_fish(&f3, "Poisson n° 3", 10, 10, -2, 10, &shift);
+    assert(add_fish(&a,&f3) == -1);
+    assert(a.nb_fishes == 2);
+
+    struct fish f4;
+    init_fish(&f4, "Poisson n° 4", 10, 10, 300, 10, &shift);
+    assert(add_fish(&a,&f4) == -1);
+    assert(a.nb_fishes == 2);
+
+    //show(&a);
+
+    printf("\t\tOK\n");
+}
+
+
+void test_del_fish()
+{
+    printf("%s", __func__);
+   struct aquarium a;
+    a.dimension[0] = 128;
+    a.dimension[1] = 337;
+
+    a.nb_fishes = 0;
+
+    void shift (int* c)
+    {
+        c[0] +=2;
+        c[1] +=3;
+    }
+
+    assert(a.nb_fishes == 0);
+    struct fish f0;
+    init_fish(&f0, "Poisson n° 0", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f0) == 0);
+    struct fish f1;
+    init_fish(&f1, "Poisson n° 1", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f1) == 0);
+
+
+    assert(a.nb_fishes == 2);
+
+    assert(del_fish(&a, "Poisson n° 0") == 0);
+    assert(a.nb_fishes == 1);
+    assert(del_fish(&a, "Poisson n° 0") == -1);
+    assert(a.nb_fishes == 1);
+
+    assert(del_fish(&a, "Poisson n° 1") == 0);
+    assert(a.nb_fishes == 0);
+
+    printf("\t\tOK\n");
+}
+
+
 void test_save_load()
 {
     printf("%s", __func__);
@@ -170,6 +258,8 @@ int main()
 
     test_add_view();
     test_del_view();
+    test_add_fish();
+    test_del_fish();
     test_save_load();
     test_find_view();
 

@@ -114,6 +114,54 @@ int del_view(struct aquarium* a, int id_view) {
 
 
 
+
+int add_fish(struct aquarium* a, struct fish* f)
+{
+    if (a->nb_fishes >= MAX_FISHES) {
+        return -1;
+    } 
+        
+    if (get_fish_position(f)[0] < 0 || get_fish_position(f)[1] < 0 || 
+        get_fish_position(f)[0] + get_fish_dimension(f)[0] > get_aquarium_dimension(a)[0] ||
+        get_fish_position(f)[1] + get_fish_dimension(f)[1] > get_aquarium_dimension(a)[1]) {
+
+        return -1;
+    }
+
+    for(int k=0; k<a->nb_fishes; k++) {
+        if (strcmp(get_fish_name(f),get_fish_name(a->fishes+k)) == 0) {
+            return -1;
+        }
+    }
+    a->fishes[a->nb_fishes] = *f;
+    a->nb_fishes++;
+    return 0;
+        
+
+}
+
+
+
+int del_fish(struct aquarium* a, char* fish_name) {
+    for(int k = 0; k< a->nb_fishes; k++) {
+        if (strcmp((a->fishes[k]).name,fish_name) == 0) {
+
+            for(int j = k+1; j < a->nb_fishes; j++) {
+                a->fishes[j-1] = a->fishes[j];
+            }
+            a->nb_fishes--;
+
+            return 0;
+
+        } 
+
+    }
+    return -1;
+
+}
+
+
+
 int save_aquarium(struct aquarium* a, char* path) {
 
     FILE* output_file;
@@ -148,4 +196,46 @@ int find_view(struct aquarium* a, int id_view) {
 }
 
 
+struct fish* fishes_in_view(struct aquarium* a, int id_view)
+{
+    struct view* v = NULL;
+    for(int k=0; k<a->nb_views; k++) {
+        if ((a->views[k]).id == id_view) {
+            v = a->views+k;
+        }
+    }
+    if (v == NULL) {
+        return NULL;
+    }
+
+
+    struct fish* tmp = malloc(sizeof(struct fish)*MAX_FISHES);
+    int rank = 0;
+
+    for (int i=0; i<a->nb_fishes; i++) {
+        int cond1 = (get_fish_position(a->fishes+i)[0] < get_view_position(v)[0] + get_view_dimension(v)[0]);
+        int cond2 = (get_fish_position(a->fishes+i)[0] + get_fish_dimension(a->fishes+i)[0] > get_view_position(v)[0]);
+        int cond3 = (get_fish_position(a->fishes+i)[1] < get_view_position(v)[1] + get_view_dimension(v)[1]);
+        int cond4 = (get_fish_position(a->fishes+i)[1] + get_fish_dimension(a->fishes+i)[1] > get_view_position(v)[1]);
+
+        if (cond1 && cond2 && cond3 && cond4) {
+            init_fish(tmp+rank, get_fish_name(a->fishes+i),
+                                 get_fish_dimension(a->fishes+i)[0], 
+                                 get_fish_dimension(a->fishes+i)[1], 
+                                 get_fish_position(a->fishes+i)[0], 
+                                 get_fish_position(a->fishes+i)[1], 
+                                 a->fishes[i].move.shift);
+
+            rank++;
+        }
+    }
+
+    if (rank < MAX_FISHES) {
+        struct fish end_fish;
+        init_fish(&end_fish, "Deadfish", 0, 0, 0, 0, NULL);
+        tmp[rank] = end_fish;
+    }
+
+    return tmp;
+}
 
