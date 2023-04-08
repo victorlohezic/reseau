@@ -37,8 +37,7 @@ public class Client {
         this.controllerAddress = config.getControllerAddress();
         this.controllerPort = config.getControllerPort();
         this.resources = config.getResources();
-        this.displayTimeoutValue = config.getDisplayTimeoutValue();
-
+        this.displayTimeoutValue = config.getDisplayTimeoutValue()*1000;
         this.prompt = new Prompt(scanner);
         try {
             this.view = new View(this.id, new int[]{0, 0}, new int[]{100, 100});
@@ -49,7 +48,7 @@ public class Client {
 
 
 
-    private void initNetwork() {
+    private boolean initNetwork() {
             try{
             String address = this.controllerAddress; // get controllerAddress ( /!\ CAST IN INT BCAUSE IT'S A STR)
             int port = this.controllerPort; // get controllerPort 
@@ -66,16 +65,18 @@ public class Client {
             networkCommands.put("AddFish", AddFish.initAddFish(plec, pred, logging));
             networkCommands.put("Hello", Hello.initHello(plec, pred, logging));
             networkCommands.put("ping", Ping.initPing(plec, pred, logging, socket, controllerPort, displayTimeoutValue));
-            networkCommands.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
+            networkCommands.put("getFishes", GetFishes.initGetFishes(plec, pred, logging));
             networkCommands.put("DelFish", DelFish.initDelFish(plec, pred, logging));
             networkCommands.put("ls", Ls.initLs(plec, pred, logging, prompt));
             Hello.castCommandToHello(networkCommands.get("Hello")).execute();
 
-            return;
+            return true;
             } catch (IOException e) {
                 logging.debug(e.getMessage());
+                return false;
             } catch (CommandeException e) {
                 logging.warning(e.getMessage());
+                return false;
             }
     }
 
@@ -86,7 +87,7 @@ public class Client {
         try{
             promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging, prompt));
             promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging, prompt));
-            promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), logging, prompt));
+            promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), GetFishes.castCommandToFish(networkCommands.get("getFishes")), logging, prompt));
             promptCommands.put("startFish", StartFish.initStartFish(view, logging, prompt));
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
@@ -132,7 +133,7 @@ public class Client {
                 } catch(Exception e) {
                     logging.warning(e.getMessage());
                 }  
-            } else {
+            } else if (result.get(0).equals("quit") == false) {
                 logging.warning("NOK : commande introuvable");
             }
         } while (!result.get(0).equals("quit"));        
@@ -149,9 +150,10 @@ public class Client {
 
     public static void main(String[] argv) {
          Client client = new Client();
-         client.initNetwork();
-         client.initPromptCommands();
-         client.run();
-         client.closeNetwork();
+         if (client.initNetwork()){
+             client.initPromptCommands();
+             client.run();
+             client.closeNetwork();
+         }
      }
 }

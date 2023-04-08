@@ -119,4 +119,27 @@ public class TestFish {
         assert testFish.getSize()[0] == dimensions[0] : "x : coordinate isn't correct";
         assert testFish.getSize()[1] == dimensions[1] : "y : coordinate isn't correct";
     } 
+
+    /**
+     *Test if the getState return the good state STOPPED
+     */
+    public void testGetState() throws Exception {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+        assert testFish.getState() == State.STOPPED : "Initial state is wrong must be STOPPED";
+    } 
+
+    /**
+     *Test if the setState change in the good state 
+     */
+    public void testSetState() throws Exception {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+        testFish.setState(State.STARTED);
+        assert testFish.getState() == State.STARTED : "The new state is wrong, must be STARTED";
+    } 
 }
