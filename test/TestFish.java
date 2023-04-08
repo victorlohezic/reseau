@@ -26,6 +26,16 @@ public class TestFish {
         assert testFish.getPosition()[1] == coordinates[1] : "y : coordinate isn't correct";
     } 
 
+    /**
+     *Test if the getPosition return the good position of a fish
+     */
+    public void testGetMobility() throws Exception {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+        assert testFish.getMobility() == "RandomPathWay" : "mobility must be RandomPathWay";
+    } 
 
     /**
      *Test if negative position generates an error
