@@ -13,6 +13,8 @@ void test_init_movement()
         c[0] +=1;
         c[1] +=2;
     }
+    
+    assert(1);
 
     struct movement m;
     init_movement(&m, &f);
@@ -38,6 +40,8 @@ void test_shifting()
         c[0] += 10;
         c[1] += 20;
     }
+
+    assert(1);
 
     struct movement m;
     init_movement(&m, &f);
@@ -77,6 +81,8 @@ void test_init_fish()
         c[1] +=2;
     }
 
+    assert(width == 10);
+
     struct fish f;
 
     init_fish(&f, name, width, height, x, y, &shift);
@@ -113,6 +119,8 @@ void test_get_fish_name()
         c[1] +=3;
     }
 
+    assert(width == 10);
+
     struct fish f;
 
     init_fish(&f, name, width, height, x, y, &shift);
@@ -140,6 +148,8 @@ void test_get_fish_pos()
         c[0] +=2;
         c[1] +=3;
     }
+
+    assert(width == 10);
 
     struct fish f;
 
@@ -178,6 +188,8 @@ void test_set_fish_pos()
         c[1] +=3;
     }
 
+    assert(width == 10);
+
     struct fish f;
 
     init_fish(&f, name, width, height, x, y, &shift);
@@ -213,6 +225,8 @@ void test_get_fish_dim()
         c[1] +=3;
     }
 
+    assert(width == 10);
+
     struct fish f;
 
     init_fish(&f, name, width, height, x, y, &shift);
@@ -242,6 +256,8 @@ void test_set_fish_dim()
         c[0] +=2;
         c[1] +=3;
     }
+
+    assert(width == 10);
 
     struct fish f;
 
@@ -277,6 +293,8 @@ void test_set_fish_mov()
         c[0] +=2;
         c[1] +=3;
     }
+
+    assert(width == 10);
 
     struct fish f;
 
@@ -318,7 +336,7 @@ void test_shift_fish()
         c[0] +=1;
         c[1] +=2;
     }
-
+    assert(width == 10);
     struct fish f;
     init_fish(&f, name, width, height, x, y, &shift);
 
@@ -342,7 +360,6 @@ int main(void)
 
     test_init_movement();
     test_shifting();
-    printf("\n");
 
     test_init_fish();
     test_get_fish_name();

@@ -251,6 +251,72 @@ void test_find_view() {
 }
 
 
+void test_fishes_in_view()
+{
+    printf("%s", __func__);
+
+   struct aquarium a;
+    a.dimension[0] = 128;
+    a.dimension[1] = 337;
+
+    a.nb_fishes = 0;
+    a.nb_views = 0;
+
+
+    void shift (int* c)
+    {
+        c[0] +=2;
+        c[1] +=3;
+    }
+    assert(a.nb_fishes == 0);
+    struct fish f0;
+    init_fish(&f0, "Poisson n° 0", 10, 10, 10, 10, &shift);
+    assert(add_fish(&a,&f0) == 0);
+    struct fish f1;
+    init_fish(&f1, "Poisson n° 1", 10, 10, 100, 10, &shift);
+    assert(add_fish(&a,&f1) == 0);
+
+    struct fish f2;
+    init_fish(&f2, "Poisson n° 2", 10, 10, 10, 100, &shift);
+    assert(add_fish(&a,&f2) == 0);
+    struct fish f3;
+    init_fish(&f3, "Poisson n° 3", 10, 10, 100, 100, &shift);
+    assert(add_fish(&a,&f3) == 0);
+    assert(a.nb_fishes == 4);
+
+    int nb_fishes_v;
+   
+    struct view v0;
+    init_view(&v0, 0, 0, 0, 110, 15);
+    assert(add_view(&a, &v0) == 0);
+    assert(a.nb_views == 1);
+
+    struct fish fish_v0[MAX_FISHES];
+
+    nb_fishes_v = fishes_in_view(&a, fish_v0, 0);
+    assert(nb_fishes_v == 2);
+    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 0") == 0);
+    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 1") != 0);
+    assert(strcmp(get_fish_name(fish_v0+1), "Poisson n° 1") == 0);
+
+    struct view v1;
+    init_view(&v1, 1, 105, 105, 5, 5);
+    assert(add_view(&a, &v1) == 0);
+    assert(a.nb_views == 2);
+
+    nb_fishes_v = fishes_in_view(&a, fish_v0, 1);
+    assert(nb_fishes_v == 1);
+    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 3") == 0);
+    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 2") != 0);
+
+    nb_fishes_v = fishes_in_view(&a, fish_v0, 2);
+    assert(nb_fishes_v == 0);
+   
+
+    printf("\tOK\n"); 
+}
+
+
 
 int main() 
 {
@@ -262,6 +328,8 @@ int main()
     test_del_fish();
     test_save_load();
     test_find_view();
+    test_fishes_in_view();
+
 
     return 0;
 }

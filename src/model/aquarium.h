@@ -51,7 +51,7 @@ int save_aquarium(struct aquarium* a, char* path);
 int find_view(struct aquarium* a, int id_view);
 
 // return the fishes belonging to a view
-struct fish* fishes_in_view(struct aquarium* a, int id_view);
+int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view);
 
 
 #endif //_AQUARIUM_H_

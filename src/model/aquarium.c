@@ -195,8 +195,7 @@ int find_view(struct aquarium* a, int id_view) {
     return 0;
 }
 
-
-struct fish* fishes_in_view(struct aquarium* a, int id_view)
+int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view)
 {
     struct view* v = NULL;
     for(int k=0; k<a->nb_views; k++) {
@@ -205,11 +204,9 @@ struct fish* fishes_in_view(struct aquarium* a, int id_view)
         }
     }
     if (v == NULL) {
-        return NULL;
+        return 0;
     }
 
-
-    struct fish* tmp = malloc(sizeof(struct fish)*MAX_FISHES);
     int rank = 0;
 
     for (int i=0; i<a->nb_fishes; i++) {
@@ -229,13 +226,6 @@ struct fish* fishes_in_view(struct aquarium* a, int id_view)
             rank++;
         }
     }
-
-    if (rank < MAX_FISHES) {
-        struct fish end_fish;
-        init_fish(&end_fish, "Deadfish", 0, 0, 0, 0, NULL);
-        tmp[rank] = end_fish;
-    }
-
-    return tmp;
+    return rank;
 }
 
