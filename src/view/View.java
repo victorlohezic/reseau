@@ -7,14 +7,13 @@ import java.util.ListIterator;
  */
 public class View {
 
-    private int id; 
+    private String id; 
     private HashMap<String, Fish> fishes = new HashMap<>(); 
     private int[] dimensions = new int[2];
     private int[] coordinates = new int[2];
 
-    public View(int id, HashMap<String, Fish> fishes, int[] coordinates, int dimensions[]) throws ViewException {
+    public View(String id, int[] coordinates, int dimensions[]) throws ViewException {
         this.id = id;
-        this.fishes = fishes; 
         for (int i = 0; i < 2; ++i) {
             if (coordinates[i] < 0 || coordinates[i] > 100) {
                 throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
@@ -33,9 +32,9 @@ public class View {
 
     /**
      * Return the identity of the view
-     * @return id int
+     * @return String int
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 

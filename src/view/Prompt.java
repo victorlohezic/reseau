@@ -7,17 +7,22 @@ import java.util.ListIterator;
  */
 public class Prompt {
 
+    Scanner sc;
+
+    public Prompt(Scanner sc) {
+        this.sc = sc;
+    }
+
     public ArrayList<String> read() {
         /**
          * Read information from the terminal
          * Return an ArrayList with first the name of the command and then the parameters
          */
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Veuillez saisir un mot :");
+        
+        System.out.println("Veuillez saisir une commande :");
         String input = sc.nextLine();
         String inputClear = input.replaceAll(",", "").replaceAll("x", " ");
         System.out.println("Vous avez saisi : " + inputClear);
-        sc.close();
         ArrayList<String> inputList =  parse(inputClear,"\\s+");
         return inputList;
 
@@ -45,7 +50,8 @@ public class Prompt {
     }
 
     public static void main(String[] argv) {
-        Prompt prompt = new Prompt();
+        Scanner sc = new Scanner(System.in);
+        Prompt prompt = new Prompt(sc);
         ArrayList<String> inputList = prompt.read();
         ListIterator<String> li = inputList.listIterator();
 

@@ -7,7 +7,7 @@ import java.io.IOException;
 **/
 public class Status implements Commande {
     private static final Status STATUS = new Status();
-    private static final Prompt PROMPT = new Prompt();
+    private static Logging logging;
     private static BufferedReader input; 
     private static PrintWriter output;
 
@@ -17,9 +17,10 @@ public class Status implements Commande {
     /*
      * Initialise Status command and return this command
      */
-    public static Status initStatus(BufferedReader in, PrintWriter out) {
+    public static Status initStatus(BufferedReader in, PrintWriter out, Logging log) {
         input = in;
         output = out;
+        logging = log;
         return STATUS;
     }
 
@@ -30,7 +31,7 @@ public class Status implements Commande {
         output.println("status");
         try {
             String answer = input.readLine();
-            PROMPT.print(answer);
+            logging.info(answer);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

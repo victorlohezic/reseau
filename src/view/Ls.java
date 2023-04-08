@@ -9,7 +9,7 @@ public class Ls implements Commande {
     private static Logging logging;
     private static BufferedReader input; 
     private static PrintWriter output;
-    private static Prompt P = new Prompt();
+    private static Prompt P;
     private static ArrayList<String> result; 
 
     private Ls(){}

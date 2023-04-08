@@ -1,12 +1,16 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.ListIterator;
 
 public class Client {
     private Logging logging;
+    private Scanner scanner = new Scanner(System.in);;
     private Prompt prompt; 
-    private HashMap<String, Commande> promptCommand = new HashMap<>();  
-    private HashMap<String, Commande> networkCommand = new HashMap<>();  
+    private HashMap<String, ParametersCommande> promptCommands = new HashMap<>();  
+    private HashMap<String, Commande> networkCommands = new HashMap<>();  
     private View view;
 
     /* Socket Attributes */
@@ -36,6 +40,12 @@ public class Client {
         this.resources = config.getResources();
         this.displayTimeoutValue = config.getDisplayTimeoutValue();
 
+        this.prompt = new Prompt(scanner);
+        try {
+            this.view = new View(this.id, new int[]{0, 0}, new int[]{100, 100});
+        } catch (Exception e) {
+            logging.warning(e.getMessage());
+        }
     }
 
 
@@ -53,14 +63,14 @@ public class Client {
 
             // Status status = Status.initStatus(plec, pred);
             // status.execute();
-            networkCommand.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
-            networkCommand.put("AddFish", AddFish.initAddFish(plec, pred, logging));
-            networkCommand.put("Hello", Hello.initHello(plec, pred, logging));
-            networkCommand.put("ping", Ping.initPing(plec, pred, logging,controllerPort));
-            networkCommand.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
-            networkCommand.put("DelFish", DelFish.initDelFish(plec, pred, logging));
-            networkCommand.put("ls", Ls.initLs(plec, pred, logging, prompt));
-            Hello.castCommandToHello(networkCommand.get("Hello")).execute();
+            networkCommands.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
+            networkCommands.put("AddFish", AddFish.initAddFish(plec, pred, logging));
+            networkCommands.put("Hello", Hello.initHello(plec, pred, logging));
+            networkCommands.put("ping", Ping.initPing(plec, pred, logging,controllerPort));
+            networkCommands.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
+            networkCommands.put("DelFish", DelFish.initDelFish(plec, pred, logging));
+            networkCommands.put("ls", Ls.initLs(plec, pred, logging, prompt));
+            Hello.castCommandToHello(networkCommands.get("Hello")).execute();
 
             return;
             } catch (IOException e) {
@@ -70,19 +80,30 @@ public class Client {
             }
     }
 
-    /**
-     * Run functional test
+    /*
+     * Initialize the promp commands with network commands
      */
-    private void run() {
+    public void initPromptCommands() {
+        try{
+            promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view));
+        } catch (CommandeException e) {
+            logging.warning(e.getMessage());
+        }
+    }
+
+    /**
+     * Run functional tests
+     */
+    private void run_functional_tests() {
         try {
             Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
-            AddFish.castCommandToFish(networkCommand.get("AddFish")).setFish(fish);
-            DelFish.castCommandToFish(networkCommand.get("DelFish")).setFish(fish);
-            networkCommand.get("AddFish").execute();
-            networkCommand.get("DelFish").execute();
-            networkCommand.get("ping").execute();
-            networkCommand.get("getFishes").execute();
-            Ls.castCommandToLs(networkCommand.get("ls")).getResult();
+            AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
+            DelFish.castCommandToFish(networkCommands.get("DelFish")).setFish(fish);
+            networkCommands.get("AddFish").execute();
+            networkCommands.get("DelFish").execute();
+            networkCommands.get("ping").execute();
+            networkCommands.get("getFishes").execute();
+            Ls.castCommandToLs(networkCommands.get("ls")).getResult();
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
         } catch (FishException e) {
@@ -90,17 +111,40 @@ public class Client {
         }
     }   
 
+    /**
+     * Run
+     */
+    private void run() {
+        ArrayList<String> result;
+        do {
+            result = prompt.read();
+            ParametersCommande promptCommand = promptCommands.get(result.get(0));
+            int resultSize = result.size();
+            if (resultSize > 0) {
+                ArrayList<String> parameters = new ArrayList<String>(result.subList(1, resultSize));
+                promptCommand.setParameters(parameters);
+            }
+            try {
+                promptCommand.execute();
+            } catch(Exception e) {
+                logging.warning(e.getMessage());
+            }
+        } while (!result.get(0).equals("quit"));        
+    }   
+
     private void closeNetwork() {
-        try {
-            networkCommand.get("log out").execute();
-        } catch (CommandeException e) {
-            logging.warning(e.getMessage());
-        }
+        // try {
+        //     networkCommands.get("log out").execute();
+        // } catch (CommandeException e) {
+        //     logging.warning(e.getMessage());
+        // }
+        scanner.close();
     }
 
     public static void main(String[] argv) {
          Client client = new Client();
          client.initNetwork();
+         client.initPromptCommands();
          client.run();
          client.closeNetwork();
      }
