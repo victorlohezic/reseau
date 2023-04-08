@@ -27,7 +27,7 @@ public class TestFish {
     } 
 
     /**
-     *Test if the getPosition return the good position of a fish
+     *Test if the getMobility works
      */
     public void testGetMobility() throws Exception {
         int[] coordinates = {0, 0};
