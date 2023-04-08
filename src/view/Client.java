@@ -3,7 +3,6 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.ListIterator;
 
 public class Client {
     private Logging logging;
@@ -85,9 +84,9 @@ public class Client {
      */
     public void initPromptCommands() {
         try{
-            promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging));
-            promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging));
-            promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), logging));
+            promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging, prompt));
+            promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging, prompt));
+            promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), logging, prompt));
             promptCommands.put("startFish", StartFish.initStartFish(view, logging, prompt));
         } catch (CommandeException e) {
             logging.warning(e.getMessage());

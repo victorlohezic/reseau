@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.io.IOException;
+
 
 /** 
  * Give information about the state of the aquarium  
@@ -10,6 +8,7 @@ public class Status implements ParametersCommande {
     private static final Status STATUS = new Status();
     private static Logging logging;
     private static Ping ping;
+    private static Prompt prompt;
 
     private Status(){
     }
@@ -17,9 +16,10 @@ public class Status implements ParametersCommande {
     /*
      * Initialise Status command and return this command
      */
-    public static Status initStatus(Ping PingCommand, Logging log) {
+    public static Status initStatus(Ping PingCommand, Logging log, Prompt p) {
         logging = log;
         ping = PingCommand;
+        prompt = p;
         return STATUS;
     }
 
@@ -35,6 +35,7 @@ public class Status implements ParametersCommande {
             logging.warning("NOK: le controlleur ne répond pas");
         }
         logging.info(result);
+        prompt.print(result);
     }
 
     public void setParameters(ArrayList<String> p){

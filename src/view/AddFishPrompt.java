@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class AddFishPrompt implements ParametersCommande {
     private static final AddFishPrompt ADD_FISH = new AddFishPrompt();
     private static Logging logging;
+    private static Prompt prompt;
     private static Fish fish;
     private static AddFish addFishNetwork;
     private static View view;
@@ -16,10 +17,11 @@ public class AddFishPrompt implements ParametersCommande {
     /*
      * Initialise AddFishPrompt but it needs to use the method setFish to add a Fish
      */
-    public static AddFishPrompt initAddFish(AddFish networkCommande, View v, Logging log) {
+    public static AddFishPrompt initAddFish(AddFish networkCommande, View v, Logging log, Prompt p) {
         addFishNetwork = networkCommande;
         view = v;
         logging = log;
+        prompt = p;
         return ADD_FISH;
     }
 
@@ -49,6 +51,7 @@ public class AddFishPrompt implements ParametersCommande {
         if (addFishNetwork.getResult()) {
             try {
                 view.addFish(fish);
+                prompt.print("-> OK");
             } catch (FishViewException e) {
                 logging.warning(e.getMessage());
             }

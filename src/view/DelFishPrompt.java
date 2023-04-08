@@ -9,6 +9,7 @@ public class DelFishPrompt implements ParametersCommande {
     private static String nameFish;
     private static DelFish delFishNetwork;
     private static View view;
+    private static Prompt prompt;
 
     private DelFishPrompt() {
     }
@@ -16,10 +17,11 @@ public class DelFishPrompt implements ParametersCommande {
     /*
      * Initialise DelFishPrompt but it needs to use the method setFish to add a Fish
      */
-    public static DelFishPrompt initDelFish(DelFish networkCommande, View v, Logging log) {
+    public static DelFishPrompt initDelFish(DelFish networkCommande, View v, Logging log, Prompt p) {
         delFishNetwork = networkCommande;
         logging = log;
         view = v;
+        prompt = p;
         return DEL_FISH;
     }
 
@@ -50,8 +52,11 @@ public class DelFishPrompt implements ParametersCommande {
             try {
                 Fish fishToRemove = view.getFish(nameFish);
                 view.removeFish(fishToRemove);
+                prompt.print("-> OK");
             } catch (FishViewException e) {
                 logging.warning(e.getMessage());
+                prompt.print("-> NOK : Poisson Inexistant");
+
             }
         }
     }
