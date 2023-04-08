@@ -234,7 +234,7 @@ public class TestView {
     /**
     *Test updateCoordinates with a fish in the view
     */
-    public void testupdateCoordinatesFish() {
+    public void testUpdateCoordinatesFish() {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
@@ -253,7 +253,7 @@ public class TestView {
     /**
     *Test updateCoordinates with serveral fishes in the view
     */
-    public void testupdateCoordinatesFishes() {
+    public void testUpdateCoordinatesFishes() {
         int[] fishCoordinates = {50, 50};
         int[] size = {2, 4};
         try {
@@ -271,5 +271,38 @@ public class TestView {
          } catch (Exception e2) {
             assert false : "Exception Launched";
         }
+    }
+
+    /**
+    *Test get a fish in the view
+    */
+    public void testGetFish() {
+        int[] fishCoordinates = {50, 50};
+        int[] size = {2, 4};
+        try {
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(clownFish);
+            assert view.getFish(clownFish.getName()) == clownFish : "Fish name different";
+         } catch (Exception e2) {
+            assert false : "Exception Launched";
+        }
+    }
+
+    /**
+    *Test get a fish not in the view
+    */
+    public void testGetFishNotInTheView() {
+        int[] fishCoordinates = {50, 50};
+        int[] size = {2, 4};
+        try {
+            Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            view.addFish(clownFish);
+            view.getFish("Chouchou");
+         } catch (Exception e2) {
+            return;
+        }
+        assert false : "Exception Not Launched";
     }
 }

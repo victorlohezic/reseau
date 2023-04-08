@@ -19,10 +19,10 @@ public class Prompt {
          * Return an ArrayList with first the name of the command and then the parameters
          */
         
-        System.out.println("Veuillez saisir une commande :");
+        System.out.println("Please enter a command :");
         String input = sc.nextLine();
         String inputClear = input.replaceAll(",", "").replaceAll("x", " ");
-        System.out.println("Vous avez saisi : " + inputClear);
+        System.out.println("You typed : " + inputClear);
         ArrayList<String> inputList =  parse(inputClear,"\\s+");
         return inputList;
 

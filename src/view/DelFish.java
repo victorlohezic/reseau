@@ -10,7 +10,8 @@ public class DelFish implements Commande {
     private static Logging logging;
     private static BufferedReader input; 
     private static PrintWriter output;
-    private static Fish fish; 
+    private static String nameFish; 
+    private static boolean result;
 
     private DelFish(){
     }
@@ -44,11 +45,11 @@ public class DelFish implements Commande {
      * Launch the work of the commande
      * Before calling this method, you must call setFish in order to add a Fish
     **/
-    public void execute() throws CommandeException {
-        if (fish == null) {
+    public void execute()  {
+        if (nameFish == "") {
             logging.warning("Aucun poisson n'a été ajouté en paramètre");
         }
-        String commandValue = String.format("DelFish %s", fish.getName());
+        String commandValue = String.format("DelFish %s", nameFish);
 
         logging.info(commandValue);
         try{
@@ -57,9 +58,10 @@ public class DelFish implements Commande {
             answer = input.readLine();
             if (answer.equals("OK")) {
                 logging.info(answer);
+                result = true;
             } else {
                 logging.warning(answer);
-                throw new CommandeException(answer);
+                result = false;
             }
             return;
         }catch (IOException e) {
@@ -72,8 +74,20 @@ public class DelFish implements Commande {
      * It needs to call this method before execute
      * @param f : Fish
      */
-    public void setFish(Fish f) {
-        fish = f;
+    public void setFish(String name) {
+        nameFish = name;
+    }
+
+    /**
+     * This methods return true if the fish is added else false 
+     * If the result is true after the call of this method the attribute is false
+     */
+    public boolean getResult() {
+        boolean currentResult = result;
+        if (result == true) {
+            result = false;
+        }
+        return currentResult;
     }
 
 }

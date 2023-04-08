@@ -63,6 +63,19 @@ public class View {
     }
 
     /**
+     * Return a fish in the view with the @name it this fish isn't in the view, a FishException is throwed
+     * @return fishSearch Fish
+     */
+    public Fish getFish(String name) throws FishViewException {
+        Fish fishSearched;
+        fishSearched = fishes.get(name);
+        if (fishSearched == null) {
+            throw new FishViewException("The fish isn't in the view !");
+        }
+        return fishSearched;
+    }
+
+    /**
      * Add a fish to the ArrayList fishes
      * @param fish Fish
      * @throws FishViewException

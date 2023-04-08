@@ -85,7 +85,8 @@ public class Client {
      */
     public void initPromptCommands() {
         try{
-            promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view));
+            promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging));
+            promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging));
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
         }
@@ -98,7 +99,7 @@ public class Client {
         try {
             Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
             AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
-            DelFish.castCommandToFish(networkCommands.get("DelFish")).setFish(fish);
+            DelFish.castCommandToFish(networkCommands.get("DelFish")).setFish(fish.getName());
             networkCommands.get("AddFish").execute();
             networkCommands.get("DelFish").execute();
             networkCommands.get("ping").execute();
@@ -119,25 +120,29 @@ public class Client {
         do {
             result = prompt.read();
             ParametersCommande promptCommand = promptCommands.get(result.get(0));
-            int resultSize = result.size();
-            if (resultSize > 0) {
-                ArrayList<String> parameters = new ArrayList<String>(result.subList(1, resultSize));
-                promptCommand.setParameters(parameters);
-            }
-            try {
-                promptCommand.execute();
-            } catch(Exception e) {
-                logging.warning(e.getMessage());
+            if (promptCommand != null) {
+                int resultSize = result.size();
+                if (resultSize > 0) {
+                    ArrayList<String> parameters = new ArrayList<String>(result.subList(1, resultSize));
+                    promptCommand.setParameters(parameters);
+                }
+                try {
+                    promptCommand.execute();
+                } catch(Exception e) {
+                    logging.warning(e.getMessage());
+                }  
+            } else {
+                logging.warning("Unknown command");
             }
         } while (!result.get(0).equals("quit"));        
     }   
 
     private void closeNetwork() {
-        // try {
-        //     networkCommands.get("log out").execute();
-        // } catch (CommandeException e) {
-        //     logging.warning(e.getMessage());
-        // }
+        try {
+            networkCommands.get("log out").execute();
+        } catch (CommandeException e) {
+            logging.warning(e.getMessage());
+        }
         scanner.close();
     }
 

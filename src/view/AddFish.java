@@ -60,6 +60,7 @@ public class AddFish implements Commande {
             answer = input.readLine();
             if (answer.equals("OK")) {
                 logging.info(answer);
+                result = true;
             } else {
                 logging.warning(answer);
             }

@@ -10,8 +10,6 @@ import java.util.ListIterator;
 public class AddFishPrompt implements ParametersCommande {
     private static final AddFishPrompt ADD_FISH = new AddFishPrompt();
     private static Logging logging;
-    private static BufferedReader input;
-    private static PrintWriter output;
     private static Fish fish;
     private static AddFish addFishNetwork;
     private static View view;
@@ -22,9 +20,10 @@ public class AddFishPrompt implements ParametersCommande {
     /*
      * Initialise AddFishPrompt but it needs to use the method setFish to add a Fish
      */
-    public static AddFishPrompt initAddFish(AddFish networkCommande, View v) {
+    public static AddFishPrompt initAddFish(AddFish networkCommande, View v, Logging log) {
         addFishNetwork = networkCommande;
         view = v;
+        logging = log;
         return ADD_FISH;
     }
 
@@ -40,7 +39,7 @@ public class AddFishPrompt implements ParametersCommande {
         if (commande == ADD_FISH) {
             return ADD_FISH;
         } else {
-            throw new CommandeException("La commande à caster n'est pas un AddFishPrompt");
+            throw new CommandeException("The command which needs to be casted isn't an AddFishPrompt command.");
         }
     }
 
@@ -58,7 +57,7 @@ public class AddFishPrompt implements ParametersCommande {
                 logging.warning(e.getMessage());
             }
         } else {
-            logging.warning("Le poisson n'a pas ajouté avec succès.");
+            logging.warning("The fish wasn't added sucessfully");
         }
     }
 
