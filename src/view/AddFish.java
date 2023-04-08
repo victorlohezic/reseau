@@ -11,7 +11,7 @@ public class AddFish implements Commande {
     private static BufferedReader input; 
     private static PrintWriter output;
     private static Fish fish; 
-    private static boolean result;
+    private static boolean result = false;
 
     private AddFish(){
     }

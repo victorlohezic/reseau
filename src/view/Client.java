@@ -66,7 +66,7 @@ public class Client {
             networkCommands.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
             networkCommands.put("AddFish", AddFish.initAddFish(plec, pred, logging));
             networkCommands.put("Hello", Hello.initHello(plec, pred, logging));
-            networkCommands.put("ping", Ping.initPing(plec, pred, logging,controllerPort));
+            networkCommands.put("ping", Ping.initPing(plec, pred, logging, socket, controllerPort, displayTimeoutValue));
             networkCommands.put("getFishes", getFishes.initGetFishes(plec, pred, logging));
             networkCommands.put("DelFish", DelFish.initDelFish(plec, pred, logging));
             networkCommands.put("ls", Ls.initLs(plec, pred, logging, prompt));
@@ -87,6 +87,7 @@ public class Client {
         try{
             promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging));
             promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging));
+            promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), logging));
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
         }
@@ -132,7 +133,7 @@ public class Client {
                     logging.warning(e.getMessage());
                 }  
             } else {
-                logging.warning("Unknown command");
+                logging.warning("NOK : commande introuvable");
             }
         } while (!result.get(0).equals("quit"));        
     }   

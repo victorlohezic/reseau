@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
         n = 0;
         while ((buffer[n++] = getchar()) != '\n');
         n = write(newsockfd, buffer, n*sizeof(char));
+        printf("size : %ld\n", n*sizeof(char));
 
         if (n < 0)
             error("ERROR writing to socket");
