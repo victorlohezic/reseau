@@ -6,12 +6,10 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "aquarium.h"
+#include "client.h"
 
-int hello(char* command, int socket, struct aquarium* a, int* clients);
+int hello(char* command, int socket, struct client_set* clients);
 
 void log_out(int socket);
-
-int id_is_available(int id, struct aquarium* a, int* client);
 
 #endif

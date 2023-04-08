@@ -1,41 +1,60 @@
 #include "network_command.h"
+#include "client.h"
+#include <stdlib.h>
 
-int id_is_available(int id, struct aquarium* a, int* client) {
-    if (id <= 0 || id >= MAX_VIEWS || client[id] == 1 || !find_view(a, id)){
+int hello(char* command, int socket, struct client_set* clients) {
+
+    if (strstr(command, "hello") != command) {
+        write(socket, "say hello first\n", 17);
         return 0;
     }
-    return 1;
-}
 
-
-
-int hello(char* command, int socket, struct aquarium* a, int* clients) {
+    struct client_info new_client;
     char answer[20] = "greeting ";
-    char id[3] = {'\0'};
+    char str_id[4] = {'\0'};
     char copy[30];
+    int id_view;
     strcpy(copy, command);
-    char* token = strtok(copy, " "); // split the command with whitespace delimiter
-    while (token != 0) {
-        if (strcmp(token, "in") == 0) {     
-            token = strtok(NULL, " ");
-            strcpy(id, ++token);
-            break;
+    char* token = strtok(copy, " "); 
+    token = strtok(NULL, " ");
+    token = strtok(NULL, " ");
+    if (token != NULL) {
+        strcpy(str_id, ++token);
+        id_view = atoi(str_id);
+        printf("loop : %s %s\n", token, command);
+        if (is_view_available(clients, id_view)) {
+            printf("loop : %s\n", answer);
+            strcat(answer, str_id);
+            strcat(answer, "\n");
+            write(socket, answer, strlen(answer));
+            printf("%s\n", answer);
+            
+            new_client = init_client_info(socket, id_view);
+            add_client(clients, &new_client);
+            return id_view;
         }
-        token = strtok(NULL, " ");    
     }
-    
-    if (id_is_available(atoi(id), a, clients)) {
-        strcat(answer, id);
-        write(socket, answer, strlen(answer));
-        return atoi(id);
+    id_view = find_view_available(clients);
+    if (id_view == 0) {
+        write(socket, "no greeting\n", 13);
+        return 0;
     }
+    sprintf(str_id, "%d", id_view); // convert the integer to a string using sprintf
+    strcat(answer, str_id);
+    strcat(answer, "\n");
     write(socket, answer, strlen(answer));
-    return -1;
+    printf("Answer : %s\n", answer);
+    new_client = init_client_info(socket, id_view);
+    add_client(clients, &new_client);
+    return id_view;
+
 }
 
 void log_out(int socket) {
     char* answer = "bye\n";
+    printf("Answer : %s\n", answer);
     write(socket, answer, strlen(answer));
+    
 }
 
 // int main(){
