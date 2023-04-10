@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -8,7 +7,7 @@ import java.io.IOException;
 public class AddFish implements Commande {
     private static final AddFish ADD_FISH = new AddFish();
     private static Logging logging;
-    private static BufferedReader input; 
+    private static Listener input; 
     private static PrintWriter output;
     private static Fish fish; 
     private static boolean result = false;
@@ -19,7 +18,7 @@ public class AddFish implements Commande {
     /*
      * Initialise AddFish but it needs to use the method setFish to add a Fish
      */
-    public static AddFish initAddFish(BufferedReader in, PrintWriter out, Logging log) {
+    public static AddFish initAddFish(Listener in, PrintWriter out, Logging log) {
         input = in;
         output = out;
         logging = log;
@@ -65,7 +64,7 @@ public class AddFish implements Commande {
                 logging.warning(answer);
             }
             return;
-        }catch (IOException e) {
+        }catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }

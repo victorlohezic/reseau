@@ -10,7 +10,7 @@ TEST = TestFish TestView
 
 all : build
 
-build : build_directory server server_mock client copy_controller
+build : build_directory server server_mock server_mock_GUI client copy_controller
 
 test: ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
@@ -19,6 +19,9 @@ server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o 
 
 server_mock: ${SRC}/controller/server_mock.c parser.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server_mock
+
+server_mock_GUI: ${SRC}/controller/server_mock_GUI.c $(SRC)/controller/parser.o
+	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server_mock_GUI
 
 client: build_directory copy_view
 	${JC} ${SRC}/view/*.java -d ${BUILD_DIR} -cp ${BUILD_DIR} 

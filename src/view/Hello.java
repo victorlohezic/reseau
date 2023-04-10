@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -6,11 +5,11 @@ public class Hello implements Commande {
 
     private static final Hello HELLO = new Hello();
     private static Logging logging;
-    private static BufferedReader input;
+    private static Listener input;
     private static PrintWriter output;
     private Hello() {}
 
-    public static Hello initHello(BufferedReader in, PrintWriter out, Logging log) {
+    public static Hello initHello(Listener in, PrintWriter out, Logging log) {
         input = in;
         output = out;
         logging = log;
@@ -55,7 +54,7 @@ public class Hello implements Commande {
             }
         }
 
-        catch (IOException e) {
+        catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }

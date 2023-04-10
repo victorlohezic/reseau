@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -6,7 +5,7 @@ public class GetFishes implements Commande{
 
     private static final GetFishes GET_FISHES = new GetFishes();
     private static Logging logging;
-    private static BufferedReader input;
+    private static Listener input;
     private static PrintWriter output;
     private static String result;
 
@@ -14,7 +13,7 @@ public class GetFishes implements Commande{
 
     
 
-    public static GetFishes initGetFishes(BufferedReader in, PrintWriter out, Logging log) {
+    public static GetFishes initGetFishes(Listener in, PrintWriter out, Logging log) {
         input = in;
         output = out;
         logging = log;
@@ -41,12 +40,12 @@ public class GetFishes implements Commande{
         logging.info("getFishes");
         try {
             output.println("getFishes");
-            String answer = input.readLine();
+            String answer = input.getFishes();
             result = answer;
             logging.info((answer));
         }
 
-        catch (IOException e) {
+        catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }
