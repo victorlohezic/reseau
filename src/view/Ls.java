@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.io.IOException;
@@ -7,14 +6,14 @@ import java.io.IOException;
 public class Ls implements Commande {
     private static final Ls Ls = new Ls();
     private static Logging logging;
-    private static BufferedReader input; 
+    private static Listener input; 
     private static PrintWriter output;
     private static Prompt P;
     private static ArrayList<String> result; 
 
     private Ls(){}
 
-    public static Ls initLs(BufferedReader in, PrintWriter out, Logging log, Prompt prompt) {
+    public static Ls initLs(Listener in, PrintWriter out, Logging log, Prompt prompt) {
         input = in;
         output = out;
         logging = log;
@@ -48,7 +47,7 @@ public class Ls implements Commande {
             }
         }
 
-        catch (IOException e) {
+        catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }

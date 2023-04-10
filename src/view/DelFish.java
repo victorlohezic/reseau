@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -8,7 +7,7 @@ import java.io.IOException;
 public class DelFish implements Commande {
     private static final DelFish DEL_FISH = new DelFish();
     private static Logging logging;
-    private static BufferedReader input; 
+    private static Listener input; 
     private static PrintWriter output;
     private static String nameFish; 
     private static boolean result = false;
@@ -19,7 +18,7 @@ public class DelFish implements Commande {
     /*
      * Initialise DelFish but it needs to use the method setFish to add a Fish
      */
-    public static DelFish initDelFish(BufferedReader in, PrintWriter out, Logging log) {
+    public static DelFish initDelFish(Listener in, PrintWriter out, Logging log) {
         input = in;
         output = out;
         logging = log;
@@ -64,7 +63,7 @@ public class DelFish implements Commande {
                 result = false;
             }
             return;
-        }catch (IOException e) {
+        }catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }

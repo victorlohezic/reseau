@@ -15,6 +15,7 @@ public class Client {
     /* Socket Attributes */
     private Socket socket;
     BufferedReader plec;
+    Listener listener;
     PrintWriter pred;
 
     /*Config data*/ 
@@ -56,19 +57,25 @@ public class Client {
             logging.info("SOCKET = " + this.socket);
 
             this.plec = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); // Initialize data flow allowing to read what is sent by server
-
+            this.listener = new Listener(plec, prompt, view, logging);
+            this.listener.start();
             this.pred = new PrintWriter(new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream())), true); // Initialize data flow allowing to write to server
 
             // Status status = Status.initStatus(plec, pred);
             // status.execute();
-            networkCommands.put("log out", LogOut.initLogOut(plec, pred, socket, logging));
-            networkCommands.put("AddFish", AddFish.initAddFish(plec, pred, logging));
-            networkCommands.put("Hello", Hello.initHello(plec, pred, logging));
-            networkCommands.put("ping", Ping.initPing(plec, pred, logging, socket, controllerPort, displayTimeoutValue));
-            networkCommands.put("getFishes", GetFishes.initGetFishes(plec, pred, logging));
-            networkCommands.put("DelFish", DelFish.initDelFish(plec, pred, logging));
-            networkCommands.put("ls", Ls.initLs(plec, pred, logging, prompt));
+            networkCommands.put("log out", LogOut.initLogOut(listener, pred, socket, logging));
+            networkCommands.put("AddFish", AddFish.initAddFish(listener, pred, logging));
+            networkCommands.put("Hello", Hello.initHello(listener, pred, logging));
+            networkCommands.put("getFishesContinuously", GetFishesContinuously.initGetFishesContinuously(pred, logging));
+            networkCommands.put("ping", Ping.initPing(listener, pred, logging, socket, controllerPort, displayTimeoutValue));
+            networkCommands.put("getFishes", GetFishes.initGetFishes(listener, pred, logging));
+            networkCommands.put("DelFish", DelFish.initDelFish(listener, pred, logging));
+            networkCommands.put("ls", Ls.initLs(listener, pred, logging, prompt));
             Hello.castCommandToHello(networkCommands.get("Hello")).execute();
+            GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
+            // GetFishesContinuously getFishesContinuously = GetFishesContinuously.initGetFishes();
+            // networkCommands.put("getFishesContinuously", getFishesContinuously);
+            // getFishesContinuously.execute();
 
             return true;
             } catch (IOException e) {
@@ -137,10 +144,31 @@ public class Client {
                 logging.warning("NOK : commande introuvable");
             }
         } while (!result.get(0).equals("quit"));        
-    }   
+    } 
+    
+    /**
+     * Run GUI
+     */
+    private void runGUI(){
+        try {
+        Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
+        Fish fish2 = new Fish("SmileyFleur", new int[]{0, 0}, new int[]{10, 50}, "RandomPathWay");
+        AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
+        AddFish.castCommandToFish(networkCommands.get("AddFish")).execute();
+        Thread.sleep(1000);
+        AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish2);
+        AddFish.castCommandToFish(networkCommands.get("AddFish")).execute();
+        } catch (Exception e) {
+            logging.warning(e.getMessage());
+        }
+        run();
+    }
 
     private void closeNetwork() {
+        this.listener.stopRunning();
         try {
+            // GetFishesContinuously getFishesContinuously = GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously"));
+            // getFishesContinuously.stopRunning();
             networkCommands.get("log out").execute();
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
@@ -152,7 +180,8 @@ public class Client {
          Client client = new Client();
          if (client.initNetwork()){
              client.initPromptCommands();
-             client.run();
+             //client.run();
+             client.runGUI();
              client.closeNetwork();
          }
      }

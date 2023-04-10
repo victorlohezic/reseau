@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.io.IOException;
 public class LogOut implements Commande {
     private static final LogOut LOGOUT = new LogOut();
     private static Logging logging;
-    private static BufferedReader input; 
+    private static Listener input; 
     private static PrintWriter output;
     private static Socket socket;
 
@@ -19,7 +18,7 @@ public class LogOut implements Commande {
     /*
      * Initialise Status command and return this command
      */
-    public static LogOut initLogOut(BufferedReader in, PrintWriter out, Socket s, Logging log) {
+    public static LogOut initLogOut(Listener in, PrintWriter out, Socket s, Logging log) {
         input = in;
         output = out;
         logging = log;
@@ -41,11 +40,10 @@ public class LogOut implements Commande {
             } else {
                 logging.warning("Le client n'a pas répondu bye");
             }
-            input.close(); // close reading flow
             output.close(); // close wrinting flow
             socket.close(); // close socket
             return;
-        }catch (IOException e) {
+        }catch (Exception e) {
             logging.debug(e.getMessage());
         }
     }

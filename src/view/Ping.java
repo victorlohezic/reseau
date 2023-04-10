@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.net.Socket;
@@ -7,7 +6,7 @@ import java.net.Socket;
 public class Ping implements Commande {
     private static final Ping PING = new Ping();
     private static Logging logging;
-    private static BufferedReader input;
+    private static Listener input;
     private static PrintWriter output;
     private static int port;
     private static Socket socket;
@@ -32,7 +31,7 @@ public class Ping implements Commande {
         }
     }
 
-    public static Ping initPing(BufferedReader in, PrintWriter out, Logging log, Socket s, int controllerPort, int timeoutValue) {
+    public static Ping initPing(Listener in, PrintWriter out, Logging log, Socket s, int controllerPort, int timeoutValue) {
         input = in;
         output = out;
         logging = log;
@@ -47,6 +46,7 @@ public class Ping implements Commande {
         try {
             output.println("ping "+ port);
             int previousTimeout = socket.getSoTimeout();
+            logging.debug(String.format("%s", previousTimeout));
             socket.setSoTimeout(displayTimeoutValue);
             String answer = input.readLine();
             socket.setSoTimeout(previousTimeout);
@@ -55,7 +55,7 @@ public class Ping implements Commande {
             if (answer.equals(goodAnswer)) {
                 result = true;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logging.debug(e.getMessage());
         } 
     }
