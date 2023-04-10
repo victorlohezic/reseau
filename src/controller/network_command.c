@@ -5,30 +5,33 @@
 int hello(char* command, int socket, struct client_set* clients) {
 
     if (strstr(command, "hello") != command) {
-        write(socket, "say hello first\n", 17);
+        write(socket, "Say hello first\n", 17);
         return 0;
     }
 
+    int id_view;
+    
+    if (id_view = find_client(clients, socket)) {
+        write(socket, "Already connected\n", 19);
+        return id_view;
+    }
     struct client_info new_client;
     char answer[20] = "greeting ";
     char str_id[4] = {'\0'};
     char copy[30];
-    int id_view;
+    
     strcpy(copy, command);
     char* token = strtok(copy, " "); 
+    token = strtok(NULL, " ");
     token = strtok(NULL, " ");
     token = strtok(NULL, " ");
     if (token != NULL) {
         strcpy(str_id, ++token);
         id_view = atoi(str_id);
-        printf("loop : %s %s\n", token, command);
         if (is_view_available(clients, id_view)) {
-            printf("loop : %s\n", answer);
             strcat(answer, str_id);
-            strcat(answer, "\n");
             write(socket, answer, strlen(answer));
-            printf("%s\n", answer);
-            
+            printf("> %s", answer);
             new_client = init_client_info(socket, id_view);
             add_client(clients, &new_client);
             return id_view;
@@ -43,7 +46,7 @@ int hello(char* command, int socket, struct client_set* clients) {
     strcat(answer, str_id);
     strcat(answer, "\n");
     write(socket, answer, strlen(answer));
-    printf("Answer : %s\n", answer);
+    printf("> %s", answer);
     new_client = init_client_info(socket, id_view);
     add_client(clients, &new_client);
     return id_view;
@@ -52,11 +55,19 @@ int hello(char* command, int socket, struct client_set* clients) {
 
 void log_out(int socket) {
     char* answer = "bye\n";
-    printf("Answer : %s\n", answer);
+    printf("> %s", answer);
     write(socket, answer, strlen(answer));
     
 }
 
+void ping(char* command, int socket) {
+    char answer[20] = "pong ";
+    char* port_number = strtok(command, " "); 
+    port_number = strtok(NULL, " ");
+    strcat(answer, port_number);
+    write(socket, answer, strlen(answer));
+    printf("> %s", answer);
+}
 // int main(){
 //     int client[10] = {0};
 //     client[3] = 1;

@@ -16,6 +16,14 @@ void init_client_set(struct client_set *clients, struct aquarium* client_aquariu
     }
 }
 
+int find_client(struct client_set *clients, int socket_client) {
+    for (int i = 0; i < MAX_CLIENTS; ++i) {
+        if (clients->clients[i].socket_fd == socket_client) {
+            return clients->clients[i].id_view; 
+        }
+    }
+    return 0;
+}
 void add_client(struct client_set *clients, struct client_info* client) {
     int id = client->id_view - 1;
     clients->clients[id] = *client;
@@ -32,16 +40,14 @@ struct client_info get_client_info(struct client_set *clients, int id_view) {
 
 int is_view_available(struct client_set *clients, int id_view) {
     if (id_view <= 0 || 
-    id_view >= MAX_VIEWS || 
-    get_socket_client(&(clients->clients[id_view-1])) == 0 || 
+    id_view > MAX_VIEWS || 
+    clients->clients[id_view-1].socket_fd != 0 || 
     !find_view(clients->client_aquarium, id_view)) 
     {   
-    return 0;
-    }
-
+        return 0;
+    } 
     return 1;
 }
-
 
 int find_view_available(struct client_set *clients) {
     for (int i = 0; i < MAX_CLIENTS; ++i) {

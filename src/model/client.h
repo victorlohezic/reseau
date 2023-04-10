@@ -22,6 +22,8 @@ int get_socket_client(struct client_info *client);
 
 void init_client_set(struct client_set *clients, struct aquarium *client_aquarium);
 
+int find_client(struct client_set *clients, int socket_client);
+
 void add_client(struct client_set *clients, struct client_info* client);
 
 void del_client(struct client_set *clients, struct client_info* client);

@@ -32,7 +32,7 @@ void handle_network_command(char* command, int socket_client, struct client_set*
         log_out(socket_client);
     }
     else if (strstr(command, "ping") == command) {
-        write(socket_client, "pong\n", 6);
+        ping(command, socket_client);
     }
     else if (strstr(command, "addFishes") == command) {
         write(socket_client, "add1\n", 6);
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
             if (read(socket_fd , buffer, 256) < 0) {
                 error("ERROR on reading new socket");
             }
-            printf("Here is the message: %s\n", buffer);
+            printf("< %s", buffer);
             if (hello(buffer, socket_fd, &clients) != -1) {
                 FD_SET(socket_fd, &readfds);  
             } 
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
                 if ((read(socket_fd, buffer, 1024)) < 0) {
                     error("ERROR on reading");
                 }  
-                printf("Here is the message: %s\n", buffer);
+                printf("< %s", buffer);
                 //Echo back the message that came in 
                handle_network_command(buffer, socket_fd, &clients); 
             }  
