@@ -14,10 +14,10 @@ build : build_directory server server_mock server_mock_GUI client copy_controlle
 
 test: ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
-server: ${SRC}/controller/server.c $(SRC)/controller/parser.o network_command.o aquarium.o view.o model.o client.o
+server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o client.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server
 
-server_mock: ${SRC}/controller/server_mock.c $(SRC)/controller/parser.o
+server_mock: ${SRC}/controller/server_mock.c parser.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server_mock
 
 server_mock_GUI: ${SRC}/controller/server_mock_GUI.c $(SRC)/controller/parser.o
