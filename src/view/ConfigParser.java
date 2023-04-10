@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.util.Map;
 import java.util.HashMap;
 
-public class ConfigParser {
+public final class ConfigParser {
 
     private String filenameConfig;
     private Map<String, String> config;
