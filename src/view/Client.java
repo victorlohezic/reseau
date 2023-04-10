@@ -14,9 +14,9 @@ public class Client {
 
     /* Socket Attributes */
     private Socket socket;
-    BufferedReader plec;
-    Listener listener;
-    PrintWriter pred;
+    private BufferedReader plec;
+    private Listener listener;
+    private PrintWriter pred;
 
     /*Config data*/ 
     private String id;
