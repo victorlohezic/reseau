@@ -164,7 +164,7 @@ public class Fish {
     }
 
     /**
-     * This method decrement the time of each position, if position time is negative, this position
+     * This method decrements the time of each position, if position time is negative, this position
      * is removed from coordinatesAndTimes, the last position position negative or equal to 0 replace
      * the current position
      * @throws FishException
