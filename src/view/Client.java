@@ -152,12 +152,26 @@ public class Client {
     private void runGUI(){
         try {
         Fish fish = new Fish("Chouchou", new int[]{0, 0}, new int[]{2, 3}, "RandomPathWay");
+        ArrayList<String> fishArrayList= new ArrayList<String>();
+        fishArrayList.add(fish.getName());
+        fishArrayList.add(String.format("%d", fish.getPosition()[0]));
+        fishArrayList.add(String.format("%d", fish.getPosition()[1]));
+        fishArrayList.add(String.format("%d", fish.getSize()[0]));
+        fishArrayList.add(String.format("%d", fish.getSize()[1]));
+        fishArrayList.add(fish.getMobility());
         Fish fish2 = new Fish("SmileyFleur", new int[]{0, 0}, new int[]{10, 50}, "RandomPathWay");
-        AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
-        AddFish.castCommandToFish(networkCommands.get("AddFish")).execute();
+        ArrayList<String> fishArrayList2= new ArrayList<String>();
+        fishArrayList2.add(fish2.getName());
+        fishArrayList2.add(String.format("%d", fish2.getPosition()[0]));
+        fishArrayList2.add(String.format("%d", fish2.getPosition()[1]));
+        fishArrayList2.add(String.format("%d", fish2.getSize()[0]));
+        fishArrayList2.add(String.format("%d", fish2.getSize()[1]));
+        fishArrayList2.add(fish2.getMobility());
+        AddFishPrompt.castCommandToFish(promptCommands.get("addFish")).setParameters(fishArrayList);
+        AddFishPrompt.castCommandToFish(promptCommands.get("addFish")).execute();
         Thread.sleep(1000);
-        AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish2);
-        AddFish.castCommandToFish(networkCommands.get("AddFish")).execute();
+        AddFishPrompt.castCommandToFish(promptCommands.get("addFish")).setParameters(fishArrayList2);;
+        AddFishPrompt.castCommandToFish(promptCommands.get("addFish")).execute();
         } catch (Exception e) {
             logging.warning(e.getMessage());
         }
