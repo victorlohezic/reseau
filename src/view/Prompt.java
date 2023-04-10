@@ -7,7 +7,7 @@ import java.util.ListIterator;
  */
 public class Prompt {
 
-    Scanner sc;
+    private Scanner sc;
 
     public Prompt(Scanner sc) {
         this.sc = sc;
