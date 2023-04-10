@@ -10,7 +10,7 @@ TEST = TestFish TestView
 
 all : build
 
-build : build_directory server client copy_controller
+build : build_directory server server_mock client copy_controller
 
 test: ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
