@@ -6,6 +6,8 @@ public class Fish {
     private String name;
     private int[] dimensions = new int[2]; 
     private int[] coordinates = new int[2]; 
+    private int[] newCoordinates = new int[]{0, 0}; 
+    private int time = 0; 
     private String mobility;
     private State state = State.STOPPED;
 
@@ -31,6 +33,22 @@ public class Fish {
 
         this.mobility = mobility;
     }
+
+    /**
+     * Return the position of the fish to be reached
+     * @return coordinates int[2]
+     */
+    public int[] getNewPosition() {
+        return newCoordinates;
+    } 
+
+    /**
+     * Return the time to reach the new_position
+     * @return time int
+     */
+    public int getTime() {
+        return time;
+    } 
 
     /**
      * Return the position of the fish
@@ -73,6 +91,15 @@ public class Fish {
     }
 
     /**
+     * Change the time to reach the new_position
+     * @param newTime int
+     * @return time int
+     */
+    public void setTime(int newTime) {
+        time = newTime;
+    } 
+
+    /**
      * Change the state of the fish
      * Current value : STARTED -> New value : STOPPED
      * Current value : STOPPED -> New value : STARTED
@@ -80,6 +107,21 @@ public class Fish {
      */
     public void setState(State newState) {
         state = newState;
+    }
+
+    /*
+     * Change the attribute newCoordinates with the @newPosition int[2]
+     */
+    public void setNewPosition(int[] newPosition) throws FishException {
+        for (int i = 0; i < 2; ++i)  {
+            if (newPosition[i] < 0) {
+                throw new FishException(String.format("The %d coordinate is negative", i));
+            } else if (newPosition[i] > 100) {
+                throw new FishException(String.format("The %d coordinate is over 100", i));
+            } else {
+                newCoordinates[i] = newPosition[i];
+            } 
+        }
     }
 
     /*

@@ -27,6 +27,31 @@ public class TestFish {
     } 
 
     /**
+     *Test if the getNewPosition return the good new position of a fish
+     */
+    public void testGetNewPostionFish() throws Exception {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+        assert testFish.getNewPosition()[0] == coordinates[0] : "x : coordinate isn't correct";
+        assert testFish.getNewPosition()[1] == coordinates[1] : "y : coordinate isn't correct";
+    } 
+
+    /**
+     *Test if the getNewPosition return the good new position of a fish
+     */
+    public void testSetNewPostionFish() throws Exception {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+        testFish.setNewPosition(new int[]{5, 5});
+        assert testFish.getNewPosition()[0] == 5 : "x : coordinate isn't correct";
+        assert testFish.getNewPosition()[1] == 5 : "y : coordinate isn't correct";
+    } 
+
+    /**
      *Test if the getMobility works
      */
     public void testGetMobility() throws Exception {
@@ -85,6 +110,23 @@ public class TestFish {
         assert false: "Exception not lauched";
     } 
 
+    /**
+     *Test if negative new position generates an error
+     */
+    public void testSetNegativeNewPositionFish() {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        try {
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+            int[] newDimensions = {-5, 2};
+            testFish.setNewPosition(newDimensions);
+        } catch(FishException e) {
+            return;
+        }
+        assert false: "Exception not lauched";
+    } 
+
 
         /**
      *Test if negative size generates an error
@@ -112,6 +154,23 @@ public class TestFish {
             Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
             int[] newDimensions = {105, 2};
             testFish.setPosition(newDimensions);
+        } catch(FishException e) {
+            return;
+        }
+        assert false: "Exception not lauched";
+    }
+
+    /**
+     *Test if too big position generates an error
+     */
+    public void testSetOverBigNewPositionFish() {
+        int[] coordinates = {0, 0};
+        int[] dimensions = {5, 2};
+        String name = "ChouchouALaCreme";
+        try {
+            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
+            int[] newDimensions = {105, 2};
+            testFish.setNewPosition(newDimensions);
         } catch(FishException e) {
             return;
         }
