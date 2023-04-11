@@ -41,7 +41,7 @@ public class Client {
         this.displayTimeoutValue = config.getDisplayTimeoutValue()*1000;
         this.prompt = new Prompt(scanner);
         try {
-            this.view = new View(this.id, new int[]{0, 0}, new int[]{1000, 1000});
+            this.view = new View(this.id, new int[]{0, 0}, new int[]{100, 100});
         } catch (Exception e) {
             logging.warning(e.getMessage());
         }
@@ -151,7 +151,7 @@ public class Client {
      */
     private void runGUI(){
         try {
-        Fish fish = new Fish("Chouchou", new int[]{20, 90}, new int[]{150, 100}, "RandomPathWay");
+        Fish fish = new Fish("Chouchou", new int[]{20, 90}, new int[]{20, 10}, "RandomPathWay");
         ArrayList<String> fishArrayList= new ArrayList<String>();
         fishArrayList.add(fish.getName());
         fishArrayList.add(String.format("%d", fish.getPosition()[0]));
@@ -159,7 +159,7 @@ public class Client {
         fishArrayList.add(String.format("%d", fish.getSize()[0]));
         fishArrayList.add(String.format("%d", fish.getSize()[1]));
         fishArrayList.add(fish.getMobility());
-        Fish fish2 = new Fish("SmileyFleur", new int[]{20, 11}, new int[]{180, 120}, "RandomPathWay");
+        Fish fish2 = new Fish("SmileyFleur", new int[]{20, 11}, new int[]{22, 12}, "RandomPathWay");
         ArrayList<String> fishArrayList2= new ArrayList<String>();
         fishArrayList2.add(fish2.getName());
         fishArrayList2.add(String.format("%d", fish2.getPosition()[0]));

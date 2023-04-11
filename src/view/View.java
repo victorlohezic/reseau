@@ -15,20 +15,20 @@ public class View implements ActionListener{
     private HashMap<String, Fish> fishes = new HashMap<>(); 
     private int[] dimensions = new int[2];
     private int[] coordinates = new int[2];
-    public GUI myGUI;
+    private GUI myGUI;
     private Timer timer;
 
     public View(String id, int[] coordinates, int dimensions[]) throws ViewException {
         this.id = id;
         for (int i = 0; i < 2; ++i) {
-            if (coordinates[i] < 0 || coordinates[i] > 1000) {
+            if (coordinates[i] < 0 || coordinates[i] > 100) {
                 throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
             }
         }
         this.coordinates[0] = coordinates[0];
         this.coordinates[1] = coordinates[1];
         for (int i = 0; i < 2; ++i) {
-            if (dimensions[i] + coordinates[i] > 1000) {
+            if (dimensions[i] + coordinates[i] > 100) {
                 throw new ViewException(String.format("The dimension of the aquarium is superior to the dimension of the aquarium", i));
             }
         }
@@ -161,6 +161,11 @@ public class View implements ActionListener{
     }
 
 
+    public void updateInterface() {
+
+        this.myGUI.updateGUI(this);
+    }
+
 
     public void actionPerformed(ActionEvent e) {
 
@@ -169,27 +174,20 @@ public class View implements ActionListener{
             for (String name : fishes.keySet()) {
                 try {
                     Fish fish = fishes.get(name);
-                    System.out.println(fish.getName());
                     ArrayList<int[]> positionAndTime = fish.getPositionsAndTimes();
-                    System.out.println("avant decrement");
                     ListIterator<int[]> li = positionAndTime.listIterator();
-                    System.out.println(positionAndTime.size());
                     while (li.hasNext()) {
                         int[] element = li.next();
-                        System.out.println(String.format("%d %d %d", element[0], element[1], element[2]));
                     }
                     fish.decrementTime();
-                    System.out.println("après decrement");
                     positionAndTime = fish.getPositionsAndTimes();
                     li = positionAndTime.listIterator();
                     while (li.hasNext()) {
                         int[] element = li.next();
-                        System.out.println(String.format("%d %d %d", element[0], element[1], element[2]));
                     }
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
-                //System.out.println("Positions dans view: "+  fishes.get(name).getPosition()[0] +" "+fishes.get(name).getPosition()[1]);
 
             }
         }
