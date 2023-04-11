@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class Listener extends Thread {
     private String contentOneTime;
@@ -38,7 +39,7 @@ public class Listener extends Thread {
                     }
                     logging.debug("Bien reçu chef !");
                     logging.debug(result);
-                    updateView(result.replaceAll("\\[", "").replaceAll("x", "").replaceAll("\\]", "").replaceAll("x", " ").replaceAll(",", ""));
+                    updateView(result.replaceAll("\\[", "").replaceAll("x", " ").replaceAll("\\]", "").replaceAll("x", " ").replaceAll(",", " "));
                 }
             }
         } catch (IOException e) {
@@ -80,14 +81,24 @@ public class Listener extends Thread {
 
 
     private void updateView(String fishes) {
+        System.out.println("Début Traitement Update View");
+        System.out.println(fishes);
         ArrayList<String> dataFishes = prompt.parse(fishes, " ");
+        ListIterator<String> li = dataFishes.listIterator();;
+        while (li.hasNext()) {
+            String element = li.next();
+            System.out.println(element);
+        }
         int countData = dataFishes.size();
         dataFishes = new ArrayList<String>(dataFishes.subList(1, countData));
+        System.out.println(countData);
         --countData;
         for (int i = 0; i < countData/6; ++i) {
-            ArrayList<String> fish = new ArrayList<String>(dataFishes.subList(i, i+6));
+            ArrayList<String> fish = new ArrayList<String>(dataFishes.subList(i*6, (i+1)*6));
             String fishName = fish.get(0);
             int time = Integer.parseInt(fish.get(5));
+            System.out.println(fishName);
+            System.out.println(String.format("%s %s %d", fish.get(1), fish.get(2), time));
             int[] positionAndTime = new int[]{Integer.parseInt(fish.get(1)), Integer.parseInt(fish.get(2)), time};
             //int[] size = new int[]{Integer.parseInt(fish.get(3)), Integer.parseInt(fish.get(4))};
             try {

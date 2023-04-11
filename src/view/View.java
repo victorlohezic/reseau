@@ -168,11 +168,28 @@ public class View implements ActionListener{
             
             for (String name : fishes.keySet()) {
                 try {
-                    fishes.get(name).decrementTime();
+                    Fish fish = fishes.get(name);
+                    System.out.println(fish.getName());
+                    ArrayList<int[]> positionAndTime = fish.getPositionsAndTimes();
+                    System.out.println("avant decrement");
+                    ListIterator<int[]> li = positionAndTime.listIterator();
+                    System.out.println(positionAndTime.size());
+                    while (li.hasNext()) {
+                        int[] element = li.next();
+                        System.out.println(String.format("%d %d %d", element[0], element[1], element[2]));
+                    }
+                    fish.decrementTime();
+                    System.out.println("après decrement");
+                    positionAndTime = fish.getPositionsAndTimes();
+                    li = positionAndTime.listIterator();
+                    while (li.hasNext()) {
+                        int[] element = li.next();
+                        System.out.println(String.format("%d %d %d", element[0], element[1], element[2]));
+                    }
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
-                System.out.print("Positions dans view: "+  fishes.get(name).getPosition()[0] +" "+fishes.get(name).getPosition()[1]);
+                //System.out.println("Positions dans view: "+  fishes.get(name).getPosition()[0] +" "+fishes.get(name).getPosition()[1]);
 
             }
         }
