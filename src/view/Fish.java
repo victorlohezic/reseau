@@ -170,6 +170,8 @@ public class Fish {
      * @throws FishException
      */
     public void decrementTime() throws FishException{
+        System.out.print("Decrement time\n");
+
         ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
         int[] new_current_element = null;
         while (iterator.hasNext()) {
@@ -182,6 +184,7 @@ public class Fish {
         }
         if (new_current_element != null) {
             setPosition(new_current_element);
+            System.out.print("Changement de la position\n");
         }
     }
 

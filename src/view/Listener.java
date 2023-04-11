@@ -97,6 +97,7 @@ public class Listener extends Thread {
                 logging.warning(e.getMessage());
             }
         }
+        view.myGUI.updateGUI(view);
     }
 
     public void stopRunning(){

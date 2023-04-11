@@ -1,33 +1,45 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
+import javax.swing.*;
+
+import java.awt.event.*;
+
 
 /**
  * View of the aquarium
  */
-public class View {
+public class View implements ActionListener{
 
     private String id; 
     private HashMap<String, Fish> fishes = new HashMap<>(); 
     private int[] dimensions = new int[2];
     private int[] coordinates = new int[2];
+    public GUI myGUI;
+    private Timer timer;
 
     public View(String id, int[] coordinates, int dimensions[]) throws ViewException {
         this.id = id;
         for (int i = 0; i < 2; ++i) {
-            if (coordinates[i] < 0 || coordinates[i] > 100) {
+            if (coordinates[i] < 0 || coordinates[i] > 1000) {
                 throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
             }
         }
         this.coordinates[0] = coordinates[0];
         this.coordinates[1] = coordinates[1];
         for (int i = 0; i < 2; ++i) {
-            if (dimensions[i] + coordinates[i] > 100) {
+            if (dimensions[i] + coordinates[i] > 1000) {
                 throw new ViewException(String.format("The dimension of the aquarium is superior to the dimension of the aquarium", i));
             }
         }
         this.dimensions[0] = dimensions[0];
         this.dimensions[1] = dimensions[1];
+
+        myGUI = new GUI(this);
+
+        timer = new Timer(1000, this);
+        timer.start();
+
     }
 
     /**
@@ -147,4 +159,25 @@ public class View {
         }
         return true;
     }
+
+
+
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == timer) {
+            
+            for (String name : fishes.keySet()) {
+                try {
+                    fishes.get(name).decrementTime();
+                } catch (Exception ex) {
+                    System.out.print(ex.getMessage());
+                }
+                System.out.print("Positions dans view: "+  fishes.get(name).getPosition()[0] +" "+fishes.get(name).getPosition()[1]);
+
+            }
+        }
+    }
 }
+
+
+

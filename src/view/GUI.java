@@ -2,26 +2,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GUI extends JFrame {
 
-    int nbFishes;
-    ImageIcon[] icons;
-    JLabel[] labels;
+public class GUI extends JFrame {//implements ActionListener{
+
+    private int nbFishes=0;
+    private ImageIcon[] icons;
+    private JLabel[] labels;
+    private JLabel[] myLabel;
+    private int dx = 0;
+    //private Timer timer;
 
     public GUI(View newView) {
         super("View");
         setLayout(null); // creates the window
 
 
-        //ImageIcon icon = new ImageIcon("clown.jpeg"); // creates a picture
-        //myLabel = new JLabel(icon); //converts to a label to display
-        //myLabel.setBounds(x_fish, y_fish, 219, 171); //location, size of the picture
-        
-
-        // Create the timer to update the button position
-        //timer = new Timer(100, this);
+        //Create the timer to update the button position
+        //timer = new Timer(1000, this);
         //timer.start();
-
 
 
         setLocation(newView.getPosition()[0], newView.getPosition()[1]); //sets the location of the window on the screen at
@@ -35,12 +33,17 @@ public class GUI extends JFrame {
 
 
 
-    public void updateView(View newView) {
 
+    public void updateGUI(View newView) {
+
+        System.out.print("update GUIIIIIIIII");
+
+        
         for (int i=0; i<this.nbFishes; i++) {
             this.remove(labels[i]);
         }
 
+        dx+=10;
         this.nbFishes = newView.getFishes().size();
         this.icons = new ImageIcon[nbFishes];
         this.labels = new JLabel[nbFishes];
@@ -48,41 +51,32 @@ public class GUI extends JFrame {
         // Iterate over the keys using a for-each loop
         int count = 0;
         for (String name : newView.getFishes().keySet()) {
-
+            System.out.print("affiche un poisson");
             Fish fish = newView.getFishes().get(name);
             icons[count] = new ImageIcon("clown.jpeg");
             labels[count] = new JLabel(icons[count]);
-            labels[count].setBounds(fish.getPosition()[0],
-                                    fish.getPosition()[1],
-                                    fish.getSize()[0],
-                                    fish.getSize()[1]);
-
+            labels[count].setBounds(0, 0, fish.getSize()[0], fish.getSize()[1]);
             this.add(labels[count]);
+            labels[count].setLocation(fish.getPosition()[0], fish.getPosition()[1]);
+            System.out.print("Positions: "+  fish.getPosition()[0] +" "+fish.getPosition()[1]);
+            count++;
         }
-
     }
 
-
+    
 /*
     public void actionPerformed(ActionEvent e) {
-        add(myLabel); // adds the picture to the window
 
         if (e.getSource() == timer) {
             
-            // Iterate over the keys using a for-each loop
-            for (String key : map.keySet()) {
-                System.out.println(key);
-            }
-
-            // Set the label position
-            myLabel.setLocation(x_fish, y_fish);
+            System.out.print("time a 0");
         }
     
     }
+
 */
 
-
     public static void main(String[] args) {
-        //GUI myGui = new GUI(100, 100, 1000, 1000);
+        //GUI myGui = new GUI();
     }
 }
