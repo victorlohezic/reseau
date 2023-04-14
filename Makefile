@@ -20,7 +20,7 @@ server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o 
 server_mock: ${SRC}/controller/server_mock.c parser.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server_mock
 
-server_mock_GUI: ${SRC}/controller/server_mock_GUI.c $(SRC)/controller/parser.o
+server_mock_GUI: ${SRC}/controller/server_mock_GUI.c parser.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server_mock_GUI
 
 client: build_directory copy_view
