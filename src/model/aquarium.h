@@ -50,6 +50,9 @@ int save_aquarium(struct aquarium* a, char* path);
 // return 1 if the view is in the aquarium 0 otherwise 
 int find_view(struct aquarium* a, int id_view);
 
+// return if the fish is in the aquarium 0 otherwise
+int find_fish(struct aquarium *a, char* fish_name);
+
 // return the fishes belonging to a view
 int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view);
 

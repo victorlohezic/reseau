@@ -112,6 +112,14 @@ int del_view(struct aquarium* a, int id_view) {
 
 }
 
+int find_fish(struct aquarium *a, char* fish_name) {
+    for(int k=0; k<a->nb_fishes; k++) {
+        if (strcmp(fish_name, get_fish_name(a->fishes+k)) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 
 
@@ -128,11 +136,10 @@ int add_fish(struct aquarium* a, struct fish* f)
         return -1;
     }
 
-    for(int k=0; k<a->nb_fishes; k++) {
-        if (strcmp(get_fish_name(f),get_fish_name(a->fishes+k)) == 0) {
-            return -1;
-        }
+    if (find_fish(a, get_fish_name(f))) {
+        return -1;
     }
+
     a->fishes[a->nb_fishes] = *f;
     a->nb_fishes++;
     return 0;
