@@ -33,7 +33,7 @@ public class GetFishesContinuously implements Commande {
     public void execute() {
         logging.info("getFishesContinuously");
         try {
-            output.println("getFishes");
+            output.println("getFishesContinuously");
         }
         catch (Exception e) {
             logging.debug(e.getMessage());
