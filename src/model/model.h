@@ -19,6 +19,7 @@ void shifting(struct movement* mov, int* c);
 
 // structure of a fish
 struct fish { 
+    int is_started;
     char name[SIZE_NAMES];
     int position[2];
     int dimension[2];
@@ -27,6 +28,9 @@ struct fish {
 
 // initalizes a fish
 void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*));
+
+//set the is_started value at 1
+void start_fish(struct fish* f);
 
 // diplays the name of a fish
 char* get_fish_name(struct fish* f);

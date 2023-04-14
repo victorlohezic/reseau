@@ -53,5 +53,10 @@ int find_view(struct aquarium* a, int id_view);
 // return the fishes belonging to a view
 int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view);
 
+// update the positions of the fishes
+void update_fishes(struct aquarium* a);
+
+// starts the fish matching with the name
+int start_fish_aquarium(struct aquarium* a, char* fish_name);
 
 #endif //_AQUARIUM_H_

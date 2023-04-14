@@ -44,10 +44,10 @@ public class GUI extends JFrame {//implements ActionListener{
 
         System.out.print("update GUIIIIIIIII\n");
 
-        /*
+        
         for (int i=0; i<this.nbFishes; i++) {
             this.remove(labels[i]);
-        }*/
+        }
 
         dx+=10;
         this.nbFishes = newView.getFishes().size();
@@ -58,7 +58,7 @@ public class GUI extends JFrame {//implements ActionListener{
         int count = 0;
         for (String name : newView.getFishes().keySet()) {
             Fish fish = newView.getFishes().get(name);
-            icons[count] = new ImageIcon("clown.jpeg");
+            icons[count] = new ImageIcon("clown.png");
             labels[count] = new JLabel(icons[count]);
             labels[count].setBounds(0, 0, fish.getSize()[0]*screenWidth/100, fish.getSize()[1]*screenHeight/100);
             this.add(labels[count]);

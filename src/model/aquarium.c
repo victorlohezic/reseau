@@ -229,3 +229,24 @@ int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view)
     return rank;
 }
 
+void update_fishes(struct aquarium* a) {
+    for(int k = 0; k< a->nb_fishes; k++) {
+        if ((a->fishes+k)->is_started) {
+            shift_fish(a->fishes+k);
+        }
+    }
+}
+
+
+
+int start_fish_aquarium(struct aquarium* a, char* fish_name) {
+    for(int k = 0; k< a->nb_fishes; k++) {
+        if (strcmp((a->fishes[k]).name,fish_name) == 0) {
+
+            start_fish(a->fishes+k);
+            return 0;
+        } 
+
+    }
+    return -1;
+}

@@ -27,7 +27,13 @@ void init_fish(struct fish* f, char* _name, int width, int height, int x, int y,
     f->dimension[0] = width;
     f->dimension[1] = height;
 
+    f->is_started = 0;
+
     init_movement(&(f->move), shift);
+}
+
+void start_fish(struct fish* f) {
+    f->is_started = 1;
 }
 
 char* get_fish_name(struct fish* f)
