@@ -48,7 +48,7 @@ public class AddFish implements Commande {
         if (fish == null) {
             logging.warning("Aucun poisson n'a été ajouté en paramètre");
         }
-        String commandValue = String.format("AddFish %s at %dx%d, %dx%d, %s", 
+        String commandValue = String.format("addFish %s at %dx%d, %dx%d, %s", 
         fish.getName(), fish.getPosition()[0], fish.getPosition()[1], 
         fish.getSize()[0], fish.getSize()[1], fish.getMobility());
 

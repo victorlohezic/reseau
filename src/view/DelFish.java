@@ -48,7 +48,7 @@ public class DelFish implements Commande {
         if (nameFish == "") {
             logging.warning("Aucun poisson n'a été ajouté en paramètre");
         }
-        String commandValue = String.format("DelFish %s", nameFish);
+        String commandValue = String.format("delFish %s", nameFish);
 
         logging.info(commandValue);
         try{
