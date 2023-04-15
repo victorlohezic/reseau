@@ -1,3 +1,4 @@
 build/*
 src/view/view.cfg
 src/controller/controller.cfg
+*.o

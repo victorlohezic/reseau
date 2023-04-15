@@ -14,4 +14,12 @@ void log_out(int socket);
 
 void ping(char* command, int socket);
 
+void network_add_fish(char* command, int socket, struct client_set* clients);
+
+void network_start_fish(char* command, int socket, struct client_set* clients);
+
+void network_del_fish(char* command, int socket, struct client_set* clients);
+
+void network_get_fishes(char* command, int socket, struct client_set* clients);
+
 #endif

@@ -24,9 +24,9 @@ void error(char *msg)
     exit(1);
 }
 
-void handle_network_command(char* command, int socket_client, struct client_set* client_socket){
+void handle_network_command(char* command, int socket_client, struct client_set* clients){
     if (strstr(command, "hello") == command) { // check if the command start with hello
-        return ;
+        hello(command, socket_client, clients);
     } 
     else if (strstr(command, "log out") == command) {
         log_out(socket_client);
@@ -34,14 +34,20 @@ void handle_network_command(char* command, int socket_client, struct client_set*
     else if (strstr(command, "ping") == command) {
         ping(command, socket_client);
     }
-    else if (strstr(command, "addFishes") == command) {
-        write(socket_client, "add1\n", 6);
+    else if (strstr(command, "addFish") == command) {
+        network_add_fish(command, socket_client, clients);
     }
-    else if (strstr(command, "delFishes") == command) {
-        write(socket_client, "del1\n", 6);
+    else if (strstr(command, "delFish") == command) {
+        network_del_fish(command, socket_client, clients);
+    }
+     else if (strstr(command, "getFishesContinuously") == command) {
+        write(socket_client, "Command not found\n", 19);
     }
     else if (strstr(command, "getFishes") == command) {
-        write(socket_client, "get1\n", 6);
+        network_get_fishes(command, socket_client, clients);
+    }
+    else if (strstr(command, "startFish") == command) {
+        network_start_fish(command, socket_client, clients);
     }
     else {
         write(socket_client, "Command not found\n", 19);
