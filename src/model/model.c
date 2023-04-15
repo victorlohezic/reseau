@@ -5,6 +5,7 @@
 void init_movement(struct movement* mov, void (*f) (int*))
 {
     mov->shift = f;
+    mov->future_positions = NULL;
 }
 
 void shifting(struct movement* mov, int* c)

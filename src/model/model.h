@@ -3,16 +3,19 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "queue.h"
 
 #define SIZE_NAMES 100
 
 // structure describing the movements of a movement
 struct movement {
+    struct queue_position* future_positions;
     void (*shift) (int*);
 };
 
 // initializes a movement
 void init_movement(struct movement* mov, void (*f) (int*));
+
 
 // modifies a coordinate c with the movement mov
 void shifting(struct movement* mov, int* c);
