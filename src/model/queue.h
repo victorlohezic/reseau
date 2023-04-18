@@ -21,6 +21,8 @@ struct queue_position* add_element(struct queue_position* q, int* pos, int delta
 
 struct queue_position* del_element_head(struct queue_position* q);
 
+struct queue_position* update_queue(struct queue_position* q);
+
 int free_queue(struct queue_position* q);
 
 

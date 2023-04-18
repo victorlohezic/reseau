@@ -56,6 +56,12 @@ void set_fish_move(struct fish* f, void (*_shift) (int*));
 // applies the shifting function to move a fish
 void shift_fish(struct fish* f);
 
+// add the future coordinates of the fish in the queue
+void add_future_position(struct fish* f, int* pos, int delay);
+
+// puts the first future position of the fish [x, y, time] -> pos
+void next_future_position(struct fish* f, int* pos);
+
 // diplays the position of a fish
 void print_fish_pos(struct fish* f);
 

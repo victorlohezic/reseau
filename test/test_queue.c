@@ -131,6 +131,8 @@ int main(void)
     test_add_element();
     test_del_element_head();
     test_free_queue();
+
+    //test_update_queue();
     
     return 0;
 }

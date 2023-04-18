@@ -4,15 +4,13 @@
 struct queue_position* init_queue(int* pos, int delta_time)
 {
     struct queue_position* q = malloc(sizeof(struct queue_position));
+
     struct timeval tv;
     gettimeofday(&tv, NULL);
-
     double sec = (double) tv.tv_sec;
     double usec = (double) tv.tv_usec / 1000000;
 
-
     q->time = (double) delta_time + sec +usec;
-
     q->positions[0] = pos[0];
     q->positions[1] = pos[1];
 
@@ -62,6 +60,24 @@ struct queue_position* del_element_head(struct queue_position* q)
     return next;
 }
  
+
+struct queue_position* update_queue(struct queue_position* q)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    double sec = (double) tv.tv_sec;
+    double usec = (double) tv.tv_usec / 1000000;
+
+    double current_time = sec +usec;
+
+    struct queue_position* head = q;
+    while (head->time < current_time) {
+        head = del_element_head(head);
+    }
+    return head;
+}
+
 
 int free_queue(struct queue_position* q) 
 {

@@ -20,6 +20,7 @@ void test_del_element_head();
 
 void test_free_queue();
 
+void test_update_queue(); //a faire
 
 
 

@@ -14,7 +14,7 @@ build : build_directory server server_mock server_mock_GUI client copy_controlle
 
 test: ex_test_queue ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
-server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o client.o
+server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o queue.o client.o
 	${CC} ${CFLAGS} $^ -I $(SRC)/model -o ${BUILD_DIR}/server
 
 server_mock: ${SRC}/controller/server_mock.c parser.o
@@ -46,6 +46,9 @@ clean:
 %.o : $(SRC)/model/%.c
 	${CC} ${CFLAGS} -c $< -o $@
 
+queue.o: ${SRC}/model/queue.c
+	${CC} ${CFLAGS} ${SRC}/model/queue.c -c
+
 model.o: ${SRC}/model/model.c
 	${CC} ${CFLAGS} ${SRC}/model/model.c -c
 
@@ -62,14 +65,14 @@ network_command.o: $(SRC)/controller/network_command.c
 test_queue: build_directory queue.o test_queue.o
 	${CC} ${CFLAGS} queue.o test_queue.o -o ${BUILD_DIR}/$@ 
 
-test_model: build_directory model.o test_model.o
-	${CC} ${CFLAGS} model.o test_model.o -o ${BUILD_DIR}/$@ 
+test_model: build_directory queue.o model.o test_model.o
+	${CC} ${CFLAGS} queue.o model.o test_model.o -o ${BUILD_DIR}/$@ 
 
 test_view: $(TEST_DIR)/test_view.c view.o build_directory
 	$(CC) $(CFLAGS) view.o $(TEST_DIR)/test_view.c -o $(BUILD_DIR)/$@ 
 
-test_aquarium: build_directory model.o view.o aquarium.o test_aquarium.o
-	${CC} ${CFLAGS} model.o view.o aquarium.o test_aquarium.o -o ${BUILD_DIR}/$@ 
+test_aquarium: build_directory queue.o model.o view.o aquarium.o test_aquarium.o
+	${CC} ${CFLAGS} queue.o model.o view.o aquarium.o test_aquarium.o -o ${BUILD_DIR}/$@ 
 
 test_queue.o: ${TEST_DIR}/test_queue.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_queue.c -c

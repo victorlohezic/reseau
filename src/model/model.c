@@ -78,6 +78,34 @@ void set_fish_move(struct fish* f, void (*_shift) (int*))
 }
 
 
+void add_future_position(struct fish* f, int* pos, int delay) 
+{
+    if ((f->move).future_positions == NULL) {
+        (f->move).future_positions = init_queue(pos, delay);
+    } else {
+        (f->move).future_positions = add_element((f->move).future_positions, pos, delay);
+    }
+}
+
+void next_future_position(struct fish* f, int* pos) 
+{
+    (f->move).future_positions = update_queue((f->move).future_positions);
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    double sec = (double) tv.tv_sec;
+    double usec = (double) tv.tv_usec / 1000000;
+
+    double current_time = sec +usec;
+    int dt = (int) ((f->move).future_positions->time - current_time);
+    pos[0] = (f->move).future_positions->positions[0];
+    pos[1] = (f->move).future_positions->positions[1];
+    pos[2] = dt;
+}
+
+
+
 void print_fish_pos(struct fish* f)
 {
     printf("x = %d\n", f->position[0]);

@@ -369,6 +369,9 @@ int main(void)
     test_set_fish_dim();
     test_set_fish_mov();
     test_shift_fish();
+
+    //test_add_future_position();
+    //test_next_future_position();
     
     return 0;
 }
