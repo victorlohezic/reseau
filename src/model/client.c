@@ -1,12 +1,20 @@
 #include "client.h"
 
 struct client_info init_client_info(int socket, int id_view) {
-    struct client_info client = {socket, id_view};
+    struct client_info client = {socket, id_view, 0};
     return client;
 }
 
-int get_socket_client(struct client_info *client) {
-    return client->socket_fd;
+int get_socket_client(struct client_set* clients, int id_view) {
+    return clients->clients[id_view-1].socket_fd;
+}
+
+void start_get_fishes_continuously(struct client_set* clients, int id_view) {
+    clients->clients[id_view-1].get_fishes_continuously = 1;
+}
+
+int want_fishes_continuously(struct client_set* clients, int id_view) {
+    return clients->clients[id_view-1].get_fishes_continuously;
 }
 
 void init_client_set(struct client_set *clients, struct aquarium* client_aquarium) {

@@ -10,6 +10,7 @@
 #include <strings.h>
 #include <sys/time.h>
 #include <sys/select.h>
+#include <pthread.h>
 
 #include "parser.h"
 #include "client.h"
@@ -18,17 +19,39 @@
 #define SO_REUSEPORT 15 
 #define MAX_CLIENTS MAX_VIEWS
 
+
+int controller_port, display_time_out_value, fish_update_interval;
+
+void* send_fishes_continuously(void* array_client) {
+    struct client_set *clients = (struct client_set*) array_client;
+    int socket_client;
+    while (1) {
+        sleep(fish_update_interval);
+        for (int i = 1; i <= MAX_CLIENTS; i++)  
+        {  
+            socket_client = get_socket_client(clients, i);
+            if (socket_client != 0 && want_fishes_continuously(clients, i)) {
+                network_get_fishes(socket_client, clients);
+            }
+        }
+    }
+    return NULL;
+}
+
+
+
+
 void error(char *msg)
 {
     perror(msg);
     exit(1);
 }
 
-void handle_network_command(char* command, int socket_client, struct client_set* clients){
+void handle_network_command(char* command, int socket_client, struct client_set* clients) {
     if (strstr(command, "hello") == command) { // check if the command start with hello
         hello(command, socket_client, clients);
-    } 
-    else if (strstr(command, "log out") == command) {
+    }
+    else if (strcmp(command, "log out\n") == 0) {
         log_out(socket_client);
     }
     else if (strstr(command, "ping") == command) {
@@ -40,11 +63,11 @@ void handle_network_command(char* command, int socket_client, struct client_set*
     else if (strstr(command, "delFish") == command) {
         network_del_fish(command, socket_client, clients);
     }
-     else if (strstr(command, "getFishesContinuously") == command) {
-        write(socket_client, "Command not found\n", 19);
+    else if (strcmp(command, "getFishesContinuously\n") == 0) {
+        get_fishes_continuously(socket_client, clients);
     }
-    else if (strstr(command, "getFishes") == command) {
-        network_get_fishes(command, socket_client, clients);
+    else if (strcmp(command, "getFishes\n") == 0) {
+        network_get_fishes(socket_client, clients);
     }
     else if (strstr(command, "startFish") == command) {
         network_start_fish(command, socket_client, clients);
@@ -55,32 +78,33 @@ void handle_network_command(char* command, int socket_client, struct client_set*
 }
 
 
-void init_server(const char* filename, int* controller_port, int* display_time_out_value, int* fish_update_interval) {
+void init_server(const char* filename) {
     struct Config* config = parse_controller_config(filename);
-    *controller_port = get_setting(config, "controller-port");
-    *display_time_out_value = get_setting(config, "display-timeout-value");
-    *fish_update_interval = get_setting(config, "fish-update-interval");
+    controller_port = get_setting(config, "controller-port");
+    display_time_out_value = get_setting(config, "display-timeout-value");
+    fish_update_interval = get_setting(config, "fish-update-interval");
 }
 
 int main(int argc, char *argv[])
 {
-    int main_socket_fd, controller_port, display_time_out_value, fish_update_interval;
+    pthread_t send_fishes_continuously_thread;
+    int main_socket_fd;
     struct aquarium controller_aquarium;
     struct client_set clients;
-    struct client_info current_client;
-    load(&controller_aquarium, "save_a1.txt");
+    load(&controller_aquarium, "aquarium.txt");
 
     init_client_set(&clients, &controller_aquarium);
+    // thread getFishesContinuously
+    pthread_create(&send_fishes_continuously_thread, NULL, send_fishes_continuously, (void*) &clients);
     socklen_t clilen;
     int opt = 1;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
     int socket_fd, client_ready;
-    //int n;
     //set of socket descriptors 
     fd_set readfds;
     
-    init_server("build/controller.cfg", &controller_port, &display_time_out_value, &fish_update_interval);
+    init_server("build/controller.cfg");
     
     main_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -132,21 +156,21 @@ int main(int argc, char *argv[])
                 FD_SET(socket_fd, &readfds);  
             } 
         }
-
+        
 
          //else its some IO operation on some other socket
-        for (int i = 0; i < MAX_CLIENTS; i++)  
+        for (int i = 1; i <= MAX_CLIENTS; i++)  
         {  
-            current_client = get_client_info(&clients, i);
-            socket_fd = get_socket_client(&current_client);
+            socket_fd = get_socket_client(&clients, i);
             if (FD_ISSET(socket_fd, &readfds)) {  
+                
                 if ((read(socket_fd, buffer, 1024)) < 0) {
                     error("ERROR on reading");
                 }  
                 printf("< %s", buffer);
                 //Echo back the message that came in 
                handle_network_command(buffer, socket_fd, &clients); 
-            }  
+            }
         }
     }
     return 0;

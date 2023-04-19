@@ -9,6 +9,7 @@
 struct client_info {
     int socket_fd;
     int id_view;
+    int get_fishes_continuously;
 };
 
 struct client_set {
@@ -18,7 +19,11 @@ struct client_set {
 
 struct client_info init_client_info(int socket, int id_view);
 
-int get_socket_client(struct client_info *client);
+int get_socket_client(struct client_set* clients, int id_view);
+
+void start_get_fishes_continuously(struct client_set* clients, int id_view);
+
+int want_fishes_continuously(struct client_set* clients, int id_view);
 
 void init_client_set(struct client_set *clients, struct aquarium *client_aquarium);
 

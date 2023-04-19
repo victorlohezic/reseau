@@ -20,6 +20,8 @@ void network_start_fish(char* command, int socket, struct client_set* clients);
 
 void network_del_fish(char* command, int socket, struct client_set* clients);
 
-void network_get_fishes(char* command, int socket, struct client_set* clients);
+void network_get_fishes(int socket, struct client_set* clients);
+
+void get_fishes_continuously(int socket, struct client_set* clients);
 
 #endif

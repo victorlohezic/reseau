@@ -116,7 +116,7 @@ void network_start_fish(char* command, int socket, struct client_set* clients) {
 void network_del_fish(char* command, int socket, struct client_set* clients) {
     char fish_name[SIZE_NAMES];
 
-    if (sscanf(command, "startFish %s\n", fish_name) != 1) {
+    if (sscanf(command, "delFish %s\n", fish_name) != 1) {
         failed_network_command(socket);
         return ;
     }
@@ -140,8 +140,8 @@ void send_fish(int socket, struct fish *f) {
     printf("%s", answer);
 }
 
-void network_get_fishes(char* command, int socket, struct client_set* clients) {
-    write(socket, "list", 6);
+void network_get_fishes(int socket, struct client_set* clients) {
+    write(socket, "list", 5);
     printf("> list");
     int id_view = find_client(clients, socket);
     struct fish list_fishes[MAX_FISHES];
@@ -149,11 +149,14 @@ void network_get_fishes(char* command, int socket, struct client_set* clients) {
     for (int i = 0; i < nb_fishes; ++i) {
         send_fish(socket, &list_fishes[i]);
     }
-
+    printf("\n");    
     write(socket, "\n", 2);
-    printf("\n");
 }
 
+void get_fishes_continuously(int socket, struct client_set* clients) {
+    int id_view = find_client(clients, socket);
+    start_get_fishes_continuously(clients, id_view);
+}
 
 // int main(){
 //     int client[10] = {0};
