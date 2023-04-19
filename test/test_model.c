@@ -390,7 +390,7 @@ void test_add_future_pos()
     assert(f.move.future_positions->next->positions[0] == 11); 
 
     //print_queue(f.move.future_positions);
-    free_queue(f.move.future_positions);
+    free_fish(&f);
     printf("\tOK\n");
 }
 
@@ -436,8 +436,8 @@ void test_next_future_pos()
     assert(next_future_position(&f, future_pos) == 0);
     assert(future_pos[0] == 88 && future_pos[1] == 77);
     assert(future_pos[2] <= 1);
-
-    free_queue(f.move.future_positions);
+    free_fish(&f);
+    
     printf("\tOK\n");
 
 

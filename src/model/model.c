@@ -108,6 +108,10 @@ int next_future_position(struct fish* f, int* pos)
     return 0;
 }
 
+void free_fish(struct fish* f)
+{
+   free_queue(f->move.future_positions); 
+}
 
 
 void print_fish_pos(struct fish* f)
