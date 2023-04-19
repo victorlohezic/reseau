@@ -15,7 +15,7 @@ void test_init_view() {
     assert(v.dimension[0] == 100);
     assert(v.dimension[1] == 50);
 
-    printf("\t\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 void test_get_view_id() {

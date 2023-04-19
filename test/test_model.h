@@ -29,8 +29,8 @@ void test_set_fish_dim();
 void test_set_fish_mov();
 void test_shift_fish();
 
-void test_add_future_position(); // a faire
-void test_next_future_position(); // a faire
+void test_add_future_pos(); // a faire
+void test_next_future_pos(); // a faire
 
 
 

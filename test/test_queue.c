@@ -106,19 +106,49 @@ void test_free_queue() {
     printf("%s", __func__);
 
     int pos1[2] = {11,12};
-    struct queue_position* q1 = init_queue(pos1,5);
+    struct queue_position* q = init_queue(pos1,5);
 
     int pos2[2] = {21,22};
-    struct queue_position* q = add_element(q1, pos2, 12);
+    q = add_element(q, pos2, 12);
 
     int pos3[2] = {31,32};
-    q = add_element(q, pos3, 2);   
+    q = add_element(q, pos3, 0);   
 
     free_queue(q);
 
     printf("\t\tOK\n");
 }
 
+void test_update_queue()
+{
+    printf("%s", __func__);
+
+    int pos1[2] = {11,12};
+    struct queue_position* q = init_queue(pos1,5);
+
+    int pos2[2] = {21,22};
+    q = add_element(q, pos2, 12);
+
+    int pos3[2] = {31,32};
+    q = add_element(q, pos3, -1);   
+
+    assert(q->positions[0] == 31);
+    assert(q->next->positions[1] == 12);
+    assert(q->next->next != NULL);    
+
+
+    q = update_queue(q);
+
+    assert(q->positions[0] == 11);
+    assert(q->next->positions[1] == 22);    
+    assert(q->next->next == NULL);    
+
+
+    free_queue(q);  
+    
+
+    printf("\tOK\n");
+}
 
 
 
@@ -131,8 +161,7 @@ int main(void)
     test_add_element();
     test_del_element_head();
     test_free_queue();
-
-    //test_update_queue();
+    test_update_queue();
     
     return 0;
 }

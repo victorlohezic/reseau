@@ -63,6 +63,7 @@ struct queue_position* del_element_head(struct queue_position* q)
 
 struct queue_position* update_queue(struct queue_position* q)
 {
+
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
@@ -72,7 +73,7 @@ struct queue_position* update_queue(struct queue_position* q)
     double current_time = sec +usec;
 
     struct queue_position* head = q;
-    while (head->time < current_time) {
+    while (head != NULL && head->time < current_time) {
         head = del_element_head(head);
     }
     return head;
@@ -94,3 +95,16 @@ int free_queue(struct queue_position* q)
     return 0;
 }
 
+
+void print_queue(struct queue_position* q)
+{
+printf("\n##########\n");
+
+struct queue_position* ite = q;
+while(ite != NULL) {
+    printf("x: %d, y: %d, time: %f\n", ite->positions[0], ite->positions[1], ite->time);
+    ite = ite->next;
+}
+printf("##########\n");
+
+}

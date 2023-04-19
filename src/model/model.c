@@ -87,10 +87,13 @@ void add_future_position(struct fish* f, int* pos, int delay)
     }
 }
 
-void next_future_position(struct fish* f, int* pos) 
+int next_future_position(struct fish* f, int* pos) 
 {
     (f->move).future_positions = update_queue((f->move).future_positions);
 
+    if ((f->move).future_positions == NULL) {
+        return -1;
+    }
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
@@ -102,6 +105,7 @@ void next_future_position(struct fish* f, int* pos)
     pos[0] = (f->move).future_positions->positions[0];
     pos[1] = (f->move).future_positions->positions[1];
     pos[2] = dt;
+    return 0;
 }
 
 

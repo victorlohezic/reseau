@@ -25,6 +25,7 @@ struct queue_position* update_queue(struct queue_position* q);
 
 int free_queue(struct queue_position* q);
 
+void print_queue(struct queue_position* q);
 
 
 #endif // _QUEUE_H_

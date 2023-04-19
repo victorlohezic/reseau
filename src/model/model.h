@@ -60,7 +60,8 @@ void shift_fish(struct fish* f);
 void add_future_position(struct fish* f, int* pos, int delay);
 
 // puts the first future position of the fish [x, y, time] -> pos
-void next_future_position(struct fish* f, int* pos);
+// returns 0 on success, -1 if fish doesn't have future pos
+int next_future_position(struct fish* f, int* pos);
 
 // diplays the position of a fish
 void print_fish_pos(struct fish* f);

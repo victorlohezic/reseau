@@ -350,7 +350,98 @@ void test_shift_fish()
 }
 
 
+void test_add_future_pos()
+{
+    printf("%s", __func__);
 
+    char name[] = "poisson dagetruqué";
+    int width = 10;
+    int height = 20;
+    int x = 0   ;
+    int y = 0;
+
+    void shift (int* c)
+    {
+        c[0] +=1;
+        c[1] +=2;
+    }
+    assert(width == 10);
+    struct fish f;
+    init_fish(&f, name, width, height, x, y, &shift);
+
+    assert(f.move.future_positions == NULL);
+
+    int pos1[2] = {11,22};
+    add_future_position(&f, pos1, 5);
+    assert(f.move.future_positions != NULL);
+    assert(f.move.future_positions->positions[1] == 22);
+    assert(f.move.future_positions->next == NULL);
+
+    int pos2[2] = {13,18};
+    add_future_position(&f, pos2, 10);
+    assert(f.move.future_positions != NULL);
+    assert(f.move.future_positions->positions[1] == 22);
+    assert(f.move.future_positions->next->positions[0] == 13);   
+
+    int pos3[2] = {88,77};
+    add_future_position(&f, pos3, 1);
+    assert(f.move.future_positions != NULL);
+    assert(f.move.future_positions->positions[1] == 77);
+    assert(f.move.future_positions->next->positions[0] == 11); 
+
+    //print_queue(f.move.future_positions);
+    free_queue(f.move.future_positions);
+    printf("\tOK\n");
+}
+
+
+void test_next_future_pos()
+{
+    printf("%s", __func__);
+
+    char name[] = "nossiop le myope";
+    int width = 10;
+    int height = 20;
+    int x = 0   ;
+    int y = 0;
+
+    void shift (int* c)
+    {
+        c[0] +=1;
+        c[1] +=2;
+    }
+    assert(width == 10);
+    struct fish f;
+    init_fish(&f, name, width, height, x, y, &shift);
+
+    assert(f.move.future_positions == NULL);
+    int future_pos[3];
+    assert(next_future_position(&f, future_pos) == -1);
+
+
+    int pos1[2] = {11,22};
+    add_future_position(&f, pos1, 5);
+    assert(next_future_position(&f, future_pos) == 0);
+    assert(future_pos[0] == 11 && future_pos[1] == 22);
+    assert(future_pos[2] <= 5);
+
+    int pos2[2] = {13,18};
+    add_future_position(&f, pos2, 10);
+    assert(next_future_position(&f, future_pos) == 0);
+    assert(future_pos[0] == 11 && future_pos[1] == 22);
+    assert(future_pos[2] <= 5);
+
+    int pos3[2] = {88,77};
+    add_future_position(&f, pos3, 1);
+    assert(next_future_position(&f, future_pos) == 0);
+    assert(future_pos[0] == 88 && future_pos[1] == 77);
+    assert(future_pos[2] <= 1);
+
+    free_queue(f.move.future_positions);
+    printf("\tOK\n");
+
+
+}
 
 
 
@@ -369,9 +460,8 @@ int main(void)
     test_set_fish_dim();
     test_set_fish_mov();
     test_shift_fish();
-
-    //test_add_future_position();
-    //test_next_future_position();
+    test_add_future_pos();
+    test_next_future_pos();
     
     return 0;
 }
