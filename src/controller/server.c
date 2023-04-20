@@ -15,6 +15,7 @@
 #include "parser.h"
 #include "client.h"
 #include "network_command.h"
+#include "prompt_command.h"
 
 #define SO_REUSEPORT 15 
 #define MAX_CLIENTS MAX_VIEWS
@@ -22,8 +23,14 @@
 
 int controller_port, display_time_out_value, fish_update_interval;
 
+void error(char *msg)
+{
+    perror(msg);
+    exit(1);
+}
+
 void* send_fishes_continuously(void* array_client) {
-    struct client_set *clients = (struct client_set*) array_client;
+    struct client_set* clients = (struct client_set*) array_client;
     int socket_client;
     while (1) {
         sleep(fish_update_interval);
@@ -38,13 +45,38 @@ void* send_fishes_continuously(void* array_client) {
     return NULL;
 }
 
-
-
-
-void error(char *msg)
-{
-    perror(msg);
-    exit(1);
+void* init_prompt_command(void* aquarium_client) {
+    struct aquarium* controller_aquarium = (struct aquarium*) aquarium_client;
+    char command[256];
+    while (1) {
+        printf("$ ");
+        fflush(stdout);
+        memset(command, 0, sizeof(command)); // Reset command to an empty string
+        if(read(STDIN_FILENO, command, 256) == -1) {
+           error("ERROR on read");
+        }
+        command[strlen(command) - 1] = '\0';
+        if (strcmp(command, "load aquarium") == 0) {
+            load(controller_aquarium, "aquarium.txt");
+            printf("-> aquarium loaded (%i display view)!\n", controller_aquarium->nb_views);
+        }
+        else if (strcmp(command, "show aquarium") == 0) {
+            show(controller_aquarium);
+        }
+        else if (strcmp(command, "save aquarium") == 0) {
+            save_aquarium(controller_aquarium, "save_a1.txt");
+            printf("-> Aquarium saved !( %i display view)\n", controller_aquarium->nb_views);
+        }
+        else if (strstr(command, "add view") == command) {
+            prompt_add_view(command, controller_aquarium);
+        }
+        else if (strstr(command, "del view") == command) {
+            prompt_del_view(command, controller_aquarium);
+        }
+        else {
+            printf("%s: command not found\n", command);
+        }   
+    }
 }
 
 void handle_network_command(char* command, int socket_client, struct client_set* clients) {
@@ -87,7 +119,7 @@ void init_server(const char* filename) {
 
 int main(int argc, char *argv[])
 {
-    pthread_t send_fishes_continuously_thread;
+    pthread_t thread_send_fishes_continuously, thread_init_command_prompt;
     int main_socket_fd;
     struct aquarium controller_aquarium;
     struct client_set clients;
@@ -95,7 +127,10 @@ int main(int argc, char *argv[])
 
     init_client_set(&clients, &controller_aquarium);
     // thread getFishesContinuously
-    pthread_create(&send_fishes_continuously_thread, NULL, send_fishes_continuously, (void*) &clients);
+    pthread_create(&thread_send_fishes_continuously, NULL, send_fishes_continuously, (void*) &clients);
+    // thread prompt of controller
+    pthread_create(&thread_init_command_prompt, NULL, init_prompt_command, (void*) &controller_aquarium);
+
     socklen_t clilen;
     int opt = 1;
     char buffer[256];

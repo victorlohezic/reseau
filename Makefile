@@ -14,7 +14,7 @@ build : build_directory server server_mock server_mock_GUI client copy_controlle
 
 test: ex_test_queue ex_test_model ex_test_view ex_test_aquarium ex_java_test
 
-server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o queue.o client.o
+server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o queue.o client.o prompt_command.o
 	${CC} ${CFLAGS} -pthread $^ -I $(SRC)/model -o ${BUILD_DIR}/server
 
 server_mock: ${SRC}/controller/server_mock.c parser.o
@@ -59,6 +59,9 @@ aquarium.o: ${SRC}/model/aquarium.c
 	${CC} ${CFLAGS} ${SRC}/model/aquarium.c -c
 
 network_command.o: $(SRC)/controller/network_command.c
+	${CC} ${CFLAGS} -I $(SRC)/model $< -c
+
+prompt_command.o: $(SRC)/controller/prompt_command.c
 	${CC} ${CFLAGS} -I $(SRC)/model $< -c
 
 #-------------- tests -------------------
