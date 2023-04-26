@@ -2,7 +2,7 @@
 
 void prompt_add_view(char* command, struct aquarium* controller_aquarium) {
     int id_view, x, y, width, height;
-    if (sscanf(command, "add view N%i %ix%i+%i+%i", &id_view, &x, &y, &width, &height) != 5)  {
+    if (sscanf(command, "add view N%i %dx%d+%d+%d", &id_view, &x, &y, &width, &height) != 5)  {
         return;
     }
     struct view new_view;
