@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Hello implements Commande {
