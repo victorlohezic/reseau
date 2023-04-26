@@ -36,11 +36,36 @@ void* send_fishes_continuously(void* array_client) {
         sleep(fish_update_interval);
         for (int i = 1; i <= MAX_CLIENTS; i++)  
         {  
-            socket_client = get_socket_client(clients, i);
-            if (socket_client != 0 && want_fishes_continuously(clients, i)) {
+            if (is_client_connected(clients, i) && want_fishes_continuously(clients, i)) {
+                socket_client = get_socket_client(clients, i);
                 network_get_fishes(socket_client, clients);
             }
         }
+    }
+    return NULL;
+}
+
+void* log_out_inactive_client(void* array_client) {
+    struct client_set* clients = (struct client_set*) array_client;
+    int socket_client;
+    time_t begin, end; 
+    while (1) {
+        begin = time(NULL);
+        sleep(3);   
+        for (int i = 1; i <= MAX_CLIENTS; i++)  
+        {  
+            end = time(NULL);
+            if (!is_client_connected(clients, i)) {
+                continue;
+            }
+
+            add_time(clients, i, difftime(end, begin));
+            if (is_timeout(clients, i, display_time_out_value)) {
+                socket_client = get_socket_client(clients, i);
+                log_out(socket_client, clients);
+            }
+        }
+        sleep(1);
     }
     return NULL;
 }
@@ -80,11 +105,13 @@ void* init_prompt_command(void* aquarium_client) {
 }
 
 void handle_network_command(char* command, int socket_client, struct client_set* clients) {
+    int id_view = find_client(clients, socket_client);
+    reset_timeout(clients, id_view);
     if (strstr(command, "hello") == command) { // check if the command start with hello
         hello(command, socket_client, clients);
     }
     else if (strcmp(command, "log out\n") == 0) {
-        log_out(socket_client);
+        log_out(socket_client, clients);
     }
     else if (strstr(command, "ping") == command) {
         ping(command, socket_client);
@@ -119,17 +146,14 @@ void init_server(const char* filename) {
 
 int main(int argc, char *argv[])
 {
-    pthread_t thread_send_fishes_continuously, thread_init_command_prompt;
+    pthread_t thread_send_fishes_continuously, thread_init_command_prompt, thread_log_out_inactive_client;
     int main_socket_fd;
     struct aquarium controller_aquarium;
     struct client_set clients;
     load(&controller_aquarium, "aquarium.txt");
 
     init_client_set(&clients, &controller_aquarium);
-    // thread getFishesContinuously
-    pthread_create(&thread_send_fishes_continuously, NULL, send_fishes_continuously, (void*) &clients);
-    // thread prompt of controller
-    pthread_create(&thread_init_command_prompt, NULL, init_prompt_command, (void*) &controller_aquarium);
+    
 
     socklen_t clilen;
     int opt = 1;
@@ -140,6 +164,14 @@ int main(int argc, char *argv[])
     fd_set readfds;
     
     init_server("build/controller.cfg");
+
+    // thread getFishesContinuously
+    pthread_create(&thread_send_fishes_continuously, NULL, send_fishes_continuously, (void*) &clients);
+    // thread prompt of controller
+    pthread_create(&thread_init_command_prompt, NULL, init_prompt_command, (void*) &controller_aquarium);
+    //thread timeout client
+    pthread_create(&thread_log_out_inactive_client, NULL, log_out_inactive_client, (void*) &clients);
+    
     
     main_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 

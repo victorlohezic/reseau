@@ -47,8 +47,10 @@ int hello(char* command, int socket, struct client_set* clients) {
     return id_view;
 }
 
-void log_out(int socket) {
+void log_out(int socket, struct client_set* clients) {
     char* answer = "bye\n";
+    int id_view = find_client(clients, socket);
+    del_client(clients, id_view);
     printf("> %s", answer);
     write(socket, answer, strlen(answer));
     
