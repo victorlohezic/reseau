@@ -17,7 +17,7 @@ int hello(char* command, int socket, struct client_set* clients) {
     }
 
     struct client_info new_client;
-    char answer[20] = "greeting ";
+    char answer[20] = "greeting N";
     char str_id[4] = {'\0'};
     if (sscanf(command, "Hello in as %d\n", &id_view) == 1) {
         if (is_view_available(clients, id_view)) {
@@ -135,9 +135,12 @@ void network_del_fish(char* command, int socket, struct client_set* clients) {
 void send_fish(int socket, struct fish *f) {
     char answer[256];
     char* fish_name = get_fish_name(f);
-    int* position = get_fish_position(f);
+    int future_position[3];
+    if (next_future_position(f, future_position) == -1) {
+        return;
+    }
     int* dimension = get_fish_dimension(f);
-    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, position[0], position[1], dimension[0], dimension[1], 5);
+    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, future_position[0],future_position[1], dimension[0], dimension[1], future_position[2]);
     write(socket, answer, strlen(answer));
     printf("%s", answer);
 }
