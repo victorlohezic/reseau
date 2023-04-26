@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public class Listener extends Thread {
     private String contentOneTime;
@@ -82,10 +81,6 @@ public class Listener extends Thread {
 
     private void updateView(String fishes) {
         ArrayList<String> dataFishes = prompt.parse(fishes, " ");
-        ListIterator<String> li = dataFishes.listIterator();;
-        while (li.hasNext()) {
-            String element = li.next();
-        }
         int countData = dataFishes.size();
         dataFishes = new ArrayList<String>(dataFishes.subList(1, countData));
         --countData;

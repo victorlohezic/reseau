@@ -162,7 +162,6 @@ public class View implements ActionListener{
 
 
     public void updateInterface() {
-
         this.myGUI.updateGUI(this);
     }
 
@@ -174,17 +173,7 @@ public class View implements ActionListener{
             for (String name : fishes.keySet()) {
                 try {
                     Fish fish = fishes.get(name);
-                    ArrayList<int[]> positionAndTime = fish.getPositionsAndTimes();
-                    ListIterator<int[]> li = positionAndTime.listIterator();
-                    while (li.hasNext()) {
-                        int[] element = li.next();
-                    }
                     fish.decrementTime();
-                    positionAndTime = fish.getPositionsAndTimes();
-                    li = positionAndTime.listIterator();
-                    while (li.hasNext()) {
-                        int[] element = li.next();
-                    }
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }

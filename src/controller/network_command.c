@@ -5,19 +5,19 @@
 int hello(char* command, int socket, struct client_set* clients) {
 
     if (strstr(command, "hello") != command) {
-        write(socket, "no greeting\n", 13);
+        write(socket, "no greeting\n", 12);
         return 0;
     }
 
     int id_view;
     
     if (((id_view = find_client(clients, socket)) != 0)) {
-        write(socket, "no greeting\n", 13);
+        write(socket, "no greeting\n", 12);
         return id_view;
     }
 
     struct client_info new_client;
-    char answer[20] = "greeting ";
+    char answer[20] = "greeting N";
     char str_id[4] = {'\0'};
     if (sscanf(command, "Hello in as %d\n", &id_view) == 1) {
         if (is_view_available(clients, id_view)) {
@@ -34,7 +34,7 @@ int hello(char* command, int socket, struct client_set* clients) {
 
     id_view = find_view_available(clients);
     if (id_view == 0) {
-        write(socket, "no greeting\n", 13);
+        write(socket, "no greeting\n", 12);
         return 0;
     }
     sprintf(str_id, "%d", id_view); // convert the integer to a string using sprintf
@@ -47,8 +47,10 @@ int hello(char* command, int socket, struct client_set* clients) {
     return id_view;
 }
 
-void log_out(int socket) {
+void log_out(int socket, struct client_set* clients) {
     char* answer = "bye\n";
+    int id_view = find_client(clients, socket);
+    del_client(clients, id_view);
     printf("> %s", answer);
     write(socket, answer, strlen(answer));
     
@@ -72,7 +74,7 @@ void parse_fish(char* command, char* name, int* width, int* height, int* x, int*
 }
 
 void failed_network_command(int socket) {
-    write(socket, "NOK\n", 5);
+    write(socket, "NOK\n", 4);
     printf("> NOK\n");
 }
 
@@ -92,7 +94,7 @@ void network_add_fish(char* command, int socket, struct client_set* clients) {
         return ;
     }
 
-    write(socket, "OK\n", 4);
+    write(socket, "OK\n", 3);
     printf("> OK\n");
 }
 
@@ -109,7 +111,7 @@ void network_start_fish(char* command, int socket, struct client_set* clients) {
         return ;
     }
 
-    write(socket, "OK\n", 4);
+    write(socket, "OK\n", 3);
     printf("> OK\n");
 }
 
@@ -126,22 +128,25 @@ void network_del_fish(char* command, int socket, struct client_set* clients) {
         return ;
     }
 
-    write(socket, "OK\n", 4);
+    write(socket, "OK\n", 3);
     printf("> OK\n");
 }
 
 void send_fish(int socket, struct fish *f) {
     char answer[256];
     char* fish_name = get_fish_name(f);
-    int* position = get_fish_position(f);
+    int future_position[3];
+    if (next_future_position(f, future_position) == -1) {
+        return;
+    }
     int* dimension = get_fish_dimension(f);
-    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, position[0], position[1], dimension[0], dimension[1], 5);
+    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, future_position[0],future_position[1], dimension[0], dimension[1], future_position[2]);
     write(socket, answer, strlen(answer));
     printf("%s", answer);
 }
 
 void network_get_fishes(int socket, struct client_set* clients) {
-    write(socket, "list", 5);
+    write(socket, "list", 4);
     printf("> list");
     int id_view = find_client(clients, socket);
     struct fish list_fishes[MAX_FISHES];
@@ -150,7 +155,7 @@ void network_get_fishes(int socket, struct client_set* clients) {
         send_fish(socket, &list_fishes[i]);
     }
     printf("\n");    
-    write(socket, "\n", 2);
+    write(socket, "\n", 1);
 }
 
 void get_fishes_continuously(int socket, struct client_set* clients) {

@@ -1,5 +1,4 @@
 import java.io.PrintWriter;
-import java.io.IOException;
 
 /** 
  * Close the socket with the server

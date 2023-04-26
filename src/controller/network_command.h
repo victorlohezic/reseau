@@ -10,7 +10,7 @@
 
 int hello(char* command, int socket, struct client_set* clients);
 
-void log_out(int socket);
+void log_out(int socket, struct client_set* clients);
 
 void ping(char* command, int socket);
 

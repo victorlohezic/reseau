@@ -42,7 +42,7 @@ int load(struct aquarium* a, char* path)
 
     int id, pos_x, pos_y, dim_x, dim_y;
     struct view v;
-    while (fscanf(input_file, "%d", &id) == 1) {
+    while (fscanf(input_file, "N%d", &id) == 1) {
         fseek(input_file, 1, SEEK_CUR);
 
         fscanf(input_file, "%d", &pos_x);     

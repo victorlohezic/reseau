@@ -26,13 +26,23 @@ public class Client {
     private int displayTimeoutValue;
 
 
+    public Client(String configFileName){
+        ConfigParser config = new ConfigParser(configFileName);
+        initClient(config);
+
+    }
+
     public Client(){
+        ConfigParser config = new ConfigParser("build/view.cfg");
+        initClient(config);
+    }
+
+    private void initClient(ConfigParser config){
+        
         this.logging = new Logging("view.log");
         this.logging.enableSaving(false);
         this.logging.enable(true, true, true);
         
-        ConfigParser config = new ConfigParser("build/view.cfg");
-
         this.id = config.getId();
         logging.info(this.id);
         this.controllerAddress = config.getControllerAddress();
@@ -46,8 +56,6 @@ public class Client {
             logging.warning(e.getMessage());
         }
     }
-
-
 
     private boolean initNetwork() {
             try{
@@ -72,7 +80,7 @@ public class Client {
             networkCommands.put("DelFish", DelFish.initDelFish(listener, pred, logging));
             networkCommands.put("ls", Ls.initLs(listener, pred, logging, prompt));
             Hello.castCommandToHello(networkCommands.get("Hello")).execute();
-            GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
+            //GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
             // GetFishesContinuously getFishesContinuously = GetFishesContinuously.initGetFishes();
             // networkCommands.put("getFishesContinuously", getFishesContinuously);
             // getFishesContinuously.execute();
@@ -175,7 +183,7 @@ public class Client {
         } catch (Exception e) {
             logging.warning(e.getMessage());
         }
-        run();
+        run_functional_tests();
     }
 
     private void closeNetwork() {
@@ -191,12 +199,18 @@ public class Client {
     }
 
     public static void main(String[] argv) {
-         Client client = new Client();
-         if (client.initNetwork()){
-             client.initPromptCommands();
-             //client.run();
-             client.runGUI();
-             client.closeNetwork();
-         }
+        Client client;
+        if (argv.length == 5){
+            client = new Client(argv[4]);
+        } 
+        else{
+            client = new Client();
+        }
+        if (client.initNetwork()){
+            client.initPromptCommands();
+            //client.run();
+            client.runGUI();
+            client.closeNetwork();
+        }
      }
 }
