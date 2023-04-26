@@ -143,7 +143,7 @@ void send_fish(int socket, struct fish *f) {
 }
 
 void network_get_fishes(int socket, struct client_set* clients) {
-    write(socket, "list", 5);
+    write(socket, "list", 4);
     printf("> list");
     int id_view = find_client(clients, socket);
     struct fish list_fishes[MAX_FISHES];
