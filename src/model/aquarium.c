@@ -164,7 +164,6 @@ int del_fish(struct aquarium* a, char* fish_name) {
 
     }
     return -1;
-
 }
 
 
@@ -240,6 +239,7 @@ void update_fishes(struct aquarium* a) {
     for(int k = 0; k< a->nb_fishes; k++) {
         if ((a->fishes+k)->is_started) {
             shift_fish(a->fishes+k);
+            generate_future_position(a->fishes+k);
         }
     }
 }

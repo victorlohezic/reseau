@@ -42,7 +42,7 @@ void reset_timeout(struct client_set* clients, int id_view);
 
 void add_time(struct client_set* clients, int id_view, double time);
 
-int is_timeout(struct client_set* clients, int id_view, int timeout);
+int is_inactive(struct client_set* clients, int id_view, int timeout);
 
 int is_view_available(struct client_set *clients, int id_view);
 

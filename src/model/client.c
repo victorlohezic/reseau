@@ -57,7 +57,7 @@ void add_time(struct client_set* clients, int id_view, double time) {
     clients->clients[id_view-1].time_since_last_message += time;
 }
 
-int is_timeout(struct client_set* clients, int id_view, int timeout) {
+int is_inactive(struct client_set* clients, int id_view, int timeout) {
     return clients->clients[id_view-1].time_since_last_message >= timeout;
 }
 

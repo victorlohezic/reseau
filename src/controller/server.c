@@ -22,6 +22,7 @@
 
 
 int controller_port, display_time_out_value, fish_update_interval;
+int stop_threads = 0;
 
 void error(char *msg)
 {
@@ -32,7 +33,7 @@ void error(char *msg)
 void* send_fishes_continuously(void* array_client) {
     struct client_set* clients = (struct client_set*) array_client;
     int socket_client;
-    while (1) {
+    while (!stop_threads) {
         sleep(fish_update_interval);
         for (int i = 1; i <= MAX_CLIENTS; i++)  
         {  
@@ -49,7 +50,7 @@ void* log_out_inactive_client(void* array_client) {
     struct client_set* clients = (struct client_set*) array_client;
     int socket_client;
     time_t begin, end; 
-    while (1) {
+    while (!stop_threads) {
         begin = time(NULL);
         sleep(3);   
         for (int i = 1; i <= MAX_CLIENTS; i++)  
@@ -60,7 +61,7 @@ void* log_out_inactive_client(void* array_client) {
             }
 
             add_time(clients, i, difftime(end, begin));
-            if (is_timeout(clients, i, display_time_out_value)) {
+            if (is_inactive(clients, i, display_time_out_value)) {
                 socket_client = get_socket_client(clients, i);
                 log_out(socket_client, clients);
             }
@@ -73,7 +74,7 @@ void* log_out_inactive_client(void* array_client) {
 void* init_prompt_command(void* aquarium_client) {
     struct aquarium* controller_aquarium = (struct aquarium*) aquarium_client;
     char command[256];
-    while (1) {
+    while (!stop_threads) {
         printf("$ ");
         fflush(stdout);
         memset(command, 0, sizeof(command)); // Reset command to an empty string
@@ -102,6 +103,17 @@ void* init_prompt_command(void* aquarium_client) {
             printf("%s: command not found\n", command);
         }   
     }
+    return NULL;
+}
+
+
+void* update_aquarium(void* aquarium_client) {
+    struct aquarium* controller_aquarium = (struct aquarium*) aquarium_client;
+    while(!stop_threads) {
+        update_fishes(controller_aquarium);
+        sleep(1);
+    }
+    return NULL;
 }
 
 void handle_network_command(char* command, int socket_client, struct client_set* clients) {
@@ -142,14 +154,16 @@ void init_server(const char* filename) {
     controller_port = get_setting(config, "controller-port");
     display_time_out_value = get_setting(config, "display-timeout-value");
     fish_update_interval = get_setting(config, "fish-update-interval");
+    free_config(config);
 }
 
 int main(int argc, char *argv[])
 {
-    pthread_t thread_send_fishes_continuously, thread_init_command_prompt, thread_log_out_inactive_client;
+    pthread_t thread_send_fishes_continuously, thread_init_command_prompt, thread_log_out_inactive_client, thread_update_aquarium;
     int main_socket_fd;
     struct aquarium controller_aquarium;
     struct client_set clients;
+    
     load(&controller_aquarium, "aquarium.txt");
 
     init_client_set(&clients, &controller_aquarium);
@@ -164,6 +178,7 @@ int main(int argc, char *argv[])
     fd_set readfds;
     
     init_server("build/controller.cfg");
+    struct timeval timeout = {display_time_out_value+15, 0};
 
     // thread getFishesContinuously
     pthread_create(&thread_send_fishes_continuously, NULL, send_fishes_continuously, (void*) &clients);
@@ -171,8 +186,9 @@ int main(int argc, char *argv[])
     pthread_create(&thread_init_command_prompt, NULL, init_prompt_command, (void*) &controller_aquarium);
     //thread timeout client
     pthread_create(&thread_log_out_inactive_client, NULL, log_out_inactive_client, (void*) &clients);
-    
-    
+    //thread update aquarium
+    pthread_create(&thread_update_aquarium, NULL, update_aquarium, (void*) &controller_aquarium);
+
     main_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (main_socket_fd < 0)
@@ -197,11 +213,15 @@ int main(int argc, char *argv[])
     while (1) {
         
         bzero(buffer, 256);
-        //wait for an activity on one of the sockets , timeout is NULL , 
-        //so wait indefinitely 
-        client_ready = select(FD_SETSIZE , &readfds , NULL , NULL , NULL);  
+        //wait for an activity on one of the sockets ,
+        //so wait until timeout
+        client_ready = select(FD_SETSIZE , &readfds , NULL , NULL , &timeout);  
         if ((client_ready < 0)) { 
             error("ERROR on select");  
+        } 
+        if ((client_ready == 0)) { //timeout on select, shutdown the server
+            write(STDIN_FILENO, "\nServer is down\n", 17);
+            break; 
         } 
         //new connection 
         if (FD_ISSET(main_socket_fd, &readfds)) {  
@@ -240,5 +260,10 @@ int main(int argc, char *argv[])
             }
         }
     }
+    stop_threads = 1;
+    pthread_join(thread_init_command_prompt, NULL);
+    pthread_join(thread_update_aquarium, NULL);
+    pthread_join(thread_send_fishes_continuously, NULL);
+    pthread_join(thread_log_out_inactive_client, NULL);
     return 0;
 }
