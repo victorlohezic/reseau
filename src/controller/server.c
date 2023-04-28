@@ -208,13 +208,22 @@ int main(int argc, char *argv[])
 
     listen(main_socket_fd, MAX_CLIENTS);
     clilen = sizeof(cli_addr);
-    FD_ZERO(&readfds);  
-    FD_SET(main_socket_fd, &readfds);
+    
     while (1) {
         
+        FD_ZERO(&readfds);  
+        FD_SET(main_socket_fd, &readfds);
+        
+        for (int i = 1; i <= MAX_CLIENTS; ++i) {
+            if (is_client_connected(&clients, i)) {
+                FD_SET(get_socket_client(&clients, i), &readfds);
+            }
+        }
+
         bzero(buffer, 256);
-        //wait for an activity on one of the sockets ,
-        //so wait until timeout
+        //wait for an activity on one of the sockets
+        //wait until timeout
+
         client_ready = select(FD_SETSIZE , &readfds , NULL , NULL , &timeout);  
         if ((client_ready < 0)) { 
             error("ERROR on select");  
@@ -223,6 +232,7 @@ int main(int argc, char *argv[])
             write(STDIN_FILENO, "\nServer is down\n", 17);
             break; 
         } 
+
         //new connection 
         if (FD_ISSET(main_socket_fd, &readfds)) {  
             socket_fd = accept(main_socket_fd, (struct sockaddr *)&cli_addr, &clilen); 
@@ -232,7 +242,7 @@ int main(int argc, char *argv[])
             }
             
             //inform user of socket number - used in send and receive commands 
-            printf("New connection , socket fd is %d, port : %d \n" , socket_fd , ntohs
+            printf("\n New connection , socket fd is %d, port : %d \n" , socket_fd , ntohs
                   (cli_addr.sin_port));  
 
             if (read(socket_fd , buffer, 256) < 0) {
