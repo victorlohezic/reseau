@@ -63,6 +63,8 @@ void add_future_position(struct fish* f, int* pos, int delay);
 // returns 0 on success, -1 if fish doesn't have future pos
 int next_future_position(struct fish* f, int* pos);
 
+void generate_future_position(struct fish* f);
+
 //free the future positions of the fish
 void free_fish(struct fish* f);
 

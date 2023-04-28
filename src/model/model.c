@@ -13,8 +13,6 @@ void shifting(struct movement* mov, int* c)
     (*(mov->shift))(c);
 }
 
-
-
 // functions for the fishes
 
 
@@ -106,6 +104,10 @@ int next_future_position(struct fish* f, int* pos)
     pos[1] = (f->move).future_positions->positions[1];
     pos[2] = dt;
     return 0;
+}
+
+void generate_future_position(struct fish* f) {
+    return;
 }
 
 void free_fish(struct fish* f)
