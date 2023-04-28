@@ -180,7 +180,7 @@ int save_aquarium(struct aquarium* a, char* path) {
     fprintf(output_file, "%dx%d\n",get_aquarium_dimension(a)[0], get_aquarium_dimension(a)[1]);
 
     for(int k=0; k<a->nb_views; k++) {
-        fprintf(output_file, "%d %dx%d+%d+%d\n",
+        fprintf(output_file, "N%d %dx%d+%d+%d\n",
         get_view_id(&a->views[k]),
         get_view_position(&a->views[k])[0],
         get_view_position(&a->views[k])[1],
