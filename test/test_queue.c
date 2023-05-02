@@ -28,7 +28,7 @@ void test_init_queue() {
 }
 
 
-void test_go_to_next() {
+void test_go_to_end() {
     printf("%s", __func__);
 
     int pos1[2] = {11,12};
@@ -40,12 +40,11 @@ void test_go_to_next() {
     q1->next = q2;
     assert(q1->next == q2);
 
-    struct queue_position* next = go_to_next(q1);
+    struct queue_position* next = go_to_end(q1);
     assert(next == q2);
     assert(next->positions[0] == 21);
 
-    next = go_to_next(next);
-    assert(next == NULL);
+    assert(next->next == NULL);
 
     free(q1);
     free(q2);
@@ -62,7 +61,8 @@ void test_add_element() {
     int pos2[2] = {21,22};
     struct queue_position* q = add_element(q1, pos2, 12);
     assert(q == q1);
-    assert(go_to_next(q)->positions[0] == 21);
+    assert(go_to_end(q) != NULL);
+    assert(go_to_end(q)->positions[0] == 21);
 
     int pos3[2] = {31,32};
     q = add_element(q, pos3, 2);   
@@ -136,13 +136,15 @@ void test_update_queue()
     assert(q->next->positions[1] == 12);
     assert(q->next->next != NULL);    
 
-
-    q = update_queue(q);
+    int pos[2];
+    q = update_queue(q, pos);
 
     assert(q->positions[0] == 11);
     assert(q->next->positions[1] == 22);    
     assert(q->next->next == NULL);    
 
+    assert(pos[0] == 31);
+    assert(pos[1] == 32);
 
     free_queue(q);  
     
@@ -157,7 +159,7 @@ int main(void)
     printf("\nTEST FILE : %s\n\n", __FILE__);
 
     test_init_queue();
-    test_go_to_next();
+    test_go_to_end();
     test_add_element();
     test_del_element_head();
     test_free_queue();

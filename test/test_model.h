@@ -15,7 +15,7 @@
 
 void test_init_movement();
 void test_shifting();
-
+void test_add_latest_pos(); // a faire
 
 // testing structure fish
 
@@ -29,8 +29,10 @@ void test_set_fish_dim();
 void test_set_fish_mov();
 void test_shift_fish();
 
-void test_add_future_pos(); // a faire
-void test_next_future_pos(); // a faire
+void test_add_future_pos(); 
+void test_next_future_pos(); 
+
+void test_generate_future_position(); // a faire
 
 
 
