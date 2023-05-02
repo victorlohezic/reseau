@@ -164,7 +164,6 @@ int del_fish(struct aquarium* a, char* fish_name) {
 
     }
     return -1;
-
 }
 
 
@@ -181,7 +180,7 @@ int save_aquarium(struct aquarium* a, char* path) {
     fprintf(output_file, "%dx%d\n",get_aquarium_dimension(a)[0], get_aquarium_dimension(a)[1]);
 
     for(int k=0; k<a->nb_views; k++) {
-        fprintf(output_file, "%d %dx%d+%d+%d\n",
+        fprintf(output_file, "N%d %dx%d+%d+%d\n",
         get_view_id(&a->views[k]),
         get_view_position(&a->views[k])[0],
         get_view_position(&a->views[k])[1],
@@ -240,6 +239,7 @@ void update_fishes(struct aquarium* a) {
     for(int k = 0; k< a->nb_fishes; k++) {
         if ((a->fishes+k)->is_started) {
             shift_fish(a->fishes+k);
+            generate_future_position(a->fishes+k);
         }
     }
 }
