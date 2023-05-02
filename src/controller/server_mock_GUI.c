@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            sleep(5);
+            sleep(2);
             random_x = rand() % 101;
             random_y = rand() % 101;
             random_x2 = rand() % 101;

@@ -18,14 +18,15 @@ public class GUI extends JFrame implements ActionListener{
     private Timer timer;
     private ArrayList<float[]> futurePos = new ArrayList<float[]>(); // 0 : position x, 1 : position y, 2 : time
     private ArrayList<float[]> lastPos = new ArrayList<float[]>(); // 0 : position x, 1 : position y, 2 : time
-
+    private String[] fishNames;
+    private View myView;
 
 
     public GUI(View newView) {
         super("View");
         setLayout(null); // creates the window
 
-
+        
         //Create the timer to update the button position
         timer = new Timer(200, this);
         timer.start();
@@ -49,6 +50,8 @@ public class GUI extends JFrame implements ActionListener{
         bgLabel.setBounds(-1, -1, screenWidth, screenHeight);
         add(bgLabel);
         bgLabel.setLocation(0, 0);
+        myView = newView;
+        updateGUI(newView);
     }
 
 
@@ -65,6 +68,7 @@ public class GUI extends JFrame implements ActionListener{
         this.nbFishes = newView.getFishes().size();
         this.icons = new ImageIcon[nbFishes];
         this.labels = new JLabel[nbFishes];
+        this.fishNames = new String[nbFishes];
 
 
         int count = 0;
@@ -85,8 +89,6 @@ public class GUI extends JFrame implements ActionListener{
                 nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0];
                 nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1];
                 nextPos[2] = (float) fish.getPositionsAndTimes().get(0)[2]+getCurrentTime();
-                //System.out.print("\ndelai future pos: "+fish.getPositionsAndTimes().get(0)[2]);
-                //nextPos = {(float) fish.getPositionsAndTimes().get(count)[0], (float) fish.getPositionsAndTimes().get(count)[1], (float) fish.getPositionsAndTimes().get(count)[2]+getCurrentTime()};
             }
 
             //System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
@@ -97,12 +99,12 @@ public class GUI extends JFrame implements ActionListener{
 
             add(labels[count]);
             labels[count].setLocation((int) currentPos[0], (int) currentPos[1]);
-
+            fishNames[count] = fish.getName();
             count++;
         }
         remove(bgLabel);
         add(bgLabel);
-
+        myView = newView;
     }
 
     private float getCurrentTime() {
@@ -115,6 +117,7 @@ public class GUI extends JFrame implements ActionListener{
         return ftime;
     }
 
+
     private int interpolation(int i, int coord) { //coord = 0 pour x, 1 pour y
         //System.out.print("\n" + getCurrentTime() + " est entre "+ lastPos.get(i)[2] + " et "+ futurePos.get(i)[2]);
         float currentPos = (getCurrentTime() - lastPos.get(i)[2])*(futurePos.get(i)[coord] - lastPos.get(i)[coord])/(futurePos.get(i)[2]-lastPos.get(i)[2]) + lastPos.get(i)[coord];
@@ -125,18 +128,49 @@ public class GUI extends JFrame implements ActionListener{
     }
     
 
+    private void changeFuturePos(int i) {
+        int dt = (int) (futurePos.get(i)[2] - lastPos.get(i)[2]);
+        Fish fish = this.myView.getFishes().get(fishNames[i]);
+
+        int count = 0;
+        while (count < fish.getPositionsAndTimes().size() && fish.getPositionsAndTimes().get(count)[2] < dt) {
+            count++;
+        }
+        if (count < fish.getPositionsAndTimes().size()) {
+            futurePos.get(i)[0] = (float) fish.getPositionsAndTimes().get(count)[0];
+            futurePos.get(i)[1] = (float) fish.getPositionsAndTimes().get(count)[1];
+            futurePos.get(i)[2] = (float) fish.getPositionsAndTimes().get(count)[2] + lastPos.get(i)[2];
+        } else {
+            System.out.print("Pas de futures positions" + fish.getPositionsAndTimes().size());
+        }
+        
+        //System.out.print(dt);
+
+    }
+
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == timer) {
+            
+
             //System.out.print("Interpolation\n");
             
             for (int i=0; i<this.nbFishes; i++) {
+                //System.out.print(futurePos.get(i)[2] < getCurrentTime());
+
+                if (futurePos.get(i)[2] < getCurrentTime()) {
+                    changeFuturePos(i);
+                }
                 interpolation(i, 0);
                 this.remove(labels[i]);
 
                 add(labels[i]);
-                labels[i].setLocation(interpolation(i, 0), interpolation(i, 1));
-
+                int currentx = interpolation(i, 0);
+                int currenty = interpolation(i, 1);
+                labels[i].setLocation(currentx, currenty);
+                if (i == 0) {
+                    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0] + "x" + lastPos.get(i)[1]  + " currentPos: " + currentx+"x"+currentx+ "future pos:"+ futurePos.get(i)[0] + "x" + futurePos.get(i)[1]+ "\n");
+                }
              
             }
             remove(bgLabel);
@@ -147,8 +181,4 @@ public class GUI extends JFrame implements ActionListener{
     }
 
 
-
-    public static void main(String[] args) {
-        //GUI myGui = new GUI();
-    }
 }
