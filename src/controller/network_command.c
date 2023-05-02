@@ -134,13 +134,20 @@ void network_del_fish(char* command, int socket, struct client_set* clients) {
 
 void send_fish(int socket, struct fish *f) {
     char answer[256];
+    int x, y;
+    int time = 0;
     char* fish_name = get_fish_name(f);
     int future_position[3];
     if (next_future_position(f, future_position) == -1) {
-        return;
+        x = get_fish_position(f)[0];
+        y = get_fish_position(f)[1];
+    } else {
+        x = future_position[0];
+        y = future_position[1];
+        time = future_position[2];
     }
     int* dimension = get_fish_dimension(f);
-    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, future_position[0],future_position[1], dimension[0], dimension[1], future_position[2]);
+    sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, x, y, dimension[0], dimension[1], time);
     write(socket, answer, strlen(answer));
     printf("%s", answer);
 }
@@ -162,27 +169,3 @@ void get_fishes_continuously(int socket, struct client_set* clients) {
     int id_view = find_client(clients, socket);
     start_get_fishes_continuously(clients, id_view);
 }
-
-// int main(){
-//     int client[10] = {0};
-//     client[3] = 1;
-//     client[8] = 1;
-//     struct aquarium a;
-//     a.dimension[0] = 128;
-//     a.dimension[1] = 337;
-
-//     a.nb_fishes = 0;
-
-//     for(int k=0; k<5; k++) {
-//         init_view(a.views+k, k, 10, 10, 10, 10);
-//     }
-//     a.nb_views = 5;
-
-//     // printf("%i\n", hello("hello as in N50", 0, &a, client));
-//     // printf("%i\n", hello("hello as in N3", 0, &a, client));
-//     // printf("%i\n", hello("hello as in N8", 0, &a, client));
-//     printf("%i\n", hello("hello as in N4", 0, &a, client));
-//     printf("%i\n", hello("hello", 0, &a, client));
-
-
-// }
