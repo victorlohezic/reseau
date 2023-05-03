@@ -61,9 +61,52 @@ void test_shifting()
     printf("\t\tOK\n");
 }
 
+void test_add_latest_pos()
+{
+    printf("%s", __func__);
 
-// testing structure fish
+    void f (int* c)
+    {
+        c[0] +=1;
+        c[1] +=2;
+    }
+    
+    assert(1);
 
+    struct movement m;
+    init_movement(&m, &f);
+    int current_pos[2] = {0, 0};
+    assert(m.future_positions == NULL);
+
+    add_latest_position(&m, current_pos);
+    assert(m.future_positions != NULL);
+    assert(m.future_positions->positions[0] == 1);
+    assert(m.future_positions->next == NULL);
+
+    int pos1[2] = {2, 3};
+    m.future_positions = add_element(m.future_positions, pos1, 1);
+    assert(m.future_positions->positions[0] == 2);
+    assert(m.future_positions->next->positions[0] == 1);
+
+    add_latest_position(&m, current_pos);
+    assert(current_pos[0] == 0);
+    assert(current_pos[1] == 0);
+    assert(m.future_positions->positions[0] == 2);
+    assert(m.future_positions->positions[1] == 3);
+
+    assert(m.future_positions->next->positions[0] == 1);
+    assert(m.future_positions->next->next->positions[1] == 4);
+
+    free_queue(m.future_positions);
+    printf("\tOK\n");
+}
+
+
+
+
+/****************************/
+/* testing structure fish   */
+/****************************/
 
 void test_init_fish()
 {
@@ -133,6 +176,7 @@ void test_get_fish_name()
     printf("\tOK\n");
 }
 
+
 void test_get_fish_pos()
 {
     printf("%s", __func__);
@@ -165,7 +209,6 @@ void test_get_fish_pos()
     assert(get_fish_position(&f)[1]  != 5);
     assert(get_fish_position(&f)[0]  == 6);
     assert(get_fish_position(&f)[1]  == 8);
-
 
 
     printf("\tOK\n");
@@ -325,7 +368,7 @@ void test_shift_fish()
 {
     printf("%s", __func__);
 
-    char name[] = "poisson danal";
+    char name[] = "poisson danale";
     int width = 10;
     int height = 20;
     int x = 0   ;
@@ -355,7 +398,7 @@ void test_shift_fish()
     assert(f.position[0] == 5);
     assert(f.position[1] == 7);
 
-
+    free_fish(&f);
     printf("\t\tOK\n");
 }
 
@@ -399,7 +442,6 @@ void test_add_future_pos()
     assert(f.move.future_positions->positions[1] == 77);
     assert(f.move.future_positions->next->positions[0] == 11); 
 
-    //print_queue(f.move.future_positions);
     free_fish(&f);
     printf("\tOK\n");
 }
@@ -468,6 +510,38 @@ void test_next_future_pos()
 
 }
 
+void test_generate_future_position()
+{
+    printf("%s", __func__);
+
+    char name[] = "Poisson le poisseux";
+    int width = 10;
+    int height = 20;
+    int x = 0   ;
+    int y = 0;
+
+    void shift (int* c)
+    {
+        c[0] +=3;
+        c[1] +=2;
+    }
+    assert(width == 10);
+    struct fish f;
+    init_fish(&f, name, width, height, x, y, &shift);
+
+    generate_future_position(&f);
+    assert(f.move.future_positions->positions[0] == 3);
+
+
+    generate_future_position(&f);
+    assert(f.move.future_positions->positions[0] == 3);
+    assert(f.move.future_positions->next->positions[0] == 6);
+    assert(f.move.future_positions->next->positions[1] == 4);
+
+
+    free_fish(&f);
+    printf("\tOK\n");
+}
 
 
 int main(void)
@@ -476,7 +550,7 @@ int main(void)
 
     test_init_movement();
     test_shifting();
-    //test_add_latest_pos();
+    test_add_latest_pos();
 
 
     test_init_fish();
@@ -489,7 +563,7 @@ int main(void)
     test_shift_fish();
     test_add_future_pos();
     test_next_future_pos();
-    //test_generate_future_position(); 
+    test_generate_future_position(); 
     
     return 0;
 }
