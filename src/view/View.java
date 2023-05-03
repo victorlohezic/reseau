@@ -18,7 +18,7 @@ public class View implements ActionListener{
     private GUI myGUI;
     private Timer timer;
 
-    public View(String id, int[] coordinates, int dimensions[]) throws ViewException {
+    public View(String id, int[] coordinates, int dimensions[], String resources) throws ViewException {
         this.id = id;
         for (int i = 0; i < 2; ++i) {
             if (coordinates[i] < 0 || coordinates[i] > 100) {
@@ -35,7 +35,7 @@ public class View implements ActionListener{
         this.dimensions[0] = dimensions[0];
         this.dimensions[1] = dimensions[1];
 
-        myGUI = new GUI(this);
+        myGUI = new GUI(this, resources);
 
         timer = new Timer(1000, this);
         timer.start();

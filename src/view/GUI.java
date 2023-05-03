@@ -20,12 +20,13 @@ public class GUI extends JFrame implements ActionListener{
     private ArrayList<float[]> lastPos = new ArrayList<float[]>(); // 0 : position x, 1 : position y, 2 : time
     private String[] fishNames;
     private View myView;
+    private String resources;
 
 
-    public GUI(View newView) {
+    public GUI(View newView, String resources) {
         super("View");
         setLayout(null); // creates the window
-
+        this.resources = resources;
         
         //Create the timer to update the button position
         timer = new Timer(200, this);
@@ -178,6 +179,18 @@ public class GUI extends JFrame implements ActionListener{
       
         }
 
+    }
+
+    private String getPathFish(String nameFish) {
+        String extension = ".png";
+        int i = nameFish.length() - 1;
+        while (i >= 0 && Character.isDigit(nameFish.charAt(i))) {
+            i--;
+        }
+        if (i < nameFish.length() - 1) {
+            return resources + "/" + nameFish.substring(0, i + 1) + extension;
+        }
+        return resources + "/" + nameFish + extension;
     }
 
 

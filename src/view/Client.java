@@ -51,7 +51,7 @@ public class Client {
         this.displayTimeoutValue = config.getDisplayTimeoutValue()*1000;
         this.prompt = new Prompt(scanner);
         try {
-            this.view = new View(this.id, new int[]{0, 0}, new int[]{100, 100});
+            this.view = new View(this.id, new int[]{0, 0}, new int[]{100, 100}, resources);
         } catch (Exception e) {
             logging.warning(e.getMessage());
         }
