@@ -108,7 +108,7 @@ void test_add_fish()
 
     a.nb_fishes = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -156,7 +156,7 @@ void test_del_fish()
 
     a.nb_fishes = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -263,7 +263,7 @@ void test_fishes_in_view()
     a.nb_views = 0;
 
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;

@@ -8,7 +8,7 @@ void test_init_movement()
 {
     printf("%s", __func__);
 
-    void f (int* c)
+    void f (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -22,7 +22,7 @@ void test_init_movement()
     int c[2];
     c[0] = 1; c[1] = 1;
 
-    (*(m.shift))(c);
+    (*(m.shift))(c, NULL);
 
     assert(c[0] == 2);
     assert(c[1] == 3);
@@ -35,7 +35,7 @@ void test_shifting()
 {
     printf("%s", __func__);
 
-    void f (int* c)
+    void f (int* c, int* size)
     {
         c[0] += 10;
         c[1] += 20;
@@ -49,7 +49,7 @@ void test_shifting()
     int c[2];
     c[0] = 3; c[1] = 3;
 
-    shifting(&m, c);
+    shifting(&m, c, NULL);
 
     assert(c[0] == 13);
     assert(c[1] == 23);
@@ -65,7 +65,7 @@ void test_add_latest_pos()
 {
     printf("%s", __func__);
 
-    void f (int* c)
+    void f (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -78,7 +78,7 @@ void test_add_latest_pos()
     int current_pos[2] = {0, 0};
     assert(m.future_positions == NULL);
 
-    add_latest_position(&m, current_pos);
+    add_latest_position(&m, current_pos, NULL);
     assert(m.future_positions != NULL);
     assert(m.future_positions->positions[0] == 1);
     assert(m.future_positions->next == NULL);
@@ -88,7 +88,7 @@ void test_add_latest_pos()
     assert(m.future_positions->positions[0] == 2);
     assert(m.future_positions->next->positions[0] == 1);
 
-    add_latest_position(&m, current_pos);
+    add_latest_position(&m, current_pos, NULL);
     assert(current_pos[0] == 0);
     assert(current_pos[1] == 0);
     assert(m.future_positions->positions[0] == 2);
@@ -118,7 +118,7 @@ void test_init_fish()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -137,7 +137,7 @@ void test_init_fish()
     assert(strcmp(f.name, "poisson rouge") == 0);
     assert(strcmp(f.name, "poissie rouge") != 0);
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] == 5);
     assert(f.position[1] == 7);
 
@@ -156,7 +156,7 @@ void test_get_fish_name()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -187,7 +187,7 @@ void test_get_fish_pos()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -203,7 +203,7 @@ void test_get_fish_pos()
     assert(get_fish_position(&f)[1] == 5);
 
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
  
     assert(get_fish_position(&f)[0]  != 4);
     assert(get_fish_position(&f)[1]  != 5);
@@ -225,7 +225,7 @@ void test_set_fish_pos()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -262,7 +262,7 @@ void test_get_fish_dim()
     int x = 1;
     int y = 4;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -294,7 +294,7 @@ void test_set_fish_dim()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -331,7 +331,7 @@ void test_set_fish_mov()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -343,18 +343,18 @@ void test_set_fish_mov()
 
     init_fish(&f, name, width, height, x, y, &shift);
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] == 6);
     assert(f.position[1] == 8);
 
-    void shift2 (int* c)
+    void shift2 (int* c, int* size)
     {
         c[0] +=10;
         c[1] -=20;
     }
 
     set_fish_move(&f, &shift2);
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] != 6);
     assert(f.position[1] != 8);
     assert(f.position[0] == 16);
@@ -374,7 +374,7 @@ void test_shift_fish()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -413,7 +413,7 @@ void test_add_future_pos()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -457,7 +457,7 @@ void test_next_future_pos()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -520,7 +520,7 @@ void test_generate_future_position()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=3;
         c[1] +=2;

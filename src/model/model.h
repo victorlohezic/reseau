@@ -10,18 +10,18 @@
 // structure describing the movements of a movement
 struct movement {
     struct queue_position* future_positions;
-    void (*shift) (int*);
+    void (*shift) (int*, int*);
 };
 
 // initializes a movement
-void init_movement(struct movement* mov, void (*f) (int*));
+void init_movement(struct movement* mov, void (*f) (int*, int*));
 
 
 // modifies a coordinate c with the movement mov
-void shifting(struct movement* mov, int* c);
+void shifting(struct movement* mov, int* last_pos, int* size);
 
 //add a future position at the end of the queue
-void add_latest_position(struct movement* mov, int* current_pos);
+void add_latest_position(struct movement* mov, int* current_pos, int* size);
 
 // structure of a fish
 struct fish { 
@@ -33,7 +33,7 @@ struct fish {
 };
 
 // initalizes a fish
-void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*));
+void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*, int*));
 
 //set the is_started value at 1
 void start_fish(struct fish* f);
@@ -54,7 +54,7 @@ int* get_fish_dimension(struct fish* f);
 void set_fish_dimension(struct fish* f, int width, int height);
 
 // modifies the shifting function of a fish
-void set_fish_move(struct fish* f, void (*_shift) (int*));
+void set_fish_move(struct fish* f, void (*_shift) (int*, int*));
 
 // updates the current position of the fish
 void shift_fish(struct fish* f);

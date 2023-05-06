@@ -2,24 +2,24 @@
 
 // functions for the movements
 
-void init_movement(struct movement* mov, void (*f) (int*))
+void init_movement(struct movement* mov, void (*f) (int*, int*))
 {
     mov->shift = f;
     mov->future_positions = NULL;
 }
 
-void shifting(struct movement* mov, int* c)
+void shifting(struct movement* mov, int* last_pos, int* size)
 {
-    (*(mov->shift))(c);
+    (*(mov->shift))(last_pos, size);
 
 }
 
 
-void add_latest_position(struct movement* mov, int* current_pos)
+void add_latest_position(struct movement* mov, int* current_pos, int* size)
 {
     if (mov->future_positions == NULL) {
         int pos[2] = {current_pos[0], current_pos[1]};
-        shifting(mov, pos);
+        shifting(mov, pos, size);
         mov->future_positions = init_queue(pos, 2);
         return;
     }
@@ -37,7 +37,7 @@ void add_latest_position(struct movement* mov, int* current_pos)
     new_pos[0] = latest_pos->positions[0];
     new_pos[1] = latest_pos->positions[1];
 
-    shifting(mov,new_pos);
+    shifting(mov,new_pos, size);
     
     mov->future_positions = add_element(mov->future_positions, new_pos, (int) (latest_pos->time - current_time)+2);
 
@@ -48,7 +48,7 @@ void add_latest_position(struct movement* mov, int* current_pos)
 // functions for the fishes
 
 
-void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*))
+void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*, int*))
 {
     strcpy(f->name, _name);
 
@@ -103,7 +103,7 @@ void set_fish_dimension(struct fish* f, int width, int height)
 }
 
 
-void set_fish_move(struct fish* f, void (*_shift) (int*))
+void set_fish_move(struct fish* f, void (*_shift) (int*, int*))
 {
     init_movement(&(f->move), _shift);
 }
@@ -143,7 +143,7 @@ int next_future_position(struct fish* f, int* pos)
 }
 
 void generate_future_position(struct fish* f) {
-    add_latest_position(&(f->move), f->position);
+    add_latest_position(&(f->move), f->position, f->dimension);
 }
 
 void free_fish(struct fish* f)

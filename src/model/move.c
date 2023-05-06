@@ -1,57 +1,57 @@
 #include "move.h"
 
 
-void random_path(int* c)
+void random_path(int* last_pos, int* size)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    c[0] = (c[0]+ tv.tv_usec) % 100; 
+    last_pos[0] = (last_pos[0]+ tv.tv_usec) % (100-size[0]); 
 
     gettimeofday(&tv, NULL);
-    c[1] = (c[1]+ tv.tv_usec) % 100; 
+    last_pos[1] = (last_pos[1]+ tv.tv_usec) % (100-size[1]); 
 }
 
 
-void dvd_bouncing(int* c)
+void dvd_bouncing(int* last_pos, int* size)
 {
     struct timeval tv;
 
-    if ((c[0]%100 != 0) && (c[1]%100 != 0)){
+    if ((last_pos[0]%(100-size[0]) != 0) && (last_pos[1]%(100-size[1]) != 0)){
         gettimeofday(&tv, NULL);
         int side_choice = (tv.tv_usec)%2;
 
         gettimeofday(&tv, NULL);
-        c[side_choice] = ((tv.tv_usec+c[0])%2) * 100;
-        c[1-side_choice] = 1+((tv.tv_usec+c[1])%99);
+        last_pos[side_choice] = ((tv.tv_usec+last_pos[0])%2) * (100-size[side_choice]);
+        last_pos[1-side_choice] = 1+((tv.tv_usec+last_pos[1])%(99-size[1-side_choice]));
 
-    } else if(c[0] == 0) {
-        c[0] = 100 - c[1];
-        c[1] = 100;
+    } else if(last_pos[0] == 0) {
+        last_pos[0] = (100-size[0]) - last_pos[1];
+        last_pos[1] = (100-size[1]);
 
-    } else if(c[0] == 100) {
-        c[0] = 100 - c[1];
-        c[1] = 0;
-    } else if(c[1] == 0) {
-        c[1] = c[0];
-        c[0] = 0;
+    } else if(last_pos[0] == (100-size[0])) {
+        last_pos[0] = (100-size[0]) - last_pos[1];
+        last_pos[1] = 0;
+    } else if(last_pos[1] == 0) {
+        last_pos[1] = last_pos[0];
+        last_pos[0] = 0;
     } else {
-        c[1] = c[0];
-        c[0] = 100;
+        last_pos[1] = last_pos[0];
+        last_pos[0] = (100-size[0]);
     }
 
 }
 
-void round_trip(int* c)
+void round_trip(int* last_pos, int* size)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
-    if (c[0]%100 != 0){
-        c[0] = ((tv.tv_usec)%2) * 100;
-        c[1] = tv.tv_usec%100;
+    if (last_pos[0]%(100-size[0]) != 0){
+        last_pos[0] = ((tv.tv_usec)%2) * (100-size[0]);
+        last_pos[1] = tv.tv_usec%(100-size[1]);
     } else {
-        c[0] = 100 - c[0];
-        c[1] = (tv.tv_usec+c[1])%100;
+        last_pos[0] = (100-size[0]) - last_pos[0];
+        last_pos[1] = (tv.tv_usec+last_pos[1])%(100-size[1]);
     }
 }
 
@@ -59,7 +59,7 @@ void round_trip(int* c)
 
 
 
-void (*get_move_function(char* move_name)) (int*) 
+void (*get_move_function(char* move_name)) (int*, int*) 
 {
     if (strcmp(move_name, "RandomWayPoint") == 0) {
         return &random_path;
@@ -74,16 +74,18 @@ void (*get_move_function(char* move_name)) (int*)
 
 
 
-/*
 
+/*
 int main() {
 
-    void (*move)(int*);
-    move = get_move_function("RoundTrip");
-    int c[2] = {21, 68};
+    void (*move)(int*, int*);
+    move = get_move_function("DvdBouncing");
+    int last_pos[2] = {21, 68};
+    int size[2] = {4, 6};
     for (int k = 0; k<10; k++) {
-        (*move)(c);
-        printf("%d, %d\n", c[0], c[1]);
+        (*move)(last_pos, size);
+        printf("%d, %d\n", last_pos[0], last_pos[1]);
     }
     return 0;
-}*/
+}
+*/
