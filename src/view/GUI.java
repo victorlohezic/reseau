@@ -21,6 +21,7 @@ public class GUI extends JFrame implements ActionListener{
     private String[] fishNames;
     private View myView;
     private String resources;
+    private boolean isUpdatingFishes = false;
 
 
     public GUI(View newView, String resources) {
@@ -29,7 +30,7 @@ public class GUI extends JFrame implements ActionListener{
         this.resources = resources;
         
         //Create the timer to update the button position
-        timer = new Timer(200, this);
+        timer = new Timer(150, this);
         timer.start();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = (int) screenSize.getWidth();
@@ -44,7 +45,7 @@ public class GUI extends JFrame implements ActionListener{
 
    
 
-        bgIcon = new ImageIcon(new ImageIcon("background.jpg").getImage().getScaledInstance(screenWidth, screenHeight, Image.SCALE_DEFAULT));
+        bgIcon = new ImageIcon(new ImageIcon("./fishes/background.jpg").getImage().getScaledInstance(screenWidth, screenHeight, Image.SCALE_DEFAULT));
 
         bgLabel = new JLabel(bgIcon,SwingConstants.LEFT);
         bgLabel.setVerticalAlignment(SwingConstants.TOP);
@@ -61,7 +62,7 @@ public class GUI extends JFrame implements ActionListener{
     public void updateGUI(View newView) {
 
         System.out.print("update GUIIIIIIIII\n");
-
+        this.isUpdatingFishes = true;
         for (int i=0; i<this.nbFishes; i++) {
             this.remove(labels[i]);
         }
@@ -73,10 +74,10 @@ public class GUI extends JFrame implements ActionListener{
 
 
         int count = 0;
+        int direction;
 
         for (String name : newView.getFishes().keySet()) {
             Fish fish = newView.getFishes().get(name);
-            icons[count] = new ImageIcon(new ImageIcon("clown.png").getImage().getScaledInstance(fish.getSize()[0]*screenWidth/100, fish.getSize()[1]*screenHeight/100, Image.SCALE_DEFAULT));
             float[] currentPos = {(float) fish.getPosition()[0]*screenWidth/100, (float) fish.getPosition()[1]*screenHeight/100, getCurrentTime()};
             lastPos.add(count, currentPos);
             
@@ -94,6 +95,13 @@ public class GUI extends JFrame implements ActionListener{
 
             //System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
             futurePos.add(count, nextPos);
+            if (futurePos.get(count)[0] > lastPos.get(count)[0]) {
+                direction = 1;
+            } else {
+                direction = -1;
+            }
+            icons[count] = new ImageIcon(new ImageIcon(getPathFish(name, direction)).getImage().getScaledInstance(fish.getSize()[0]*screenWidth/100, fish.getSize()[1]*screenHeight/100, Image.SCALE_DEFAULT));
+            
             labels[count] = new JLabel(icons[count],SwingConstants.LEFT);
             labels[count].setVerticalAlignment(SwingConstants.TOP);
             labels[count].setBounds(-screenWidth, -screenHeight, screenWidth, screenHeight);
@@ -106,6 +114,8 @@ public class GUI extends JFrame implements ActionListener{
         remove(bgLabel);
         add(bgLabel);
         myView = newView;
+        this.isUpdatingFishes = false;
+
     }
 
     private float getCurrentTime() {
@@ -120,10 +130,8 @@ public class GUI extends JFrame implements ActionListener{
 
 
     private int interpolation(int i, int coord) { //coord = 0 pour x, 1 pour y
-        //System.out.print("\n" + getCurrentTime() + " est entre "+ lastPos.get(i)[2] + " et "+ futurePos.get(i)[2]);
         float currentPos = (getCurrentTime() - lastPos.get(i)[2])*(futurePos.get(i)[coord] - lastPos.get(i)[coord])/(futurePos.get(i)[2]-lastPos.get(i)[2]) + lastPos.get(i)[coord];
         int intPos = (int) currentPos;
-        //System.out.print("resultat interpolation x: " + intPos);
 
         return intPos;
     }
@@ -145,23 +153,21 @@ public class GUI extends JFrame implements ActionListener{
             System.out.print("Pas de futures positions" + fish.getPositionsAndTimes().size());
         }
         
-        //System.out.print(dt);
 
     }
 
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == timer) {
+        if (e.getSource() == timer && !this.isUpdatingFishes) {
             
 
-            //System.out.print("Interpolation\n");
             
             for (int i=0; i<this.nbFishes; i++) {
-                //System.out.print(futurePos.get(i)[2] < getCurrentTime());
 
                 if (futurePos.get(i)[2] < getCurrentTime()) {
                     changeFuturePos(i);
                 }
+
                 interpolation(i, 0);
                 this.remove(labels[i]);
 
@@ -176,13 +182,17 @@ public class GUI extends JFrame implements ActionListener{
             }
             remove(bgLabel);
             add(bgLabel);
-      
         }
 
     }
 
-    private String getPathFish(String nameFish) {
-        String extension = ".png";
+    private String getPathFish(String nameFish, int direction) {
+        String extension;
+        if (direction == 1) {
+            extension = ".png";
+        } else {
+            extension = "_r.png";
+        }
         int i = nameFish.length() - 1;
         while (i >= 0 && Character.isDigit(nameFish.charAt(i))) {
             i--;

@@ -159,7 +159,7 @@ public class Client {
      */
     private void runGUI(){
         try {
-        Fish fish = new Fish("Chouchou", new int[]{20, 90}, new int[]{20, 10}, "RandomPathWay");
+        Fish fish = new Fish("chouchou", new int[]{20, 90}, new int[]{20, 10}, "RandomWayPoint");
         ArrayList<String> fishArrayList= new ArrayList<String>();
         fishArrayList.add(fish.getName());
         fishArrayList.add(String.format("%d", fish.getPosition()[0]));
@@ -167,7 +167,7 @@ public class Client {
         fishArrayList.add(String.format("%d", fish.getSize()[0]));
         fishArrayList.add(String.format("%d", fish.getSize()[1]));
         fishArrayList.add(fish.getMobility());
-        Fish fish2 = new Fish("SmileyFleur", new int[]{20, 11}, new int[]{22, 12}, "RandomPathWay");
+        Fish fish2 = new Fish("toutou", new int[]{20, 11}, new int[]{22, 12}, "RandomWayPoint");
         ArrayList<String> fishArrayList2= new ArrayList<String>();
         fishArrayList2.add(fish2.getName());
         fishArrayList2.add(String.format("%d", fish2.getPosition()[0]));
