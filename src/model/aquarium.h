@@ -54,7 +54,7 @@ int find_view(struct aquarium* a, int id_view);
 int find_fish(struct aquarium *a, char* fish_name);
 
 // return the fishes belonging to a view
-int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view);
+int fishes_in_view(struct aquarium* a, struct fish** tmp, int id_view);
 
 // update the positions of the fishes
 void update_fishes(struct aquarium* a);

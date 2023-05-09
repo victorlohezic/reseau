@@ -241,11 +241,11 @@ void test_find_view() {
     }
     a.nb_views = 5;
 
-    assert(!find_view(&a, 5));
-    assert(!find_view(&a, -1));
-    assert(find_view(&a, 0));
-    assert(find_view(&a, 2));
-    assert(find_view(&a, 4));
+    assert(find_view(&a, 5) == -1);
+    assert(find_view(&a, -1) == -1);
+    assert(find_view(&a, 0) == 0);
+    assert(find_view(&a, 2) == 2);
+    assert(find_view(&a, 4) == 4);
 
     printf("\t\tOK\n"); 
 }
@@ -291,13 +291,13 @@ void test_fishes_in_view()
     assert(add_view(&a, &v0) == 0);
     assert(a.nb_views == 1);
 
-    struct fish fish_v0[MAX_FISHES];
+    struct fish* fish_v0[MAX_FISHES];
 
     nb_fishes_v = fishes_in_view(&a, fish_v0, 0);
     assert(nb_fishes_v == 2);
-    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 0") == 0);
-    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 1") != 0);
-    assert(strcmp(get_fish_name(fish_v0+1), "Poisson n° 1") == 0);
+    assert(strcmp(get_fish_name(fish_v0[0]), "Poisson n° 0") == 0);
+    assert(strcmp(get_fish_name(fish_v0[0]), "Poisson n° 1") != 0);
+    assert(strcmp(get_fish_name(fish_v0[1]), "Poisson n° 1") == 0);
 
     struct view v1;
     init_view(&v1, 1, 105, 105, 5, 5);
@@ -306,12 +306,68 @@ void test_fishes_in_view()
 
     nb_fishes_v = fishes_in_view(&a, fish_v0, 1);
     assert(nb_fishes_v == 1);
-    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 3") == 0);
-    assert(strcmp(get_fish_name(fish_v0), "Poisson n° 2") != 0);
+    assert(strcmp(get_fish_name(fish_v0[0]), "Poisson n° 3") == 0);
+    assert(strcmp(get_fish_name(fish_v0[0]), "Poisson n° 2") != 0);
 
     nb_fishes_v = fishes_in_view(&a, fish_v0, 2);
     assert(nb_fishes_v == 0);
    
+
+    printf("\tOK\n"); 
+}
+
+void test_fonctionnel()
+{
+    printf("%s", __func__);
+
+   struct aquarium a;
+    a.dimension[0] = 100;
+    a.dimension[1] = 100;
+    a.nb_fishes = 0;
+    a.nb_views = 0;
+
+    struct fish f0;
+    init_fish(&f0, "Poisson n° 0", 4, 3, 25, 10, get_move_function("DvdBouncing"));
+    struct fish f1;
+    init_fish(&f1, "Poisson n° 1", 4, 3, 90, 38, get_move_function("DvdBouncing"));
+    add_fish(&a, &f0);
+    add_fish(&a, &f1);
+    assert(a.nb_fishes == 2);
+
+    struct view v0;
+    init_view(&v0, 0, 0, 0, 100, 100);
+    assert(add_view(&a, &v0) == 0);
+    assert(a.nb_views == 1); 
+
+    struct fish* fish_v0[MAX_FISHES];
+
+    int nb_fishes_v = fishes_in_view(&a, fish_v0, 0);
+    assert(nb_fishes_v == 2);
+
+    assert(fish_v0[0]->position[0] == 25);
+    assert(fish_v0[1]->position[1] == 38);
+
+    generate_future_position(fish_v0[0]);
+    printf("future x %d\n", fish_v0[0]->move.future_positions->positions[0]);
+    int next_pos[2];
+
+    assert(next_future_position(fish_v0[0], next_pos) == 0);
+    assert(next_pos[0] == fish_v0[0]->move.future_positions->positions[0]);
+    
+    assert(next_future_position(a.fishes, next_pos) == 0);
+    assert(next_pos[0] == fish_v0[0]->move.future_positions->positions[0]);
+    print_queue(a.fishes->move.future_positions);
+
+    generate_future_position(a.fishes);
+    generate_future_position(a.fishes);
+    generate_future_position(a.fishes);
+
+    fishes_in_view(&a, fish_v0, 0);
+
+    print_queue(fish_v0[0]->move.future_positions);
+
+    free_fish(a.fishes);
+    free_fish(a.fishes+1);
 
     printf("\tOK\n"); 
 }
@@ -329,7 +385,7 @@ int main()
     test_save_load();
     test_find_view();
     test_fishes_in_view();
-
+    test_fonctionnel();
 
     return 0;
 }

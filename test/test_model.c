@@ -468,19 +468,19 @@ void test_next_future_pos()
 
     assert(f.move.future_positions == NULL);
     int future_pos[3];
-    assert(next_future_position(&f, future_pos) == -1);
-
+    assert(next_future_position(&f, future_pos) == 0);
+    assert(future_pos[0] == 1 && future_pos[1] == 2);
 
     int pos1[2] = {11,22};
     add_future_position(&f, pos1, 5);
     assert(next_future_position(&f, future_pos) == 0);
-    assert(future_pos[0] == 11 && future_pos[1] == 22);
+    assert(future_pos[0] == 1 && future_pos[1] == 2);
     assert(future_pos[2] <= 5);
 
     int pos2[2] = {13,18};
     add_future_position(&f, pos2, 10);
     assert(next_future_position(&f, future_pos) == 0);
-    assert(future_pos[0] == 11 && future_pos[1] == 22);
+    assert(future_pos[0] == 1 && future_pos[1] == 2);
     assert(future_pos[2] <= 5);
 
     int pos3[2] = {88,77};

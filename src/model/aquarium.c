@@ -202,7 +202,7 @@ int find_view(struct aquarium* a, int id_view) {
     return -1;
 }
 
-int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view)
+int fishes_in_view(struct aquarium* a, struct fish** tmp, int id_view)
 {
     struct view* v = NULL;
     for(int k=0; k<a->nb_views; k++) {
@@ -223,13 +223,8 @@ int fishes_in_view(struct aquarium* a, struct fish* tmp, int id_view)
         int cond4 = (get_fish_position(a->fishes+i)[1] + get_fish_dimension(a->fishes+i)[1] > get_view_position(v)[1]);
 
         if (cond1 && cond2 && cond3 && cond4) {
-            init_fish(tmp+rank, get_fish_name(a->fishes+i),
-                                 get_fish_dimension(a->fishes+i)[0], 
-                                 get_fish_dimension(a->fishes+i)[1], 
-                                 get_fish_position(a->fishes+i)[0], 
-                                 get_fish_position(a->fishes+i)[1], 
-                                 a->fishes[i].move.shift);
 
+            tmp[rank] = a->fishes+i;
             rank++;
         }
     }

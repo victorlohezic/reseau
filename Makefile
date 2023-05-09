@@ -74,8 +74,8 @@ test_model: build_directory queue.o model.o test_model.o
 test_view: $(TEST_DIR)/test_view.c view.o build_directory
 	$(CC) $(CFLAGS) view.o $(TEST_DIR)/test_view.c -o $(BUILD_DIR)/$@ 
 
-test_aquarium: build_directory queue.o model.o view.o aquarium.o test_aquarium.o
-	${CC} ${CFLAGS} queue.o model.o view.o aquarium.o test_aquarium.o -o ${BUILD_DIR}/$@ 
+test_aquarium: build_directory queue.o move.o model.o view.o aquarium.o test_aquarium.o
+	${CC} ${CFLAGS} queue.o move.o model.o view.o aquarium.o test_aquarium.o -o ${BUILD_DIR}/$@ 
 
 test_queue.o: ${TEST_DIR}/test_queue.c
 	${CC} ${CFLAGS} ${TEST_DIR}/test_queue.c -c

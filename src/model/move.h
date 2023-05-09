@@ -14,7 +14,7 @@ void random_path(int* last_pos, int* size);
 //Fish bouncing at the borders -> DvdBouncing
 void dvd_bouncing(int* last_pos, int* size);
 
-//Fish going left->right/right->left -> 
+//Fish going left->right/right->left -> RoundTrip
 void round_trip(int* last_pos, int* size);
 
 

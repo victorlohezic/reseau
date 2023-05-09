@@ -61,7 +61,6 @@ public class GUI extends JFrame implements ActionListener{
 
     public void updateGUI(View newView) {
 
-        System.out.print("update GUIIIIIIIII\n");
         this.isUpdatingFishes = true;
         for (int i=0; i<this.nbFishes; i++) {
             this.remove(labels[i]);
@@ -88,8 +87,8 @@ public class GUI extends JFrame implements ActionListener{
               
                 nextPos[2] = getCurrentTime()+(float) 0.1;
             } else {
-                nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0];
-                nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1];
+                nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0]*screenWidth/100; ;
+                nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1]*screenHeight/100; ;
                 nextPos[2] = (float) fish.getPositionsAndTimes().get(0)[2]+getCurrentTime();
             }
 
@@ -146,8 +145,8 @@ public class GUI extends JFrame implements ActionListener{
             count++;
         }
         if (count < fish.getPositionsAndTimes().size()) {
-            futurePos.get(i)[0] = (float) fish.getPositionsAndTimes().get(count)[0];
-            futurePos.get(i)[1] = (float) fish.getPositionsAndTimes().get(count)[1];
+            futurePos.get(i)[0] = (float) fish.getPositionsAndTimes().get(count)[0]*screenWidth/100; ;
+            futurePos.get(i)[1] = (float) fish.getPositionsAndTimes().get(count)[1]*screenHeight/100; ;
             futurePos.get(i)[2] = (float) fish.getPositionsAndTimes().get(count)[2] + lastPos.get(i)[2];
         } else {
             System.out.print("Pas de futures positions" + fish.getPositionsAndTimes().size());
@@ -168,15 +167,15 @@ public class GUI extends JFrame implements ActionListener{
                     changeFuturePos(i);
                 }
 
-                interpolation(i, 0);
                 this.remove(labels[i]);
 
                 add(labels[i]);
                 int currentx = interpolation(i, 0);
                 int currenty = interpolation(i, 1);
+                //System.out.print("x = " + currentx + "y = " + currenty+ "\n");
                 labels[i].setLocation(currentx, currenty);
                 if (i == 0) {
-                    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0] + "x" + lastPos.get(i)[1]  + " currentPos: " + currentx+"x"+currentx+ "future pos:"+ futurePos.get(i)[0] + "x" + futurePos.get(i)[1]+ "\n");
+                    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0]*100/screenWidth + "x" + lastPos.get(i)[1]*100/screenHeight  + " currentPos: " + currentx*100/screenWidth+"x"+currenty*100/screenHeight+ " future pos:"+ futurePos.get(i)[0]*100/screenWidth + "x" + futurePos.get(i)[1]*100/screenHeight+ "\n");
                 }
              
             }

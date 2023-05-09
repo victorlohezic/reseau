@@ -8,7 +8,7 @@ void random_path(int* last_pos, int* size)
     last_pos[0] = (last_pos[0]+ tv.tv_usec) % (100-size[0]); 
 
     gettimeofday(&tv, NULL);
-    last_pos[1] = (last_pos[1]+ tv.tv_usec) % (100-size[1]); 
+    last_pos[1] = (last_pos[1]+ tv.tv_usec*tv.tv_usec) % (100-size[1]); 
 }
 
 
@@ -38,7 +38,6 @@ void dvd_bouncing(int* last_pos, int* size)
         last_pos[1] = last_pos[0];
         last_pos[0] = (100-size[0]);
     }
-
 }
 
 void round_trip(int* last_pos, int* size)
@@ -79,8 +78,8 @@ void (*get_move_function(char* move_name)) (int*, int*)
 int main() {
 
     void (*move)(int*, int*);
-    move = get_move_function("DvdBouncing");
-    int last_pos[2] = {21, 68};
+    move = get_move_function("RandomWayPoint");
+    int last_pos[2] = {21, 21};
     int size[2] = {4, 6};
     for (int k = 0; k<10; k++) {
         (*move)(last_pos, size);
