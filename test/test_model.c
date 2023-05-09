@@ -8,7 +8,7 @@ void test_init_movement()
 {
     printf("%s", __func__);
 
-    void f (int* c)
+    void f (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -22,7 +22,7 @@ void test_init_movement()
     int c[2];
     c[0] = 1; c[1] = 1;
 
-    (*(m.shift))(c);
+    (*(m.shift))(c, NULL);
 
     assert(c[0] == 2);
     assert(c[1] == 3);
@@ -35,7 +35,7 @@ void test_shifting()
 {
     printf("%s", __func__);
 
-    void f (int* c)
+    void f (int* c, int* size)
     {
         c[0] += 10;
         c[1] += 20;
@@ -49,7 +49,7 @@ void test_shifting()
     int c[2];
     c[0] = 3; c[1] = 3;
 
-    shifting(&m, c);
+    shifting(&m, c, NULL);
 
     assert(c[0] == 13);
     assert(c[1] == 23);
@@ -61,9 +61,52 @@ void test_shifting()
     printf("\t\tOK\n");
 }
 
+void test_add_latest_pos()
+{
+    printf("%s", __func__);
 
-// testing structure fish
+    void f (int* c, int* size)
+    {
+        c[0] +=1;
+        c[1] +=2;
+    }
+    
+    assert(1);
 
+    struct movement m;
+    init_movement(&m, &f);
+    int current_pos[2] = {0, 0};
+    assert(m.future_positions == NULL);
+
+    add_latest_position(&m, current_pos, NULL);
+    assert(m.future_positions != NULL);
+    assert(m.future_positions->positions[0] == 1);
+    assert(m.future_positions->next == NULL);
+
+    int pos1[2] = {2, 3};
+    m.future_positions = add_element(m.future_positions, pos1, 1);
+    assert(m.future_positions->positions[0] == 2);
+    assert(m.future_positions->next->positions[0] == 1);
+
+    add_latest_position(&m, current_pos, NULL);
+    assert(current_pos[0] == 0);
+    assert(current_pos[1] == 0);
+    assert(m.future_positions->positions[0] == 2);
+    assert(m.future_positions->positions[1] == 3);
+
+    assert(m.future_positions->next->positions[0] == 1);
+    assert(m.future_positions->next->next->positions[1] == 4);
+
+    free_queue(m.future_positions);
+    printf("\tOK\n");
+}
+
+
+
+
+/****************************/
+/* testing structure fish   */
+/****************************/
 
 void test_init_fish()
 {
@@ -75,7 +118,7 @@ void test_init_fish()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -94,7 +137,7 @@ void test_init_fish()
     assert(strcmp(f.name, "poisson rouge") == 0);
     assert(strcmp(f.name, "poissie rouge") != 0);
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] == 5);
     assert(f.position[1] == 7);
 
@@ -113,7 +156,7 @@ void test_get_fish_name()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -133,6 +176,7 @@ void test_get_fish_name()
     printf("\tOK\n");
 }
 
+
 void test_get_fish_pos()
 {
     printf("%s", __func__);
@@ -143,7 +187,7 @@ void test_get_fish_pos()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -159,13 +203,12 @@ void test_get_fish_pos()
     assert(get_fish_position(&f)[1] == 5);
 
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
  
     assert(get_fish_position(&f)[0]  != 4);
     assert(get_fish_position(&f)[1]  != 5);
     assert(get_fish_position(&f)[0]  == 6);
     assert(get_fish_position(&f)[1]  == 8);
-
 
 
     printf("\tOK\n");
@@ -182,7 +225,7 @@ void test_set_fish_pos()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -219,7 +262,7 @@ void test_get_fish_dim()
     int x = 1;
     int y = 4;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -251,7 +294,7 @@ void test_set_fish_dim()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -288,7 +331,7 @@ void test_set_fish_mov()
     int x = 4;
     int y = 5;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=2;
         c[1] +=3;
@@ -300,18 +343,18 @@ void test_set_fish_mov()
 
     init_fish(&f, name, width, height, x, y, &shift);
 
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] == 6);
     assert(f.position[1] == 8);
 
-    void shift2 (int* c)
+    void shift2 (int* c, int* size)
     {
         c[0] +=10;
         c[1] -=20;
     }
 
     set_fish_move(&f, &shift2);
-    shifting(&(f.move), f.position);
+    shifting(&(f.move), f.position, NULL);
     assert(f.position[0] != 6);
     assert(f.position[1] != 8);
     assert(f.position[0] == 16);
@@ -325,13 +368,13 @@ void test_shift_fish()
 {
     printf("%s", __func__);
 
-    char name[] = "poisson danal";
+    char name[] = "poisson danale";
     int width = 10;
     int height = 20;
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -340,12 +383,22 @@ void test_shift_fish()
     struct fish f;
     init_fish(&f, name, width, height, x, y, &shift);
 
-    for(int k = 0; k<10; k++){
-        assert(get_fish_position(&f)[0] == k);
-        assert(get_fish_position(&f)[1] == 2*k);
-        shift_fish(&f);
-    }
+    shift_fish(&f);
+    assert(x == 0);
+    assert(y == 0);
+    int pos[2] = {5, 7};
+    assert(f.move.future_positions == NULL);
+    add_future_position(&f, pos, -1);
+    assert(f.move.future_positions->next == NULL);
+    assert(f.move.future_positions->positions[0] == 5);
+    
 
+    shift_fish(&f);
+
+    assert(f.position[0] == 5);
+    assert(f.position[1] == 7);
+
+    free_fish(&f);
     printf("\t\tOK\n");
 }
 
@@ -360,7 +413,7 @@ void test_add_future_pos()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -389,7 +442,6 @@ void test_add_future_pos()
     assert(f.move.future_positions->positions[1] == 77);
     assert(f.move.future_positions->next->positions[0] == 11); 
 
-    //print_queue(f.move.future_positions);
     free_fish(&f);
     printf("\tOK\n");
 }
@@ -405,7 +457,7 @@ void test_next_future_pos()
     int x = 0   ;
     int y = 0;
 
-    void shift (int* c)
+    void shift (int* c, int* size)
     {
         c[0] +=1;
         c[1] +=2;
@@ -436,6 +488,21 @@ void test_next_future_pos()
     assert(next_future_position(&f, future_pos) == 0);
     assert(future_pos[0] == 88 && future_pos[1] == 77);
     assert(future_pos[2] <= 1);
+
+    int pos4[2] = {14,18};
+    add_future_position(&f, pos4, -1);
+    assert(f.position[0] == 0);
+    assert(f.position[1] == 0);
+
+    assert(next_future_position(&f, future_pos) == 0);
+    assert(future_pos[0] == 88 && future_pos[1] == 77);
+    assert(future_pos[2] <= 1);
+
+
+    assert(f.position[0] == 14);
+    assert(f.position[1] == 18);
+
+
     free_fish(&f);
     
     printf("\tOK\n");
@@ -443,6 +510,38 @@ void test_next_future_pos()
 
 }
 
+void test_generate_future_position()
+{
+    printf("%s", __func__);
+
+    char name[] = "Poisson le poisseux";
+    int width = 10;
+    int height = 20;
+    int x = 0   ;
+    int y = 0;
+
+    void shift (int* c, int* size)
+    {
+        c[0] +=3;
+        c[1] +=2;
+    }
+    assert(width == 10);
+    struct fish f;
+    init_fish(&f, name, width, height, x, y, &shift);
+
+    generate_future_position(&f);
+    assert(f.move.future_positions->positions[0] == 3);
+
+
+    generate_future_position(&f);
+    assert(f.move.future_positions->positions[0] == 3);
+    assert(f.move.future_positions->next->positions[0] == 6);
+    assert(f.move.future_positions->next->positions[1] == 4);
+
+
+    free_fish(&f);
+    printf("\tOK\n");
+}
 
 
 int main(void)
@@ -451,6 +550,8 @@ int main(void)
 
     test_init_movement();
     test_shifting();
+    test_add_latest_pos();
+
 
     test_init_fish();
     test_get_fish_name();
@@ -462,6 +563,7 @@ int main(void)
     test_shift_fish();
     test_add_future_pos();
     test_next_future_pos();
+    test_generate_future_position(); 
     
     return 0;
 }

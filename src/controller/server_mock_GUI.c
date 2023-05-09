@@ -99,14 +99,14 @@ int main(int argc, char *argv[])
         }
         else
         {
-            sleep(5);
+            sleep(2);
             random_x = rand() % 101;
             random_y = rand() % 101;
             random_x2 = rand() % 101;
             random_y2 = rand() % 101;
             random_time = rand() % 5;
             random_time2 = rand() % 6;
-            sprintf(buffer, "list [Chouchou at %dx%d,20x10,%d] [SmileyFleur at %dx%d,22x12,%d]\n", random_x, random_y, random_time, random_x2, random_y2, random_time2);
+            sprintf(buffer, "list [chouchou at %dx%d,20x10,%d] [toutou at %dx%d,22x12,%d]\n", random_x, random_y, random_time, random_x2, random_y2, random_time2);
             fprintf(stderr, buffer);
             n = write(newsockfd, buffer, strlen(buffer) * sizeof(char));
         }

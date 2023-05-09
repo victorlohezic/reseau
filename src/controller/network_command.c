@@ -87,7 +87,7 @@ void network_add_fish(char* command, int socket, struct client_set* clients) {
         return ;
     }
     struct fish new_fish;
-    init_fish(&new_fish, fish_name, width, height, x, y, (void (*)(int*)) movement);
+    init_fish(&new_fish, fish_name, width, height, x, y, (void (*)(int*, int*)) movement);
 
     if (add_fish(clients->client_aquarium, &new_fish) == -1) {
         failed_network_command(socket);

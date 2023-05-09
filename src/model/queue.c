@@ -19,11 +19,16 @@ struct queue_position* init_queue(int* pos, int delta_time)
     return q;
 }
 
-struct queue_position* go_to_next(struct queue_position* q) {
+struct queue_position* go_to_end(struct queue_position* q) {
     if (q == NULL) {
         return NULL;
     }
-    return q->next;
+    
+    struct queue_position* ite = q;
+    while (ite->next != NULL) {
+        ite = ite->next;
+    }
+    return ite;
 }
 
 
@@ -61,7 +66,7 @@ struct queue_position* del_element_head(struct queue_position* q)
 }
  
 
-struct queue_position* update_queue(struct queue_position* q)
+struct queue_position* update_queue(struct queue_position* q, int* current_pos)
 {
 
     struct timeval tv;
@@ -74,6 +79,10 @@ struct queue_position* update_queue(struct queue_position* q)
 
     struct queue_position* head = q;
     while (head != NULL && head->time < current_time) {
+        if (head->next == NULL || head->next->time > current_time) {
+            current_pos[0] = head->positions[0];
+            current_pos[1] = head->positions[1];
+        }
         head = del_element_head(head);
     }
     return head;

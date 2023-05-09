@@ -2,21 +2,53 @@
 
 // functions for the movements
 
-void init_movement(struct movement* mov, void (*f) (int*))
+void init_movement(struct movement* mov, void (*f) (int*, int*))
 {
     mov->shift = f;
     mov->future_positions = NULL;
 }
 
-void shifting(struct movement* mov, int* c)
+void shifting(struct movement* mov, int* last_pos, int* size)
 {
-    (*(mov->shift))(c);
+    (*(mov->shift))(last_pos, size);
+
 }
+
+
+void add_latest_position(struct movement* mov, int* current_pos, int* size)
+{
+    if (mov->future_positions == NULL) {
+        int pos[2] = {current_pos[0], current_pos[1]};
+        shifting(mov, pos, size);
+        mov->future_positions = init_queue(pos, 2);
+        return;
+    }
+    mov->future_positions = update_queue(mov->future_positions, current_pos);
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    double sec = (double) tv.tv_sec;
+    double usec = (double) tv.tv_usec / 1000000;
+
+    double current_time = sec +usec;
+
+    struct queue_position* latest_pos = go_to_end(mov->future_positions);
+    int new_pos[2]; 
+    new_pos[0] = latest_pos->positions[0];
+    new_pos[1] = latest_pos->positions[1];
+
+    shifting(mov,new_pos, size);
+    
+    mov->future_positions = add_element(mov->future_positions, new_pos, (int) (latest_pos->time - current_time)+2);
+
+}
+
+
 
 // functions for the fishes
 
 
-void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*))
+void init_fish(struct fish* f, char* _name, int width, int height, int x, int y, void (*shift) (int*, int*))
 {
     strcpy(f->name, _name);
 
@@ -43,11 +75,12 @@ char* get_fish_name(struct fish* f)
 
 void shift_fish(struct fish* f)
 {
-    shifting(&(f->move),f->position);
+    (f->move).future_positions = update_queue((f->move).future_positions, f->position);
 }
 
 int* get_fish_position(struct fish* f)
 {
+    shift_fish(f);
     return f->position;
 }
 
@@ -70,7 +103,7 @@ void set_fish_dimension(struct fish* f, int width, int height)
 }
 
 
-void set_fish_move(struct fish* f, void (*_shift) (int*))
+void set_fish_move(struct fish* f, void (*_shift) (int*, int*))
 {
     init_movement(&(f->move), _shift);
 }
@@ -87,11 +120,11 @@ void add_future_position(struct fish* f, int* pos, int delay)
 
 int next_future_position(struct fish* f, int* pos) 
 {
-    (f->move).future_positions = update_queue((f->move).future_positions);
-
+    shift_fish(f);
     if ((f->move).future_positions == NULL) {
         return -1;
     }
+    
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
@@ -99,7 +132,10 @@ int next_future_position(struct fish* f, int* pos)
     double usec = (double) tv.tv_usec / 1000000;
 
     double current_time = sec +usec;
-    int dt = (int) ((f->move).future_positions->time - current_time);
+
+    double last_time = (f->move).future_positions->time;
+    int dt = (int) (last_time - current_time);
+    
     pos[0] = (f->move).future_positions->positions[0];
     pos[1] = (f->move).future_positions->positions[1];
     pos[2] = dt;
@@ -107,7 +143,7 @@ int next_future_position(struct fish* f, int* pos)
 }
 
 void generate_future_position(struct fish* f) {
-    return;
+    add_latest_position(&(f->move), f->position, f->dimension);
 }
 
 void free_fish(struct fish* f)

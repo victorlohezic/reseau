@@ -12,7 +12,7 @@
 
 void test_init_queue();
 
-void test_go_to_next();
+void test_go_to_end();
 
 void test_add_element();
 
