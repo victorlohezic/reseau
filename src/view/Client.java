@@ -80,7 +80,7 @@ public class Client {
             networkCommands.put("DelFish", DelFish.initDelFish(listener, pred, logging));
             networkCommands.put("ls", Ls.initLs(listener, pred, logging, prompt));
             Hello.castCommandToHello(networkCommands.get("Hello")).execute();
-            //GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
+            GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
             // GetFishesContinuously getFishesContinuously = GetFishesContinuously.initGetFishes();
             // networkCommands.put("getFishesContinuously", getFishesContinuously);
             // getFishesContinuously.execute();
@@ -208,8 +208,8 @@ public class Client {
         }
         if (client.initNetwork()){
             client.initPromptCommands();
-            //client.run();
-            client.runGUI();
+            client.run();
+            //client.runGUI();
             client.closeNetwork();
         }
      }
