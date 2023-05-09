@@ -21,7 +21,6 @@ void add_latest_position(struct movement* mov, int* current_pos, int* size)
         int pos[2]; 
         pos[0] = current_pos[0];
         pos[1] = current_pos[1];
-        fprintf(stderr, "current pos = %dx%d\n", current_pos[0], current_pos[1]);
         shifting(mov, pos, size);
         mov->future_positions = init_queue(pos, 2);
         return;
@@ -126,7 +125,6 @@ int next_future_position(struct fish* f, int* pos)
     shift_fish(f);
     if ((f->move).future_positions == NULL) {
         generate_future_position(f);
-        fprintf(stderr, "vide!!!!!!!!!!!!\n");
     }
     shift_fish(f);
     if ((f->move).future_positions == NULL) {
@@ -151,7 +149,6 @@ int next_future_position(struct fish* f, int* pos)
 
 void generate_future_position(struct fish* f) {
     add_latest_position(&(f->move), f->position, f->dimension);
-    print_queue(f->move.future_positions);
 }
 
 void free_fish(struct fish* f)

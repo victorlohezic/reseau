@@ -348,7 +348,7 @@ void test_fonctionnel()
     assert(fish_v0[1]->position[1] == 38);
 
     generate_future_position(fish_v0[0]);
-    printf("future x %d\n", fish_v0[0]->move.future_positions->positions[0]);
+    //printf("future x %d\n", fish_v0[0]->move.future_positions->positions[0]);
     int next_pos[2];
 
     assert(next_future_position(fish_v0[0], next_pos) == 0);
@@ -356,7 +356,7 @@ void test_fonctionnel()
     
     assert(next_future_position(a.fishes, next_pos) == 0);
     assert(next_pos[0] == fish_v0[0]->move.future_positions->positions[0]);
-    print_queue(a.fishes->move.future_positions);
+    //print_queue(a.fishes->move.future_positions);
 
     generate_future_position(a.fishes);
     generate_future_position(a.fishes);
@@ -364,7 +364,7 @@ void test_fonctionnel()
 
     fishes_in_view(&a, fish_v0, 0);
 
-    print_queue(fish_v0[0]->move.future_positions);
+    //print_queue(fish_v0[0]->move.future_positions);
 
     free_fish(a.fishes);
     free_fish(a.fishes+1);
