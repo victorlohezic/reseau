@@ -89,12 +89,23 @@ public class Listener extends Thread {
             String fishName = fish.get(0);
             int time = Integer.parseInt(fish.get(5));
             int[] positionAndTime = new int[]{Integer.parseInt(fish.get(1)), Integer.parseInt(fish.get(2)), time};
-            //int[] size = new int[]{Integer.parseInt(fish.get(3)), Integer.parseInt(fish.get(4))};
+            int[] size = new int[]{Integer.parseInt(fish.get(3)), Integer.parseInt(fish.get(4))};
             try {
                 Fish fishFromView = view.getFish(fishName);
                 fishFromView.addPositionAndTime(positionAndTime);
             } catch (Exception e) {
-                logging.warning(e.getMessage());
+                try {
+                    Fish newFish = new Fish(
+                        fishName,
+                        new int[]{Integer.parseInt(fish.get(1)), Integer.parseInt(fish.get(2))},
+                        size,
+                        ""
+                    );
+                    view.addFish(newFish);
+                    newFish.addPositionAndTime(positionAndTime);
+                } catch (Exception e2) {
+                    logging.warning(e2.getMessage());
+                }
             }
         }
         view.updateInterface();
