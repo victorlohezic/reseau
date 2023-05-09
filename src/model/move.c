@@ -68,7 +68,7 @@ void (*get_move_function(char* move_name)) (int*, int*)
     } else if(strcmp(move_name, "RoundTrip") == 0){
         return &round_trip;
     } else {
-        assert(0);
+        return &random_path;
     }
 }
 

@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     fd_set readfds;
     
     init_server("build/controller.cfg");
-    struct timeval timeout = {display_time_out_value+15, 0};
+    //struct timeval timeout = {display_time_out_value+15, 0};
 
     // thread getFishesContinuously
     pthread_create(&thread_send_fishes_continuously, NULL, send_fishes_continuously, (void*) &clients);
@@ -224,14 +224,14 @@ int main(int argc, char *argv[])
         //wait for an activity on one of the sockets
         //wait until timeout
 
-        client_ready = select(FD_SETSIZE , &readfds , NULL , NULL , &timeout);  
+        client_ready = select(FD_SETSIZE , &readfds , NULL , NULL , NULL);  
         if ((client_ready < 0)) { 
             error("ERROR on select");  
         } 
-        if ((client_ready == 0)) { //timeout on select, shutdown the server
-            write(STDIN_FILENO, "\nServer is down\n", 17);
-            break; 
-        } 
+        // if ((client_ready == 0)) { //timeout on select, shutdown the server
+        //     write(STDIN_FILENO, "\nServer is down\n", 17);
+        //     break; 
+        // } 
 
         //new connection 
         if (FD_ISSET(main_socket_fd, &readfds)) {  

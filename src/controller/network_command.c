@@ -1,6 +1,4 @@
 #include "network_command.h"
-#include "client.h"
-#include <stdlib.h>
 
 int hello(char* command, int socket, struct client_set* clients) {
 
@@ -68,11 +66,6 @@ void ping(char* command, int socket) {
     printf("> %s", answer);
 }
 
-void parse_fish(char* command, char* name, int* width, int* height, int* x, int* y, void (*shift) (int*)) {
-    
-
-}
-
 void failed_network_command(int socket) {
     write(socket, "NOK\n", 4);
     printf("> NOK\n");
@@ -81,13 +74,27 @@ void failed_network_command(int socket) {
 void network_add_fish(char* command, int socket, struct client_set* clients) {
     char fish_name[SIZE_NAMES];
     int width, height, x, y; 
-    char movement[SIZE_NAMES];
-    if (sscanf(command, "addFish %s at %dx%d,%dx%d, %s\n", fish_name, &x, &y, &width, &height, movement) != 6) {
+    
+    char movement_name[SIZE_NAMES];
+    if (sscanf(command, "addFish %s at %dx%d,%dx%d, %s\n", fish_name, &x, &y, &width, &height, movement_name) != 6) {
         failed_network_command(socket);
         return ;
     }
+    int id_view = find_client(clients, socket);
+    int k = find_view(clients->client_aquarium, id_view);
+    if (k < 0) {
+        failed_network_command(socket);
+        return;
+    }
+    struct view v_client = clients->client_aquarium->views[k];
+    int* view_position = get_view_position(&v_client);
+    int* view_dimension = get_view_dimension(&v_client);
+    x = view_position[0] + (x/100) * view_dimension[0];
+    y = view_position[1] + (y/100) * view_dimension[1];
     struct fish new_fish;
-    init_fish(&new_fish, fish_name, width, height, x, y, (void (*)(int*, int*)) movement);
+    void (*movement)(int*, int*);
+    movement = get_move_function(movement_name);
+    init_fish(&new_fish, fish_name, width, height, x, y, movement);
 
     if (add_fish(clients->client_aquarium, &new_fish) == -1) {
         failed_network_command(socket);

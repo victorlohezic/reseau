@@ -5,8 +5,10 @@
 #include <sys/socket.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "client.h"
+#include "move.h"
 
 int hello(char* command, int socket, struct client_set* clients);
 

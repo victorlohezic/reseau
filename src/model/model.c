@@ -122,9 +122,12 @@ int next_future_position(struct fish* f, int* pos)
 {
     shift_fish(f);
     if ((f->move).future_positions == NULL) {
+        generate_future_position(f);
+    }
+    shift_fish(f);
+    if ((f->move).future_positions == NULL) {
         return -1;
     }
-    
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
