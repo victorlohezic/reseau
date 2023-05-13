@@ -1,71 +1,120 @@
 #include "move.h"
+#include "model.h"
 
 
-void random_path(int* last_pos, int* size)
+
+
+void random_path(struct fish* f)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    last_pos[0] = (last_pos[0]+ tv.tv_usec) % (100-size[0]); 
+    double sec = (double) tv.tv_sec;
+    double usec = (double) tv.tv_usec / 1000000;
 
-    gettimeofday(&tv, NULL);
-    last_pos[1] = (last_pos[1]+ tv.tv_usec*tv.tv_usec) % (100-size[1]); 
+    double current_time = sec +usec;
+    struct queue_position* latest_pos = go_to_end(f->move.future_positions);
+    int latest_x, latest_y, latest_time;
+    if (latest_pos != NULL) {
+        latest_x = latest_pos->positions[0];
+        latest_y = latest_pos->positions[1];
+        latest_time = latest_pos->time;
+    } else {
+        latest_x = f->position[0];
+        latest_y = f->position[1];
+        latest_time = current_time;
+    }
+    int future_x, future_y;
+    do {
+        future_x = latest_x + rand() % 201 - 50;
+    } while (future_x + f->dimension[0] >= aquarium_x);
+    do {
+        future_y = latest_y + rand() % 201 - 50;
+    } while (future_y + f->dimension[1] >= aquarium_y);
+    
+    int future_pos[2] = {future_x, future_y};
+    add_future_position(f, future_pos, (current_time - latest_time) + 2);
 }
 
 
-void dvd_bouncing(int* last_pos, int* size)
+// void dvd_bouncing(struct fish* f)
+// {
+//     struct timeval tv;
+
+//     if ((last_pos[0]%(100-size[0]) != 0) && (last_pos[1]%(100-size[1]) != 0)){
+//         gettimeofday(&tv, NULL);
+//         int side_choice = (tv.tv_usec)%2;
+
+//         gettimeofday(&tv, NULL);
+//         last_pos[side_choice] = ((tv.tv_usec+last_pos[0])%2) * (100-size[side_choice]);
+//         last_pos[1-side_choice] = 1+((tv.tv_usec+last_pos[1])%(99-size[1-side_choice]));
+
+//     } else if(last_pos[0] == 0) {
+//         last_pos[0] = (100-size[0]) - last_pos[1];
+//         last_pos[1] = (100-size[1]);
+
+//     } else if(last_pos[0] == (100-size[0])) {
+//         last_pos[0] = (100-size[0]) - last_pos[1];
+//         last_pos[1] = 0;
+//     } else if(last_pos[1] == 0) {
+//         last_pos[1] = last_pos[0];
+//         last_pos[0] = 0;
+//     } else {
+//         last_pos[1] = last_pos[0];
+//         last_pos[0] = (100-size[0]);
+//     }
+
+// }
+
+void horizontal_path(struct fish* f)
 {
     struct timeval tv;
+    gettimeofday(&tv, NULL);
+    double sec = (double) tv.tv_sec;
+    double usec = (double) tv.tv_usec / 1000000;
 
-    if ((last_pos[0]%(100-size[0]) != 0) && (last_pos[1]%(100-size[1]) != 0)){
-        gettimeofday(&tv, NULL);
-        int side_choice = (tv.tv_usec)%2;
-
-        gettimeofday(&tv, NULL);
-        last_pos[side_choice] = ((tv.tv_usec+last_pos[0])%2) * (100-size[side_choice]);
-        last_pos[1-side_choice] = 1+((tv.tv_usec+last_pos[1])%(99-size[1-side_choice]));
-
-    } else if(last_pos[0] == 0) {
-        last_pos[0] = (100-size[0]) - last_pos[1];
-        last_pos[1] = (100-size[1]);
-
-    } else if(last_pos[0] == (100-size[0])) {
-        last_pos[0] = (100-size[0]) - last_pos[1];
-        last_pos[1] = 0;
-    } else if(last_pos[1] == 0) {
-        last_pos[1] = last_pos[0];
-        last_pos[0] = 0;
+    double current_time = sec +usec;
+    struct queue_position* latest_pos = go_to_end(f->move.future_positions);
+    int latest_x, latest_y, latest_time;
+    if (latest_pos != NULL) {
+        latest_x = latest_pos->positions[0];
+        latest_y = latest_pos->positions[1];
+        latest_time = latest_pos->time;
     } else {
-        last_pos[1] = last_pos[0];
-        last_pos[0] = (100-size[0]);
+        latest_x = f->position[0];
+        latest_y = f->position[1];
+        latest_time = current_time;
+    }
+    int future_x, future_y;
+    future_y = latest_y;
+    future_x = latest_x;
+    int time = 2;
+    int future_pos[2] = {future_x, future_y};
+        if (future_x > aquarium_x/2) {
+            while (future_x - aquarium_x/6 > 0) {
+                future_x -= aquarium_x/6;
+                future_pos[0] = future_x;
+                add_future_position(f, future_pos, (current_time - latest_time) + time);
+                
+                time+=2;
+            }
+        } else {
+            while (future_x + aquarium_x/6 < aquarium_x - f->dimension[1] - 20) {
+                future_x += aquarium_x/6;
+                future_pos[0] = future_x;
+                add_future_position(f, future_pos, (current_time - latest_time) + time);
+                time+=2;
+            }
     }
 }
 
-void round_trip(int* last_pos, int* size)
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-
-    if (last_pos[0]%(100-size[0]) != 0){
-        last_pos[0] = ((tv.tv_usec)%2) * (100-size[0]);
-        last_pos[1] = tv.tv_usec%(100-size[1]);
-    } else {
-        last_pos[0] = (100-size[0]) - last_pos[0];
-        last_pos[1] = (tv.tv_usec+last_pos[1])%(100-size[1]);
-    }
-}
-
-
-
-
-
-void (*get_move_function(char* move_name)) (int*, int*) 
+void (*get_move_function(char* move_name)) (struct fish*)
 {
     if (strcmp(move_name, "RandomWayPoint") == 0) {
         return &random_path;
-    } else if(strcmp(move_name, "DvdBouncing") == 0){
-        return &dvd_bouncing;
-    } else if(strcmp(move_name, "RoundTrip") == 0){
-        return &round_trip;
+    // } else if(strcmp(move_name, "DvdBouncing") == 0){
+    //     return &dvd_bouncing;
+    } else if(strcmp(move_name, "HorizontalPathWay") == 0){
+       return &horizontal_path;
     } else {
         return &random_path;
     }

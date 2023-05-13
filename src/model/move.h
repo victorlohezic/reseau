@@ -7,19 +7,23 @@
 #include <string.h>
 #include <assert.h>
 
+#include "aquarium.h"
+
+extern int aquarium_x;
+extern int aquarium_y;
 
 //RandomWayPoint movement 
-void random_path(int* last_pos, int* size);
+void random_path(struct fish*);
 
 //Fish bouncing at the borders -> DvdBouncing
-void dvd_bouncing(int* last_pos, int* size);
+void dvd_bouncing(struct fish*);
 
-//Fish going left->right/right->left -> RoundTrip
-void round_trip(int* last_pos, int* size);
+//Fish going left->right/right->left -> 
+void horizontal_path(struct fish*);
 
 
 //returns the right function for the move name
-void (*get_move_function(char* move_name)) (int*, int*);
+void (*get_move_function(char* move_name)) (struct fish*);
 
 
 #endif // _MOVE_H_

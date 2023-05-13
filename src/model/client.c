@@ -65,7 +65,7 @@ int is_view_available(struct client_set *clients, int id_view) {
     if (id_view <= 0 || 
     id_view > MAX_VIEWS || 
     clients->clients[id_view-1].socket_fd != 0 || 
-    !find_view(clients->client_aquarium, id_view)) 
+    find_view(clients->client_aquarium, id_view) < 0) 
     {   
         return 0;
     } 
@@ -74,7 +74,7 @@ int is_view_available(struct client_set *clients, int id_view) {
 
 int find_view_available(struct client_set *clients) {
     for (int i = 0; i < MAX_CLIENTS; ++i) {
-        if (clients->clients[i].socket_fd == 0 || find_view(clients->client_aquarium, i+1)) {
+        if (clients->clients[i].socket_fd == 0 && find_view(clients->client_aquarium, i+1) >= 0) {
             return i+1;
         }
     }

@@ -24,13 +24,13 @@ public class Fish {
             } 
         }
         for (int i = 0; i < 2; ++i)  {
-            if (coordinates[i] < 0) {
-                throw new FishException(String.format("The %d coordinate is negative", i));
-            } else if (coordinates[i] > 100) {
-                throw new FishException(String.format("The %d coordinate is over 100", i));
-            } else {
+            // if (coordinates[i] < 0) {
+            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // } else if (coordinates[i] > 100) {
+            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // } else {
                 this.coordinates[i] = coordinates[i];
-            } 
+            // } 
         }
 
         this.mobility = mobility;

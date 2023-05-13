@@ -89,9 +89,8 @@ void network_add_fish(char* command, int socket, struct client_set* clients) {
     struct view v_client = clients->client_aquarium->views[k];
     int* view_position = get_view_position(&v_client);
     int* view_dimension = get_view_dimension(&v_client);
-    x = view_position[0] + (int)(((float)x/100) * view_dimension[0]);
-    y = view_position[1] + (int)(((float)y/100) * view_dimension[1]);
-
+    x = view_position[0] + x * view_dimension[0] / 100;
+    y = view_position[1] + y * view_dimension[1] / 100;
     struct fish new_fish;
     void (*movement)(int*, int*);
     movement = get_move_function(movement_name);
@@ -140,7 +139,7 @@ void network_del_fish(char* command, int socket, struct client_set* clients) {
     printf("> OK\n");
 }
 
-void send_fish(int socket, struct fish *f) {
+void send_fish(int socket, struct fish *f, const int* view_position, const int* view_dimension) {
     char answer[256];
     int x, y;
     int time = 0;
@@ -156,6 +155,9 @@ void send_fish(int socket, struct fish *f) {
 
     }
     int* dimension = get_fish_dimension(f);
+
+    x = 100 * (x - view_position[0])/view_dimension[0];
+    y = 100 * (y - view_position[1])/view_dimension[1];
     sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, x, y, dimension[0], dimension[1], time);
     write(socket, answer, strlen(answer));
     printf("%s", answer);
@@ -165,10 +167,21 @@ void network_get_fishes(int socket, struct client_set* clients) {
     write(socket, "list", 4);
     printf("> list");
     int id_view = find_client(clients, socket);
+   
+ 
+    int k = find_view(clients->client_aquarium, id_view);
+    if (k < 0) {
+        failed_network_command(socket);
+        return;
+    }
+    struct view v_client = clients->client_aquarium->views[k];
+    const int* view_position = get_view_position(&v_client);
+    const int* view_dimension = get_view_dimension(&v_client);
+   
     struct fish* list_fishes[MAX_FISHES];
     int nb_fishes = fishes_in_view(clients->client_aquarium, list_fishes, id_view);
     for (int i = 0; i < nb_fishes; ++i) {
-        send_fish(socket, list_fishes[i]);
+        send_fish(socket, list_fishes[i], view_position, view_dimension);
     }
     printf("\n");    
     write(socket, "\n", 1);

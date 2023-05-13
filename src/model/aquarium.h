@@ -11,7 +11,7 @@
 #define MAX_VIEWS 10
 #define MAX_FISHES 30
 
-
+struct fish;
 // struct of aquarium that contains views and fishes
 struct aquarium {
     int dimension[2];

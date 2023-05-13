@@ -4,6 +4,7 @@ const int* get_aquarium_dimension(const struct aquarium* a) {
     return a->dimension;
 }
 
+int aquarium_x, aquarium_y;
 
 void show(struct aquarium* a) 
 {
@@ -37,9 +38,12 @@ int load(struct aquarium* a, char* path)
     for (int k=0; k<2; k++) {
         fscanf(input_file, "%d", &num);
         a->dimension[k] = num;
+        
         fseek(input_file, 1, SEEK_CUR);
     }
-
+    aquarium_x = a->dimension[0];
+    aquarium_y = a->dimension[1];
+    
     int id, pos_x, pos_y, dim_x, dim_y;
     struct view v;
     while (fscanf(input_file, "N%d", &id) == 1) {
@@ -232,10 +236,10 @@ int fishes_in_view(struct aquarium* a, struct fish** tmp, int id_view)
 }
 
 void update_fishes(struct aquarium* a) {
+    return;
     for(int k = 0; k< a->nb_fishes; k++) {
         if ((a->fishes+k)->is_started) {
             shift_fish(a->fishes+k);
-            generate_future_position(a->fishes+k);
         }
     }
 }
