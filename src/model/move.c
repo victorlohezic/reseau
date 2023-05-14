@@ -1,6 +1,6 @@
 #include "move.h"
 #include "model.h"
-
+#include <time.h>
 
 
 
@@ -23,6 +23,7 @@ void random_path(struct fish* f)
         latest_y = f->position[1];
         latest_time = current_time;
     }
+    srand(time(NULL));
     int future_x, future_y;
     do {
         future_x = latest_x + rand() % 201 - 100;
