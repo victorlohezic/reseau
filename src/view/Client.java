@@ -3,6 +3,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Client {
     private Logging logging;
@@ -147,6 +149,20 @@ public class Client {
      */
     private void run() {
         ArrayList<String> result;
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    networkCommands.get("ping").execute();
+                } catch(Exception e) {
+                    logging.warning(e.getMessage());
+                }
+            }
+        };
+
+        timer.schedule(task, 0, displayTimeoutValue);
+
         do {
             result = prompt.read();
             ParametersCommande promptCommand = promptCommands.get(result.get(0));
@@ -164,7 +180,10 @@ public class Client {
             } else if (result.get(0).equals("quit") == false) {
                 logging.warning("NOK : commande introuvable");
             }
-        } while (!result.get(0).equals("quit"));        
+        } while (!result.get(0).equals("quit"));    
+        
+        // Stop the timer
+        timer.cancel();
     } 
     
     /**
