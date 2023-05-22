@@ -87,12 +87,12 @@ void network_add_fish(char* command, int socket, struct client_set* clients) {
         return;
     }
     struct view v_client = clients->client_aquarium->views[k];
-    int* view_position = get_view_position(&v_client);
-    int* view_dimension = get_view_dimension(&v_client);
+    const int* view_position = get_view_position(&v_client);
+    const int* view_dimension = get_view_dimension(&v_client);
     x = view_position[0] + x * view_dimension[0] / 100;
     y = view_position[1] + y * view_dimension[1] / 100;
     struct fish new_fish;
-    void (*movement)(int*, int*);
+    void (*movement)(struct fish*);
     movement = get_move_function(movement_name);
     init_fish(&new_fish, fish_name, width, height, x, y, movement);
 
@@ -145,7 +145,7 @@ void send_fish(int socket, struct fish *f, const int* view_position, const int* 
     int time = 0;
     char* fish_name = get_fish_name(f);
     int future_position[3];
-    if (next_future_position(f, future_position) == -1) {
+    if (next_future_position(f, future_position) != -1) {
         x = get_fish_position(f)[0];
         y = get_fish_position(f)[1];
     } else {
