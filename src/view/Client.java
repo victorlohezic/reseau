@@ -43,7 +43,7 @@ public class Client {
         
         this.logging = new Logging("view.log");
         this.logging.enableSaving(true);
-        this.logging.enable(true, false, false);
+        this.logging.enable(true, false, true);
         
         this.id = config.getId();
         logging.info(this.id);
@@ -168,6 +168,9 @@ public class Client {
             } else if (result.get(0).equals("quit") == false) {
                 logging.warning("NOK : commande introuvable");
             }
+            if (result.get(0).equals("quit")) {
+                break;
+            }
         } while (!result.get(0).equals("quit"));    
         
         // Stop the timer
@@ -216,6 +219,7 @@ public class Client {
             logging.warning(e.getMessage());
         }
         scanner.close();
+        logging.closeLogging();
     }
 
     public static void main(String[] argv) {
