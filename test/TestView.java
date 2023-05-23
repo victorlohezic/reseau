@@ -21,7 +21,7 @@ public class TestView {
         fishes.put("chouchou Fish", chouchouFish);
         fishes.put("flower Fish", flowerFish);
         try {
-            View view = new View("N1", coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions, "");
         } catch (ViewException e) {
             assert false : "Exception Launched";
         }
@@ -39,7 +39,7 @@ public class TestView {
         Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
         Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
         try {
-            View view = new View("N1", coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions, "");
             view.addFish(flowerFish);
             view.addFish(clownFish);
             view.addFish(chouchouFish);
@@ -61,7 +61,7 @@ public class TestView {
         Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
         Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
         try {
-            View view = new View("N1", coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions, "");
             view.addFish(clownFish);
             view.addFish(chouchouFish);
             view.addFish(flowerFish);
@@ -84,7 +84,7 @@ public class TestView {
         Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
     
         try {
-            View view = new View("N1", coordinates, dimensions);
+            View view = new View("N1", coordinates, dimensions, "");
             view.addFish(clownFish);
             view.addFish(chouchouFish);
             view.addFish(flowerFish);
@@ -99,7 +99,7 @@ public class TestView {
     */
     public void testGetId() {
         try {
-            View view = new View("N1", new int[]{0, 0}, new int[]{100, 100});
+            View view = new View("N1", new int[]{0, 0}, new int[]{100, 100}, "");
             assert "N1" == view.getId() : "Different id";
         } catch (ViewException e) {
             assert false : "Exception Launched";
@@ -111,7 +111,7 @@ public class TestView {
     */
     public void testGetDimensions() {
         try {
-            View view = new View("N1", new int[]{0, 0}, new int[]{100, 90});
+            View view = new View("N1", new int[]{0, 0}, new int[]{100, 90}, "");
             int[] dimensions = view.getDimensions();
             assert 100 == dimensions[0] : "Bad dimension[0]";
             assert 90 == dimensions[1] : "Bad dimension[1]";
@@ -125,7 +125,7 @@ public class TestView {
     */
     public void testGetPosition() {
         try {
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             int[] position = view.getPosition();
             assert 10 == position[0] : "Bad position[0]";
             assert 20 == position[1] : "Bad position[0]";
@@ -144,7 +144,7 @@ public class TestView {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
             Fish chouchouFish = new Fish("chouchouFish", fishCoordinates, size, "RandomPathWay");
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.addFish(chouchouFish);
             view.addFish(clownFish);
@@ -165,7 +165,7 @@ public class TestView {
         int[] size = {2, 4};
         try {
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{5, 5});
+            View view = new View("N1", new int[]{10, 20}, new int[]{5, 5}, "");
             view.addFish(flowerFish);
          } catch (FishViewException e) {
             return;
@@ -184,7 +184,7 @@ public class TestView {
         try {
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
             HashMap<String, Fish> fishes = new HashMap<String, Fish>();
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.addFish(flowerFish);
          } catch (FishViewException e) {
@@ -203,7 +203,7 @@ public class TestView {
         int[] size = {2, 4};
         try {
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.removeFish(flowerFish);
          } catch (Exception e2) {
@@ -220,7 +220,7 @@ public class TestView {
         try {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.removeFish(clownFish);
          } catch (FishViewException e) {
@@ -240,7 +240,7 @@ public class TestView {
         try {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.addFish(clownFish);
             clownFish.setPosition(new int[]{12, 28});
@@ -259,7 +259,7 @@ public class TestView {
         try {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
             Fish flowerFish = new Fish("flowerFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(flowerFish);
             view.addFish(clownFish);
             clownFish.setPosition(new int[]{12, 28});
@@ -281,7 +281,7 @@ public class TestView {
         int[] size = {2, 4};
         try {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(clownFish);
             assert view.getFish(clownFish.getName()) == clownFish : "Fish name different";
          } catch (Exception e2) {
@@ -297,7 +297,7 @@ public class TestView {
         int[] size = {2, 4};
         try {
             Fish clownFish = new Fish("clownFish", fishCoordinates, size, "RandomPathWay");
-            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80});
+            View view = new View("N1", new int[]{10, 20}, new int[]{90, 80}, "");
             view.addFish(clownFish);
             view.getFish("Chouchou");
          } catch (Exception e2) {
