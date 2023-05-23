@@ -36,10 +36,10 @@ public class Hello implements Commande {
         printExecute();
     }
 
-    public void execute(int id) {
+    public void execute(String id) {
 
-        logging.info("Hello in as" + id);
-        output.println("hello in as" + id);
+        logging.info("Hello in as " + id);
+        output.println("hello in as " + id);
         printExecute();
     }  
 

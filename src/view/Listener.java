@@ -25,7 +25,6 @@ public class Listener extends Thread {
             String result;
             while (running) {
                 result = input.readLine();
-                logging.debug(result);
                 if (result.split(" ")[0].equals("list") == false){
                     synchronized (mutex) {
                         contentOneTime = result;

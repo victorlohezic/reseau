@@ -42,8 +42,8 @@ public class Client {
     private void initClient(ConfigParser config){
         
         this.logging = new Logging("view.log");
-        this.logging.enableSaving(false);
-        this.logging.enable(true, true, true);
+        this.logging.enableSaving(true);
+        this.logging.enable(true, false, false);
         
         this.id = config.getId();
         logging.info(this.id);
@@ -81,7 +81,7 @@ public class Client {
             networkCommands.put("getFishes", GetFishes.initGetFishes(listener, pred, logging));
             networkCommands.put("DelFish", DelFish.initDelFish(listener, pred, logging));
             networkCommands.put("ls", Ls.initLs(listener, pred, logging, prompt));
-            Hello.castCommandToHello(networkCommands.get("Hello")).execute();
+            Hello.castCommandToHello(networkCommands.get("Hello")).execute(id);
             GetFishesContinuously.castCommandToFish(networkCommands.get("getFishesContinuously")).execute();;
             // GetFishesContinuously getFishesContinuously = GetFishesContinuously.initGetFishes();
             // networkCommands.put("getFishesContinuously", getFishesContinuously);
