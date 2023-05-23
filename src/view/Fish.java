@@ -118,13 +118,13 @@ public class Fish {
      */
     public void setPosition(int[] newPosition) throws FishException {
         for (int i = 0; i < 2; ++i) {
-            if (newPosition[i] < 0) {
-                throw new FishException(String.format("The %d coordinate is negative", i));
-            } else if (newPosition[i] > 100) {
-                throw new FishException(String.format("The %d coordinate is over 100", i));
-            } else {
+            // if (newPosition[i] < 0) {
+            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // } else if (newPosition[i] > 100) {
+            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // } else {
                 coordinates[i] = newPosition[i];
-            }
+            // }
         }
     }
 
@@ -191,13 +191,13 @@ public class Fish {
      */
     private void setPosition(int[] position, int[] newPosition) throws FishException {
         for (int i = 0; i < 2; ++i) {
-            if (newPosition[i] < 0) {
-                throw new FishException(String.format("The %d coordinate is negative", i));
-            } else if (newPosition[i] > 100) {
-                throw new FishException(String.format("The %d coordinate is over 100", i));
-            } else {
+            // if (newPosition[i] < 0) {
+            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // } else if (newPosition[i] > 100) {
+            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // } else {
                 position[i] = newPosition[i];
-            }
+            // }
         }
     }
 
