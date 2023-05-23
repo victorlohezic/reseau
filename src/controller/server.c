@@ -16,6 +16,7 @@
 #include "client.h"
 #include "network_command.h"
 #include "prompt_command.h"
+#include "logger.h"
 
 #define SO_REUSEPORT 15 
 #define MAX_CLIENTS MAX_VIEWS
@@ -242,13 +243,13 @@ int main(int argc, char *argv[])
             }
             
             //inform user of socket number - used in send and receive commands 
-            printf("\n New connection , socket fd is %d, port : %d \n" , socket_fd , ntohs
+            log_message("\n New connection , socket fd is %d, port : %d \n" , socket_fd , ntohs
                   (cli_addr.sin_port));  
 
             if (read(socket_fd , buffer, 256) < 0) {
                 error("ERROR on reading new socket");
             }
-            printf("< %s", buffer);
+            log_message("< %s", buffer);
             if (hello(buffer, socket_fd, &clients) != -1) {
                 FD_SET(socket_fd, &readfds);  
             } 
@@ -264,7 +265,7 @@ int main(int argc, char *argv[])
                 if ((read(socket_fd, buffer, 1024)) < 0) {
                     error("ERROR on reading");
                 }  
-                printf("< %s", buffer);
+                log_message("< %s", buffer);
                 //Echo back the message that came in 
                handle_network_command(buffer, socket_fd, &clients); 
             }

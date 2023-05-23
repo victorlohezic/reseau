@@ -9,6 +9,7 @@
 
 #include "client.h"
 #include "move.h"
+#include "logger.h"
 
 int hello(char* command, int socket, struct client_set* clients);
 

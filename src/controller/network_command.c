@@ -23,7 +23,7 @@ int hello(char* command, int socket, struct client_set* clients) {
             strcat(answer, str_id);
             strcat(answer, "\n");
             write(socket, answer, strlen(answer));
-            printf("> %s", answer);
+            log_message("> %s", answer);
             new_client = init_client_info(socket, id_view);
             add_client(clients, &new_client);
             return id_view;
@@ -39,7 +39,7 @@ int hello(char* command, int socket, struct client_set* clients) {
     strcat(answer, str_id);
     strcat(answer, "\n");
     write(socket, answer, strlen(answer));
-    printf("> %s", answer);
+    log_message("> %s", answer);
     new_client = init_client_info(socket, id_view);
     add_client(clients, &new_client);
     return id_view;
@@ -49,7 +49,7 @@ void log_out(int socket, struct client_set* clients) {
     char* answer = "bye\n";
     int id_view = find_client(clients, socket);
     del_client(clients, id_view);
-    printf("> %s", answer);
+    log_message("> %s", answer);
     write(socket, answer, strlen(answer));
     
 }
@@ -63,12 +63,12 @@ void ping(char* command, int socket) {
     strcat(answer, port_number);
     strcat(answer, "\n");
     write(socket, answer, strlen(answer));
-    printf("> %s", answer);
+    log_message("> %s", answer);
 }
 
 void failed_network_command(int socket) {
     write(socket, "NOK\n", 4);
-    printf("> NOK\n");
+    log_message("> NOK\n");
 }
 
 void network_add_fish(char* command, int socket, struct client_set* clients) {
@@ -102,7 +102,7 @@ void network_add_fish(char* command, int socket, struct client_set* clients) {
     }
 
     write(socket, "OK\n", 3);
-    printf("> OK\n");
+    log_message("> OK\n");
 }
 
 void network_start_fish(char* command, int socket, struct client_set* clients) {
@@ -119,7 +119,7 @@ void network_start_fish(char* command, int socket, struct client_set* clients) {
     }
 
     write(socket, "OK\n", 3);
-    printf("> OK\n");
+    log_message("> OK\n");
 }
 
 void network_del_fish(char* command, int socket, struct client_set* clients) {
@@ -136,7 +136,7 @@ void network_del_fish(char* command, int socket, struct client_set* clients) {
     }
 
     write(socket, "OK\n", 3);
-    printf("> OK\n");
+    log_message("> OK\n");
 }
 
 void send_fish(int socket, struct fish *f, const int* view_position, const int* view_dimension) {
@@ -145,7 +145,7 @@ void send_fish(int socket, struct fish *f, const int* view_position, const int* 
     int time = 0;
     char* fish_name = get_fish_name(f);
     int future_position[3];
-    if (next_future_position(f, future_position) != -1) {
+    if (next_future_position(f, future_position) == -1) {
         x = get_fish_position(f)[0];
         y = get_fish_position(f)[1];
     } else {
@@ -160,12 +160,12 @@ void send_fish(int socket, struct fish *f, const int* view_position, const int* 
     y = 100 * (y - view_position[1])/view_dimension[1];
     sprintf(answer, " [%s at %dx%d,%dx%d,%d]", fish_name, x, y, dimension[0], dimension[1], time);
     write(socket, answer, strlen(answer));
-    printf("%s", answer);
+    log_message("%s", answer);
 }
 
 void network_get_fishes(int socket, struct client_set* clients) {
     write(socket, "list", 4);
-    printf("> list");
+    log_message("> list");
     int id_view = find_client(clients, socket);
    
  
@@ -183,7 +183,10 @@ void network_get_fishes(int socket, struct client_set* clients) {
     for (int i = 0; i < nb_fishes; ++i) {
         send_fish(socket, list_fishes[i], view_position, view_dimension);
     }
-    printf("\n");    
+    // for (int i = 0; i < clients->client_aquarium->nb_fishes; ++i) {
+    //     send_fish(socket, &clients->client_aquarium->fishes[i], view_position, view_dimension);
+    // }
+    log_message("\n");    
     write(socket, "\n", 1);
 }
 
