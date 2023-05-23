@@ -27,10 +27,10 @@ void random_path(struct fish* f)
     int future_x, future_y;
     do {
         future_x = latest_x + rand() % 201 - 100;
-    } while (future_x + f->dimension[0] >= aquarium_x);
+    } while (future_x + f->dimension[0] >= aquarium_x || future_x < 0);
     do {
         future_y = latest_y + rand() % 201 - 100;
-    } while (future_y + f->dimension[1] >= aquarium_y);
+    } while (future_y + f->dimension[1] >= aquarium_y || future_y < 0);
     
     int future_pos[2] = {future_x, future_y};
     add_future_position(f, future_pos, (current_time - latest_time) + 2);
