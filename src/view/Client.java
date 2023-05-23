@@ -86,14 +86,6 @@ public class Client {
             // GetFishesContinuously getFishesContinuously = GetFishesContinuously.initGetFishes();
             // networkCommands.put("getFishesContinuously", getFishesContinuously);
             // getFishesContinuously.execute();
-            Fish fish = new Fish("chouchou", new int[]{50, 50}, new int[]{15, 20}, "RandomWayPoint");
-            AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
-          
-            networkCommands.get("AddFish").execute();
-            fish = new Fish("toutou", new int[]{50, 50}, new int[]{15, 20}, "HorizontalPathWay");
-            AddFish.castCommandToFish(networkCommands.get("AddFish")).setFish(fish);
-          
-            networkCommands.get("AddFish").execute();
 
             return true;
             
@@ -103,11 +95,7 @@ public class Client {
             } catch (CommandeException e) {
                 logging.warning(e.getMessage());
                 return false;
-            
-            } catch (FishException e) {
-                logging.warning(e.getMessage());
-                return false;
-            }
+            } 
     }
 
     /*
