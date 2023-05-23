@@ -36,8 +36,6 @@ public class Listener extends Thread {
                         getFishes = result;
                         mutexFishes.notifyAll();
                     }
-                    logging.debug("Bien reçu chef !");
-                    logging.debug(result);
                     updateView(result.replaceAll("\\[", "").replaceAll("x", " ").replaceAll("\\]", "").replaceAll("x", " ").replaceAll(",", " "));
                 }
             }
