@@ -14,7 +14,7 @@ Les différents paramètres sont résumés dans ce tableau :
 | make build  |     Compile le projet |
 | make client  |     Compile le client |
 | make server  |   Compile le serveur |
-| make test  |   Compile les tests du client et les exécute |
+| make test  |   Compile les tests du client et les exécuter |
 | make clean  |   Supprime le dossier build |
 
 Pour lancer le serveur. Il faut exécuter : 
@@ -24,6 +24,61 @@ build/server
 et pour lancer le client 
 ```Bash 
 java -cp build Client
+```
+
+## Commandes disponibles pour le client
+
+Pour obtenir des informations sur l'acquarium :
+```
+status
+```
+
+
+Cette commande permet à l'utilisateur d’ajouter un poisson à l’aquarium :
+```
+addFish chouchou at 61x52, 4x3, RandomWayPoint
+```
+
+Les poissons disponibles sont : 
+- chouchou
+- toutou
+- chacha 
+- sasa
+
+Les mobilités disponibles sont : 
+- HorizontalPathWay 
+- RandomWayPoint
+
+Pour supprimer un poisson : 
+``` 
+delFish Chouchou
+```
+
+Cette commande permet à l'utilisateur de démarrer un poisson : 
+```
+startFish PoissonNain
+```
+
+## Commandes disponibles pour le serveur
+Chargement de l’aquarium
+```
+load aquarium1
+```
+Affichage de la topologie
+```
+show aquarium
+```
+Ajouter une vue
+```
+add view N5 400x400+400+200
+```
+Supprimer une vue
+```
+del view N
+```
+Enregistrer / exporter les données de l’aquarium actuelle dans un fichier
+```
+save aquarium2
 ```
 
 ## Ajout de tests en Java

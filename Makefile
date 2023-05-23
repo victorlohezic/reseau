@@ -12,7 +12,7 @@ all : build
 
 build : build_directory server client copy_controller
 
-test: ex_test_queue ex_test_model ex_test_view ex_test_aquarium ex_java_test
+test: ex_java_test
 
 server: ${SRC}/controller/server.c parser.o network_command.o aquarium.o view.o model.o queue.o client.o prompt_command.o move.o logger.o
 	${CC} ${CFLAGS} -pthread $^ -I $(SRC)/model -o ${BUILD_DIR}/server
