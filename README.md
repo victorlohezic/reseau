@@ -59,6 +59,11 @@ Cette commande permet à l'utilisateur de démarrer un poisson :
 startFish PoissonNain
 ```
 
+Pour quitter la console client : 
+``` 
+quit
+```
+
 ## Commandes disponibles pour le serveur
 Chargement de l’aquarium
 ```
