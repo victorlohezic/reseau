@@ -99,9 +99,10 @@ public class GUI extends JFrame implements ActionListener{
                 nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0]*screenSize[0]/100; ;
                 nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1]*screenSize[1]/100; ;
                 nextPos[2] = (float) fish.getPositionsAndTimes().get(0)[2]+getCurrentTime();
+                System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
+
             }
 
-            System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
             futurePos.add(count, nextPos);
             if (futurePos.get(count)[0] > lastPos.get(count)[0]) {
                 direction = 1;
@@ -183,23 +184,20 @@ public class GUI extends JFrame implements ActionListener{
                 add(labels[i]);
                 int currentx = interpolation(i, 0);
                 int currenty = interpolation(i, 1);
-                //System.out.print("x = " + currentx + "y = " + currenty+ "\n");
                 labels[i].setLocation(currentx, currenty);
-                //if (i == 0) {
-                //    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0]*100/screenSize[0] + "x" + lastPos.get(i)[1]*100/screenSize[1]  + " currentPos: " + currentx*100/screenSize[0]+"x"+currenty*100/screenSize[1]+ " future pos:"+ futurePos.get(i)[0]*100/screenSize[0] + "x" + futurePos.get(i)[1]*100/screenSize[1]+ "\n");
-                //}
-             
+
+                //System.out.print(fishNames[0] + " x = " + currentx + " y = " + currenty +"\n");
             }
             remove(bgLabel);
             add(bgLabel);
+
+
         }
 
     }
 
     private String getPathFish(String nameFish, int direction) {
-        if (nameFish !=  "chacha" && nameFish !=  "chouchou" && nameFish !=  "sasa" && nameFish !=  "toutou") {
-            nameFish = "default";
-        }
+
         String extension;
         if (direction == 1) {
             extension = ".png";
@@ -210,10 +208,13 @@ public class GUI extends JFrame implements ActionListener{
         while (i >= 0 && Character.isDigit(nameFish.charAt(i))) {
             i--;
         }
-        if (i < nameFish.length() - 1) {
-            return resources + "/" + nameFish.substring(0, i + 1) + extension;
+        String fishName  = nameFish.substring(0, i + 1);
+
+        if (!fishName.equals("chacha") && !fishName.equals("chouchou") && !fishName.equals("sasa") && !fishName.equals("toutou")){
+            System.out.print("fishname = "+fishName+"\n");
+            fishName = "defaut";
         }
-        return resources + "/" + nameFish + extension;
+        return resources + "/" +  fishName + extension;
     }
 
 
