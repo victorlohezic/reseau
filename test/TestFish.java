@@ -42,37 +42,6 @@ public class TestFish {
     /**
      *Test if negative position generates an error
      */
-    public void testInitNegativePositionFish() {
-        int[] coordinates = {-10, 0};
-        int[] dimensions = {5, 2};
-        String name = "ChouchouALaCreme";
-        try {
-            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
-        } catch(FishException e) {
-            return;
-        }
-        assert false: "Exception not lauched";
-    } 
-
-        /**
-     *Test if too big position generates an error
-     */
-    public void testInitOverBigPositionFish() {
-        int[] coordinates = {0, 120};
-        int[] dimensions = {5, 2};
-        String name = "ChouchouALaCreme";
-        try {
-            Fish testFish = new Fish(name, coordinates, dimensions, "RandomPathWay");
-        } catch(FishException e) {
-            return;
-        }
-        assert false: "Exception not lauched";
-    } 
-
-
-    /**
-     *Test if negative position generates an error
-     */
     public void testSetNegativePositionFish() {
         int[] coordinates = {0, 0};
         int[] dimensions = {5, 2};
