@@ -20,11 +20,11 @@ public class View implements ActionListener{
 
     public View(String id, int[] coordinates, int dimensions[], String resources) throws ViewException {
         this.id = id;
-        for (int i = 0; i < 2; ++i) {
-            if (coordinates[i] < 0 || coordinates[i] > 100) {
-                throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
-            }
-        }
+        //for (int i = 0; i < 2; ++i) {
+        //    if (coordinates[i] < 0 || coordinates[i] > 100) {
+        //        throw new ViewException(String.format("The %d coordinate is < 0 or > 100", i));
+        //    }
+        //}
         this.coordinates[0] = coordinates[0];
         this.coordinates[1] = coordinates[1];
         for (int i = 0; i < 2; ++i) {

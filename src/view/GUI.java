@@ -11,8 +11,7 @@ public class GUI extends JFrame implements ActionListener{
     private int nbFishes=0;
     private ImageIcon[] icons;
     private JLabel[] labels;
-    private int screenWidth;
-    private int screenHeight;
+    private int[] screenSize;
     private ImageIcon bgIcon;
     private JLabel bgLabel; 
     private Timer timer;
@@ -24,6 +23,7 @@ public class GUI extends JFrame implements ActionListener{
     private boolean isUpdatingFishes = false;
 
 
+
     public GUI(View newView, String resources) {
         super("View");
         setLayout(null); // creates the window
@@ -32,24 +32,29 @@ public class GUI extends JFrame implements ActionListener{
         //Create the timer to update the button position
         timer = new Timer(150, this);
         timer.start();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = (int) screenSize.getWidth();
-        screenHeight = (int) screenSize.getHeight();
-        System.out.print("dimensions ecran : "+ screenWidth + " "+ screenHeight);
+        Dimension getScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenSize = new int[2];
+        screenSize[0] = (int) getScreenSize.getWidth();
+        screenSize[1] = (int) getScreenSize.getHeight();
 
-        setLocation(newView.getPosition()[0]*screenWidth/100, newView.getPosition()[1]*screenHeight/100); //sets the location of the window on the screen at
-        setSize(newView.getDimensions()[0]*screenWidth/100, newView.getDimensions()[1]*screenHeight/100); // sets the size of the window at 500x537 (500+height of stripe)
+
+        //screenSize[0] = (int) screenSize.getWidth();
+        //screenSize[1] = (int) screenSize.getHeight();
+        //System.out.print("dimensions ecran : "+ screenSize[0] + " "+ screenSize[1]);
+
+        setLocation(0,0); //sets the location of the window on the screen at
+        setSize(screenSize[0], screenSize[1]); // sets the size of the window at 500x537 (500+height of stripe)
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // closes the window when exit
-        setResizable(false); // prevents from resizing the window
+        //setResizable(false); // prevents from resizing the window
         setVisible(true); // displays the window
 
    
 
-        bgIcon = new ImageIcon(new ImageIcon("./fishes/background.jpg").getImage().getScaledInstance(screenWidth, screenHeight, Image.SCALE_DEFAULT));
+        bgIcon = new ImageIcon(new ImageIcon("./fishes/background.jpg").getImage().getScaledInstance(screenSize[0], screenSize[1], Image.SCALE_DEFAULT));
 
         bgLabel = new JLabel(bgIcon,SwingConstants.LEFT);
         bgLabel.setVerticalAlignment(SwingConstants.TOP);
-        bgLabel.setBounds(-1, -1, screenWidth, screenHeight);
+        bgLabel.setBounds(-1, -1, screenSize[0], screenSize[1]);
         add(bgLabel);
         bgLabel.setLocation(0, 0);
         myView = newView;
@@ -74,36 +79,40 @@ public class GUI extends JFrame implements ActionListener{
 
         int count = 0;
         int direction;
+        
+        Dimension getScreenSize = getSize();
+        screenSize[0] = (int) getScreenSize.width;
+        screenSize[1] = (int) getScreenSize.height;
 
         for (String name : newView.getFishes().keySet()) {
             Fish fish = newView.getFishes().get(name);
-            float[] currentPos = {(float) fish.getPosition()[0]*screenWidth/100, (float) fish.getPosition()[1]*screenHeight/100, getCurrentTime()};
+            float[] currentPos = {(float) fish.getPosition()[0]*screenSize[0]/100, (float) fish.getPosition()[1]*screenSize[1]/100, getCurrentTime()};
             lastPos.add(count, currentPos);
             
             float[] nextPos = new float[3];
             if (fish.getPositionsAndTimes().size() == 0) {
-                nextPos[0] = (float) fish.getPosition()[0]*screenWidth/100; 
-                nextPos[1] = (float) fish.getPosition()[1]*screenHeight/100;
+                nextPos[0] = (float) fish.getPosition()[0]*screenSize[0]/100; 
+                nextPos[1] = (float) fish.getPosition()[1]*screenSize[1]/100;
               
                 nextPos[2] = getCurrentTime()+(float) 0.1;
             } else {
-                nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0]*screenWidth/100; ;
-                nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1]*screenHeight/100; ;
+                nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0]*screenSize[0]/100; ;
+                nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1]*screenSize[1]/100; ;
                 nextPos[2] = (float) fish.getPositionsAndTimes().get(0)[2]+getCurrentTime();
             }
 
-            //System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
+            System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
             futurePos.add(count, nextPos);
             if (futurePos.get(count)[0] > lastPos.get(count)[0]) {
                 direction = 1;
             } else {
                 direction = -1;
             }
-            icons[count] = new ImageIcon(new ImageIcon(getPathFish(name, direction)).getImage().getScaledInstance(fish.getSize()[0]*screenWidth/100, fish.getSize()[1]*screenHeight/100, Image.SCALE_DEFAULT));
+            icons[count] = new ImageIcon(new ImageIcon(getPathFish(name, direction)).getImage().getScaledInstance(fish.getSize()[0]*screenSize[0]/100, fish.getSize()[1]*screenSize[1]/100, Image.SCALE_DEFAULT));
             
             labels[count] = new JLabel(icons[count],SwingConstants.LEFT);
             labels[count].setVerticalAlignment(SwingConstants.TOP);
-            labels[count].setBounds(-screenWidth, -screenHeight, screenWidth, screenHeight);
+            labels[count].setBounds(-screenSize[0], -screenSize[1], screenSize[0], screenSize[1]);
 
             add(labels[count]);
             labels[count].setLocation((int) currentPos[0], (int) currentPos[1]);
@@ -145,11 +154,11 @@ public class GUI extends JFrame implements ActionListener{
             count++;
         }
         if (count < fish.getPositionsAndTimes().size()) {
-            futurePos.get(i)[0] = (float) fish.getPositionsAndTimes().get(count)[0]*screenWidth/100; ;
-            futurePos.get(i)[1] = (float) fish.getPositionsAndTimes().get(count)[1]*screenHeight/100; ;
+            futurePos.get(i)[0] = (float) fish.getPositionsAndTimes().get(count)[0]*screenSize[0]/100; ;
+            futurePos.get(i)[1] = (float) fish.getPositionsAndTimes().get(count)[1]*screenSize[1]/100; ;
             futurePos.get(i)[2] = (float) fish.getPositionsAndTimes().get(count)[2] + lastPos.get(i)[2];
-        } else {
-            System.out.print("Pas de futures positions" + fish.getPositionsAndTimes().size());
+        //} else {
+        //    System.out.print("Pas de futures positions" + fish.getPositionsAndTimes().size());
         }
         
 
@@ -159,7 +168,9 @@ public class GUI extends JFrame implements ActionListener{
 
         if (e.getSource() == timer && !this.isUpdatingFishes) {
             
-
+            Dimension getScreenSize = getSize();
+            screenSize[0] = (int) getScreenSize.width;
+            screenSize[1] = (int) getScreenSize.height;
             
             for (int i=0; i<this.nbFishes; i++) {
 
@@ -174,9 +185,9 @@ public class GUI extends JFrame implements ActionListener{
                 int currenty = interpolation(i, 1);
                 //System.out.print("x = " + currentx + "y = " + currenty+ "\n");
                 labels[i].setLocation(currentx, currenty);
-                if (i == 0) {
-                    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0]*100/screenWidth + "x" + lastPos.get(i)[1]*100/screenHeight  + " currentPos: " + currentx*100/screenWidth+"x"+currenty*100/screenHeight+ " future pos:"+ futurePos.get(i)[0]*100/screenWidth + "x" + futurePos.get(i)[1]*100/screenHeight+ "\n");
-                }
+                //if (i == 0) {
+                //    System.out.print("Poisson "+i+" ancienne pos: "+lastPos.get(i)[0]*100/screenSize[0] + "x" + lastPos.get(i)[1]*100/screenSize[1]  + " currentPos: " + currentx*100/screenSize[0]+"x"+currenty*100/screenSize[1]+ " future pos:"+ futurePos.get(i)[0]*100/screenSize[0] + "x" + futurePos.get(i)[1]*100/screenSize[1]+ "\n");
+                //}
              
             }
             remove(bgLabel);
@@ -186,6 +197,9 @@ public class GUI extends JFrame implements ActionListener{
     }
 
     private String getPathFish(String nameFish, int direction) {
+        if (nameFish !=  "chacha" && nameFish !=  "chouchou" && nameFish !=  "sasa" && nameFish !=  "toutou") {
+            nameFish = "default";
+        }
         String extension;
         if (direction == 1) {
             extension = ".png";
