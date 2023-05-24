@@ -156,8 +156,9 @@ int next_future_position(struct fish* f, int* pos)
 }
 
 void generate_future_position(struct fish* f) {
-
-    f->move.shift(f);
+    if (f->is_started) {
+        f->move.shift(f);
+    }
 }
 
 void free_fish(struct fish* f)
