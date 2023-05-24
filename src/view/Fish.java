@@ -15,22 +15,22 @@ public class Fish {
 
     public Fish(String name, int[] coordinates, int[] dimensions, String mobility) throws FishException {
         this.name = name;
-  
-        for (int i = 0; i < 2; ++i)  {
+
+        for (int i = 0; i < 2; ++i) {
             if (dimensions[i] < 0) {
                 throw new FishException(String.format("The %d dimension is negative", i));
             } else {
                 this.dimensions[i] = dimensions[i];
-            } 
+            }
         }
-        for (int i = 0; i < 2; ++i)  {
+        for (int i = 0; i < 2; ++i) {
             // if (coordinates[i] < 0) {
-            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // throw new FishException(String.format("The %d coordinate is negative", i));
             // } else if (coordinates[i] > 100) {
-            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // throw new FishException(String.format("The %d coordinate is over 100", i));
             // } else {
-                this.coordinates[i] = coordinates[i];
-            // } 
+            this.coordinates[i] = coordinates[i];
+            // }
         }
 
         this.mobility = mobility;
@@ -46,7 +46,7 @@ public class Fish {
     }
 
     /**
-     * Return the current position of the fish 
+     * Return the current position of the fish
      * 
      * @return int[2]
      */
@@ -111,7 +111,7 @@ public class Fish {
         coordinatesAndTimes = newPositionsAndTimes;
     }
 
-     /**
+    /**
      * Change the current position with the new current position
      * 
      * @param newPosition
@@ -119,69 +119,71 @@ public class Fish {
     public void setPosition(int[] newPosition) throws FishException {
         for (int i = 0; i < 2; ++i) {
             // if (newPosition[i] < 0) {
-            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // throw new FishException(String.format("The %d coordinate is negative", i));
             // } else if (newPosition[i] > 100) {
-            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // throw new FishException(String.format("The %d coordinate is over 100", i));
             // } else {
-                coordinates[i] = newPosition[i];
+            coordinates[i] = newPosition[i];
             // }
         }
     }
 
     /**
      * Add the new Position and the time in coordinatesAndTimes ArrayList<int[]>
-     * If there is already a position at this time, replace the position 
+     * If there is already a position at this time, replace the position
      * else the posiition is added in order to keep a list sorted by time ascending
+     * 
      * @param newPositionAndTime int[] x, y, time
      * @throws FishException
      */
     public void addPositionAndTime(int[] newPositionAndTime) throws FishException {
-        if (state == State.STARTED) {
-            if (newPositionAndTime[2] == 0) {
-                setPosition(newPositionAndTime);
-                return;
-            }
-            int count = 0;
-            boolean added = false;
-            ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
-            while (iterator.hasNext()) {
-                int[] element = iterator.next();
-                int elementTime = element[2];
-                if (elementTime == newPositionAndTime[2]) {
-                    setPosition(element, newPositionAndTime);
-                    added = true;
-                }
-                if (elementTime <= newPositionAndTime[2]) {
-                    ++count;
-                }
-            }
-            if (added == false) {
-                coordinatesAndTimes.add(count, newPositionAndTime);
+        if (newPositionAndTime[2] == 0) {
+            setPosition(newPositionAndTime);
+            return;
+        }
+        int count = 0;
+        boolean added = false;
+        ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
+        while (iterator.hasNext()) {
+            int[] element = iterator.next();
+            int elementTime = element[2];
+            if (elementTime == newPositionAndTime[2]) {
+                setPosition(element, newPositionAndTime);
                 added = true;
-            } 
-            if (added == false) {
-                throw new FishException("The newPositionAndTime isnt added");
             }
+            if (elementTime <= newPositionAndTime[2]) {
+                ++count;
+            }
+        }
+        if (added == false) {
+            coordinatesAndTimes.add(count, newPositionAndTime);
+            added = true;
+        }
+        if (added == false) {
+            throw new FishException("The newPositionAndTime isnt added");
         }
     }
 
     /**
-     * This method decrements the time of each position, if position time is negative, this position
-     * is removed from coordinatesAndTimes, the last position position negative or equal to 0 replace
+     * This method decrements the time of each position, if position time is
+     * negative, this position
+     * is removed from coordinatesAndTimes, the last position position negative or
+     * equal to 0 replace
      * the current position
+     * 
      * @throws FishException
      */
-    public void decrementTime() throws FishException{
+    public void decrementTime() throws FishException {
 
         ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
         int[] new_current_element = null;
         while (iterator.hasNext()) {
             int[] element = iterator.next();
             --element[2];
-            if (element[2] <= 0){
+            if (element[2] <= 0) {
                 new_current_element = element;
                 iterator.remove();
-            } 
+            }
         }
         if (new_current_element != null) {
             setPosition(new_current_element);
@@ -194,11 +196,11 @@ public class Fish {
     private void setPosition(int[] position, int[] newPosition) throws FishException {
         for (int i = 0; i < 2; ++i) {
             // if (newPosition[i] < 0) {
-            //     throw new FishException(String.format("The %d coordinate is negative", i));
+            // throw new FishException(String.format("The %d coordinate is negative", i));
             // } else if (newPosition[i] > 100) {
-            //     throw new FishException(String.format("The %d coordinate is over 100", i));
+            // throw new FishException(String.format("The %d coordinate is over 100", i));
             // } else {
-                position[i] = newPosition[i];
+            position[i] = newPosition[i];
             // }
         }
     }

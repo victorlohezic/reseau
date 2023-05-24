@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.io.PrintWriter;
 
 /**
  * Close the socket with the server
@@ -9,6 +10,8 @@ public class StartFish implements ParametersCommande {
     private static String nameFish;
     private static View view;
     private static Prompt prompt;
+    private static PrintWriter output;
+    private static Listener input; 
 
     private StartFish() {
     }
@@ -16,10 +19,12 @@ public class StartFish implements ParametersCommande {
     /*
      * Initialise StartFish but it needs to use the method setFish to add a Fish
      */
-    public static StartFish initStartFish(View v, Logging log, Prompt p) {
+    public static StartFish initStartFish(View v, Logging log, Prompt p, PrintWriter out, Listener in) {
         logging = log;
         view = v;
         prompt = p;
+        output = out;
+        input = in;
         return START_FISH;
     }
 
@@ -47,8 +52,15 @@ public class StartFish implements ParametersCommande {
         try{
             Fish fish = view.getFish(nameFish);
             fish.setState(State.STARTED);
-            prompt.print("-> OK");
-        } catch (FishViewException e) {
+            output.println("startFish " + fish.getName());
+            logging.info("startFish " + fish.getName());
+            String answer = input.readLine();
+            if (answer.equals("OK")) {
+                logging.info(answer);
+            } else {
+                logging.warning(answer);
+            }
+        } catch (Exception e) {
             logging.warning(e.getMessage());
         }
     }

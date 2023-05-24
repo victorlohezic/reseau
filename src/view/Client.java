@@ -106,7 +106,7 @@ public class Client {
             promptCommands.put("addFish", AddFishPrompt.initAddFish(AddFish.castCommandToFish(networkCommands.get("AddFish")), view, logging, prompt));
             promptCommands.put("delFish", DelFishPrompt.initDelFish(DelFish.castCommandToFish(networkCommands.get("DelFish")), view, logging, prompt));
             promptCommands.put("status", Status.initStatus(Ping.castCommandToPing(networkCommands.get("ping")), GetFishes.castCommandToFish(networkCommands.get("getFishes")), logging, prompt));
-            promptCommands.put("startFish", StartFish.initStartFish(view, logging, prompt));
+            promptCommands.put("startFish", StartFish.initStartFish(view, logging, prompt, pred, listener));
         } catch (CommandeException e) {
             logging.warning(e.getMessage());
         }
