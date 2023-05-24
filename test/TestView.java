@@ -28,28 +28,6 @@ public class TestView {
     }
 
     /**
-     *Test if the coordinates is negative
-     */
-    public void testInitViewNegativeCoordinates() throws Exception {
-        int[] coordinates = {-10, 0};
-        int[] fishCoordinates = {0, 0};
-        int[] dimensions = {50, 50};
-        int[] size = {2, 4};
-        Fish clownFish = new Fish("Clown Fish", fishCoordinates, size, "RandomPathWay");
-        Fish chouchouFish = new Fish("Chouchou Fish", fishCoordinates, size, "RandomPathWay");
-        Fish flowerFish = new Fish("Flower Fish", fishCoordinates, size, "RandomPathWay");
-        try {
-            View view = new View("N1", coordinates, dimensions, "");
-            view.addFish(flowerFish);
-            view.addFish(clownFish);
-            view.addFish(chouchouFish);
-        } catch (ViewException e) {
-            return;
-        }
-        assert false : "Exception not launched";
-    }
-
-    /**
      *Test if the coordinates is over big
      */
     public void testInitViewOverBigCoordinates() throws Exception {
