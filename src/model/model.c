@@ -82,6 +82,9 @@ char* get_fish_name(struct fish* f)
 
 void shift_fish(struct fish* f)
 {
+    if (!f->is_started) {
+        return;
+    }
     (f->move).future_positions = update_queue((f->move).future_positions, f->position);
     if ((f->move).future_positions == NULL) {
         generate_future_position(f);
