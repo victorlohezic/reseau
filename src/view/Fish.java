@@ -136,30 +136,32 @@ public class Fish {
      * @throws FishException
      */
     public void addPositionAndTime(int[] newPositionAndTime) throws FishException {
-        if (newPositionAndTime[2] == 0) {
-            setPosition(newPositionAndTime);
-            return;
-        }
-        int count = 0;
-        boolean added = false;
-        ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
-        while (iterator.hasNext()) {
-            int[] element = iterator.next();
-            int elementTime = element[2];
-            if (elementTime == newPositionAndTime[2]) {
-                setPosition(element, newPositionAndTime);
+        if (state == State.STARTED) {
+            if (newPositionAndTime[2] == 0) {
+                setPosition(newPositionAndTime);
+                return;
+            }
+            int count = 0;
+            boolean added = false;
+            ListIterator<int[]> iterator = coordinatesAndTimes.listIterator();
+            while (iterator.hasNext()) {
+                int[] element = iterator.next();
+                int elementTime = element[2];
+                if (elementTime == newPositionAndTime[2]) {
+                    setPosition(element, newPositionAndTime);
+                    added = true;
+                }
+                if (elementTime <= newPositionAndTime[2]) {
+                    ++count;
+                }
+            }
+            if (added == false) {
+                coordinatesAndTimes.add(count, newPositionAndTime);
                 added = true;
+            } 
+            if (added == false) {
+                throw new FishException("The newPositionAndTime isnt added");
             }
-            if (elementTime <= newPositionAndTime[2]) {
-                ++count;
-            }
-        }
-        if (added == false) {
-            coordinatesAndTimes.add(count, newPositionAndTime);
-            added = true;
-        } 
-        if (added == false) {
-            throw new FishException("The newPositionAndTime isnt added");
         }
     }
 

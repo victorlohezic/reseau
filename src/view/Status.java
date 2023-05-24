@@ -38,7 +38,7 @@ public class Status implements ParametersCommande {
         }
         getFishes.execute();
         String stateView = getFishes.getResult();
-        System.out.println(stateView.split(" ").length);
+        //System.out.println(stateView.split(" ").length);
         stateView = stateView.replaceAll("\\[", "\n Fish").replaceAll("]", "").replaceAll("list \n", "").replaceAll(",\\d+ *\n", "\n").replaceAll(",\\d+$", "");
         int fishCount = stateView.length() > 7  ? stateView.split("\n", -1).length : 0;
         String plurial = fishCount < 2 ? "poisson trouvé" : "poissons trouvés";

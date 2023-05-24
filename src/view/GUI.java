@@ -99,7 +99,7 @@ public class GUI extends JFrame implements ActionListener{
                 nextPos[0] = (float) fish.getPositionsAndTimes().get(0)[0]*screenSize[0]/100; ;
                 nextPos[1] = (float) fish.getPositionsAndTimes().get(0)[1]*screenSize[1]/100; ;
                 nextPos[2] = (float) fish.getPositionsAndTimes().get(0)[2]+getCurrentTime();
-                System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
+                //System.out.print("\nfuture position : "+ nextPos[0]+ " " + nextPos[1]);
 
             }
 
